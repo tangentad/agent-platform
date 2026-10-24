@@ -1,0 +1,37 @@
+# Circle on Fly.io: one always-on machine, SQLite on a volume at /data. Deploy: `fly deploy`.
+app = "circle-agent"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  HOST = "0.0.0.0"
+  PORT = "3000"
+  DB_PATH = "/data/circle.sqlite"
+  PUBLIC_URL = "https://circle-agent.fly.dev"
+
+[[mounts]]
+  source = "data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  # /health is 503 when the database cannot be read or the scheduler has stopped beating.
+  # Fly stops routing to a failing machine and shows it in `fly status`; see docs/runbook.md.
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    path = "/health"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

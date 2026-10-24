@@ -1,6 +1,7 @@
 import type { Database } from "bun:sqlite";
 import type {
   AgentSpec,
+  Artifact,
   AttentionItem,
   AttentionStatus,
   Commitment,
@@ -19,7 +20,6 @@ import type {
   RunStatus,
   Schedule,
   Session,
-  StagedItem,
   ToolCallRecord,
 } from "../core/types.ts";
 
@@ -38,23 +38,60 @@ export class Store {
   getPerson(id: string) {
     return parse<Person>(this.db.query("SELECT data FROM persons WHERE id = ?").get(id) as Row | null);
   }
+  /** Every reference to one person id, moved to another, in one transaction (identity merge). */
+  reassignPerson(from: string, to: string) {
+    this.db.transaction(() => {
+      const json = (table: string, field: string, col?: string) =>
+        this.db.run(
+          `UPDATE ${table} SET ${col ? `${col} = ?, ` : ""}data = json_set(data, '$.${field}', ?) WHERE json_extract(data, '$.${field}') = ?`,
+          col ? [to, to, from] : [to, from],
+        );
+      json("attention", "assigneeId", "assignee_id");
+      json("attention", "requesterId");
+      json("attention", "answeredBy");
+      json("commitments", "ownerId", "owner_id");
+      json("commitments", "beneficiaryId");
+      json("runs", "requesterId");
+      json("tasks", "requesterId");
+      json("approvals", "decidedBy");
+      json("agents", "ownerId", "owner_id");
+      // The kept person's own connection wins when both connected the same service.
+      this.db.run("UPDATE OR IGNORE credentials SET person_id = ? WHERE person_id = ?", [to, from]);
+      this.db.run("DELETE FROM credentials WHERE person_id = ?", [from]);
+    })();
+  }
+
   findPersonByPhone(phone: string) {
-    const rows = this.db.query("SELECT data FROM persons").all() as Row[];
-    return parseAll<Person>(rows).find((p) => p.phoneE164 === phone);
+    // ponytail: a json_extract scan; add a phone column and index if the people table ever gets big
+    const p = parse<Person>(this.db.query("SELECT data FROM persons WHERE json_extract(data, '$.phoneE164') = ?").get(phone) as Row | null);
+    // A merged record is an alias for history: the human lives at the record it points to.
+    return p?.mergedInto ? this.getPerson(p.mergedInto) : p;
   }
 
   // ----- agents -----
   putAgent(a: AgentSpec) {
+    // REPLACE would resolve a handle clash by deleting the other agent; refuse instead.
+    const clash = this.db.query("SELECT id FROM agents WHERE handle = ? AND id != ?").get(a.handle, a.id);
+    if (clash) throw new Error(`handle "${a.handle}" is taken by another agent`);
     this.db.run("INSERT OR REPLACE INTO agents(id, owner_id, handle, data) VALUES (?, ?, ?, ?)", [a.id, a.ownerId, a.handle, JSON.stringify(a)]);
   }
   getAgent(id: string) {
     return parse<AgentSpec>(this.db.query("SELECT data FROM agents WHERE id = ?").get(id) as Row | null);
   }
-  getAgentByHandle(handle: string) {
-    return parse<AgentSpec>(this.db.query("SELECT data FROM agents WHERE handle = ?").get(handle) as Row | null);
+  /** A handle no other agent has: the name's, or the name's with a number. */
+  freeHandle(base: string) {
+    const root = base || "agent";
+    for (let i = 1; ; i++) {
+      const h = i === 1 ? root : `${root}-${i}`;
+      if (!this.db.query("SELECT 1 FROM agents WHERE handle = ?").get(h)) return h;
+    }
   }
   listAgents(ownerId?: string) {
-    const rows = ownerId ? (this.db.query("SELECT data FROM agents WHERE owner_id = ?").all(ownerId) as Row[]) : (this.db.query("SELECT data FROM agents").all() as Row[]);
+    // Oldest first, stably: INSERT OR REPLACE gives an edited agent a new rowid, so rowid order would move it to the end.
+    const order = "ORDER BY json_extract(data, '$.createdAt'), id";
+    const rows = ownerId
+      ? (this.db.query(`SELECT data FROM agents WHERE owner_id = ? ${order}`).all(ownerId) as Row[])
+      : (this.db.query(`SELECT data FROM agents ${order}`).all() as Row[]);
     return parseAll<AgentSpec>(rows);
   }
 
@@ -80,6 +117,9 @@ export class Store {
   }
   putMembership(m: Membership) {
     this.db.run("INSERT OR REPLACE INTO memberships(room_id, person_id, role, data) VALUES (?, ?, ?, ?)", [m.roomId, m.personId, m.role, JSON.stringify(m)]);
+  }
+  deleteMembership(roomId: string, personId: string) {
+    this.db.run("DELETE FROM memberships WHERE room_id = ? AND person_id = ?", [roomId, personId]);
   }
   listMembers(roomId: string) {
     return parseAll<Membership>(this.db.query("SELECT data FROM memberships WHERE room_id = ?").all(roomId) as Row[]);
@@ -219,6 +259,16 @@ export class Store {
     const rows = this.db.query("SELECT data FROM messages WHERE session_id = ? ORDER BY at DESC, rowid DESC LIMIT ?").all(sessionId, Math.min(Math.max(1, limit), 500)) as Row[];
     return parseAll<Message>(rows).reverse();
   }
+  /** Chat search: newest messages in the given rooms whose text contains the words, one SQL LIKE per word. */
+  // ponytail: LIKE over json_extract; move messages into an FTS5 table if a circle's history ever makes this slow
+  searchMessages(roomIds: string[], query: string, limit = 50): Message[] {
+    const words = query.toLowerCase().split(/\s+/).filter(Boolean).slice(0, 6);
+    if (!roomIds.length || !words.length) return [];
+    const like = words.map(() => "lower(json_extract(data, '$.text')) LIKE ? ESCAPE '\\'").join(" AND ");
+    const args = [...roomIds, ...words.map((w) => `%${w.replace(/[\\%_]/g, (c) => `\\${c}`)}%`), Math.min(Math.max(1, limit), 200)];
+    const rows = this.db.query(`SELECT data FROM messages WHERE room_id IN (${roomIds.map(() => "?").join(",")}) AND ${like} ORDER BY at DESC LIMIT ?`).all(...args) as Row[];
+    return parseAll<Message>(rows);
+  }
   messagesForRoom(roomId: string, limit = 200): Message[] {
     const rows = this.db.query("SELECT data FROM messages WHERE room_id = ? ORDER BY at DESC, rowid DESC LIMIT ?").all(roomId, Math.min(Math.max(1, limit), 500)) as Row[];
     return parseAll<Message>(rows).reverse();
@@ -286,6 +336,9 @@ export class Store {
   putProfile(p: Profile) {
     this.db.run("INSERT OR REPLACE INTO profiles(agent_id, scope, scope_id, text, derived_at) VALUES (?, ?, ?, ?, ?)", [p.agentId, p.scope, p.scopeId, p.text, p.derivedAt]);
   }
+  deleteProfile(agentId: string, scope: MemoryScope, scopeId: string) {
+    this.db.run("DELETE FROM profiles WHERE agent_id = ? AND scope = ? AND scope_id = ?", [agentId, scope, scopeId]);
+  }
   getProfile(agentId: string, scope: MemoryScope, scopeId: string): Profile | undefined {
     const r = this.db.query("SELECT * FROM profiles WHERE agent_id = ? AND scope = ? AND scope_id = ?").get(agentId, scope, scopeId) as Row | null;
     return r ? { agentId, scope, scopeId, text: r.text as string, derivedAt: r.derived_at as number } : undefined;
@@ -324,7 +377,7 @@ export class Store {
     return parseAll<AttentionItem>(this.db.query(sql).all(...(args as string[])) as Row[]);
   }
 
-  // ----- schedules and staged items -----
+  // ----- schedules -----
   putSchedule(s: Schedule) {
     this.db.run(
       "INSERT INTO schedules(id, agent_id, room_id, paused, next_run_at, data) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET agent_id = excluded.agent_id, room_id = excluded.room_id, paused = excluded.paused, next_run_at = excluded.next_run_at, data = excluded.data",
@@ -350,24 +403,6 @@ export class Store {
   }
   dueSchedules(now: number) {
     return parseAll<Schedule>(this.db.query("SELECT data FROM schedules WHERE paused = 0 AND next_run_at IS NOT NULL AND next_run_at <= ?").all(now) as Row[]);
-  }
-  putStaged(s: StagedItem) {
-    this.db.run("INSERT OR REPLACE INTO staged(id, room_id, deliver_after, delivered_at, data) VALUES (?, ?, ?, ?, ?)", [
-      s.id,
-      s.roomId,
-      s.deliverAfter,
-      s.deliveredAt ?? null,
-      JSON.stringify(s),
-    ]);
-  }
-  dueStaged(now: number) {
-    return parseAll<StagedItem>(this.db.query("SELECT data FROM staged WHERE delivered_at IS NULL AND deliver_after <= ?").all(now) as Row[]);
-  }
-  listStaged(roomId?: string) {
-    const rows = roomId
-      ? (this.db.query("SELECT data FROM staged WHERE room_id = ? ORDER BY deliver_after").all(roomId) as Row[])
-      : (this.db.query("SELECT data FROM staged ORDER BY deliver_after").all() as Row[]);
-    return parseAll<StagedItem>(rows);
   }
 
   // ----- commitments -----
@@ -469,6 +504,27 @@ export class Store {
     this.db.run("DELETE FROM credentials WHERE person_id = ? AND service = ?", [personId, service]);
   }
 
+  // ----- artifacts -----
+  putArtifact(a: Artifact) {
+    this.db.run("INSERT OR REPLACE INTO artifacts(id, agent_id, room_id, kind, created_at, data) VALUES (?, ?, ?, ?, ?, ?)", [
+      a.id,
+      a.agentId,
+      a.roomId ?? null,
+      a.kind,
+      a.createdAt,
+      JSON.stringify(a),
+    ]);
+  }
+  getArtifact(id: string) {
+    return parse<Artifact>(this.db.query("SELECT data FROM artifacts WHERE id = ?").get(id) as Row | null);
+  }
+  listArtifacts(agentId: string, opts: { roomId?: string; limit?: number } = {}): Artifact[] {
+    const rows = opts.roomId
+      ? (this.db.query("SELECT data FROM artifacts WHERE agent_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT ?").all(agentId, opts.roomId, opts.limit ?? 50) as Row[])
+      : (this.db.query("SELECT data FROM artifacts WHERE agent_id = ? ORDER BY created_at DESC LIMIT ?").all(agentId, opts.limit ?? 50) as Row[]);
+    return parseAll<Artifact>(rows);
+  }
+
   // ----- kv -----
   getKv(k: string): string | undefined {
     const r = this.db.query("SELECT v FROM kv WHERE k = ?").get(k) as Row | null;
@@ -479,5 +535,14 @@ export class Store {
   }
   setKv(k: string, v: string) {
     this.db.run("INSERT OR REPLACE INTO kv(k, v) VALUES (?, ?)", [k, v]);
+  }
+
+  // ----- error log: operational, not a run record, so it is pruned -----
+  logError(at: number, source: string, message: string, keep = 1000) {
+    this.db.run("INSERT INTO errors(at, source, message) VALUES (?, ?, ?)", [at, source, message]);
+    this.db.run("DELETE FROM errors WHERE id <= (SELECT MAX(id) FROM errors) - ?", [keep]);
+  }
+  listErrors(opts: { since?: number; limit?: number } = {}): { id: number; at: number; source: string; message: string }[] {
+    return this.db.query("SELECT id, at, source, message FROM errors WHERE at >= ? ORDER BY id DESC LIMIT ?").all(opts.since ?? 0, opts.limit ?? 100) as never;
   }
 }

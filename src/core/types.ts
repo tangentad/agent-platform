@@ -16,21 +16,55 @@ export interface Person {
   email?: string;
   /** How patient and detailed the agent should be with this person. */
   techComfort?: "low" | "medium" | "high";
+  /** Saved delivery addresses, for checkout and forms. */
+  addresses?: Address[];
+  /** May the agent send email from this person's own Gmail? Off until they turn it on; each send still asks. */
+  sendAsMe?: boolean;
+  /** Two records were one human (multiplayer-spec §11): this record's data moved to the id it names. */
+  mergedInto?: Id;
+  /** Per-person trust for an owner (multiplayer-spec §7.3): their own threshold, pause and allow list. The agent's policy is the default. */
+  trust?: TrustPolicy;
+  /** Records merged INTO this one; their old messages still point at them. */
+  mergedFrom?: Id[];
+  createdAt: UnixMs;
+}
+
+export interface Address {
+  id: Id;
+  label: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  region?: string;
+  postalCode?: string;
+  country: string;
+}
+
+/** Something the agent made that people can open: a document, a dashboard, a file, an image, audio, a call recording. */
+export interface Artifact {
+  id: Id;
+  agentId: Id;
+  roomId?: Id;
+  runId?: Id;
+  kind: "document" | "dashboard" | "hotels" | "flights" | "file" | "image" | "audio";
+  title: string;
+  /** Markdown for documents, a dashboard spec, or a file's metadata (name, mime, size, path). */
+  data: unknown;
+  /** Anyone with the link, or members of the room only. */
+  share: "room" | "link";
   createdAt: UnixMs;
 }
 
 export type RoomKind = "dm" | "group";
-export type ChannelKind = "web" | "imessage" | "sms" | "console" | "voice";
+export type ChannelKind = "web" | "imessage" | "sms" | "whatsapp" | "telegram" | "slack" | "console" | "voice";
 
 /**
  * Roles inside a room.
- * owner      : the person who set the agent up; their accounts pay for everything.
- * decider    : a member allowed to approve requests on the owner's behalf (a caregiver sibling, say).
- * member     : a signed-up person; served with their own consent for their own requests.
- * guest      : never signed up; served through the owner or a decider.
- * cared_for  : the person the circle looks after (an aging parent); gets patient mode and extra privacy.
+ * owner  : the person who set the agent up; their accounts and money, and the approvals that go with them.
+ * member : a signed-up person; once they consent, their own accounts serve their own requests.
+ * guest  : never signed up; served through the owner, who OKs anything that uses accounts or money.
  */
-export type MemberRole = "owner" | "decider" | "member" | "guest" | "cared_for";
+export type MemberRole = "owner" | "member" | "guest";
 
 export interface Room {
   id: Id;
@@ -88,10 +122,16 @@ export interface AgentSpec {
   instructions: string;
   soul: Soul;
   model: string;
+  /** The owner chose this model; boot leaves it alone instead of following the deployment default. */
+  modelPinned?: boolean;
+  /** The owner's off switch: no run starts, schedules wait, until it is turned back on. */
+  paused?: boolean;
   effort: Effort;
   trust: TrustPolicy;
-  /** Standing rules the owner typed, verbatim, newest last. */
-  rules: string[];
+  /** Procedures this agent may use, by skill name; absent means all. Core rules always apply. */
+  skills?: string[];
+  /** Tools this agent may use, by tool name or family; absent means every tool the server wired. */
+  tools?: string[];
   createdAt: UnixMs;
 }
 
@@ -169,6 +209,8 @@ export interface Session {
   /** Compaction: older messages folded into prose so the context stays short. */
   summary?: string;
   summaryThroughAt?: UnixMs;
+  /** The last message folded into the summary; the cut is by position, so two messages in one millisecond cannot straddle it. */
+  summaryThroughId?: Id;
   createdAt: UnixMs;
   lastActivityAt: UnixMs;
 }
@@ -197,6 +239,8 @@ export interface Task {
 }
 
 export interface Run {
+  /** What was asked, for message and task runs: the ground the same-errand check compares against. */
+  requestText?: string;
   id: Id;
   sessionId: Id;
   roomId: Id;
@@ -236,6 +280,8 @@ export type RunEventType =
   | "steer_applied"
   | "gate_opened"
   | "gate_resolved"
+  | "resumed"
+  | "run_queued"
   | "reply"
   | "error"
   | "done";
@@ -368,8 +414,12 @@ export interface Calendar {
  */
 export interface Authorization {
   basis: "user_requested" | "standing_rule" | "agent_initiative";
-  /** Third parties the owner was told about: name, how, why. Anyone else needs a fresh yes. */
-  disclosedOutreach: { who: string; how: "phone" | "email" | "sms" | "community_post"; why: string }[];
+  /**
+   * Third parties the owner was told about: name, how, why, and the number or address when known.
+   * A disclosure without a contact binds to the first one used, so a later run cannot reach a
+   * different number under the same name. Anyone else needs a fresh yes.
+   */
+  disclosedOutreach: { who: string; how: "phone" | "email" | "sms" | "community_post"; why: string; contact?: string }[];
   /** What must still be true for the action to make sense. */
   premise: string;
 }
@@ -410,19 +460,6 @@ export interface Approval {
   decidedBy: Id;
   decidedAt: UnixMs;
   consumedAt?: UnixMs;
-}
-
-/** Outreach held until working hours; delivered by the scheduler sweep. */
-export interface StagedItem {
-  id: Id;
-  roomId: Id;
-  sessionId: Id;
-  agentId: Id;
-  kind: "sms" | "email" | "phone" | "community_post";
-  payload: Record<string, unknown>;
-  deliverAfter: UnixMs;
-  deliveredAt?: UnixMs;
-  createdAt: UnixMs;
 }
 
 // ---------- Responsibilities ----------
@@ -472,9 +509,13 @@ export interface Plan {
   id: Id;
   runId: Id;
   goal: string;
+  /** Opened by the runtime on the first approach-shaped tool call, not by the model. */
+  auto?: boolean;
   steps: PlanStep[];
   /** Index of the active step. */
   cursor: number;
   createdAt: UnixMs;
   updatedAt: UnixMs;
+  /** How many times the model rewrote the remaining course (revise_plan). */
+  revisions?: number;
 }

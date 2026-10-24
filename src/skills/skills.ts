@@ -40,16 +40,13 @@ export function parseSkill(src: string): Skill | undefined {
 }
 
 /** Crude relevance: a skill matches when a few of its "when" words appear in the request or the room is a group. */
-export function matchSkills(skills: Skill[], text: string, opts: { group: boolean; caredFor: boolean }): Skill[] {
+export function matchSkills(skills: Skill[], text: string, opts: { group: boolean }): Skill[] {
   const t = text.toLowerCase();
   const out: Skill[] = [];
   for (const s of skills) {
+    if (s.name.startsWith("_")) continue; // core rules and other prompt parts, never matched as procedures
     if (s.when.startsWith("always")) {
       if (opts.group) out.push(s);
-      continue;
-    }
-    if (s.name === "care-circle" && opts.caredFor) {
-      out.push(s);
       continue;
     }
     const words = s.when
@@ -64,5 +61,8 @@ export function matchSkills(skills: Skill[], text: string, opts: { group: boolea
 }
 
 export function skillIndex(skills: Skill[]): string {
-  return skills.map((s) => `- ${s.name}: ${s.when}`).join("\n");
+  return skills
+    .filter((s) => !s.name.startsWith("_"))
+    .map((s) => `- ${s.name}: ${s.when}`)
+    .join("\n");
 }

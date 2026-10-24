@@ -1,128 +1,15 @@
-import type { Clock } from "../core/clock.ts";
-import type { AgentSpec, ApproachKind, AttentionItem, AttentionKind, Authorization, Id, Room, Run, Session, Task } from "../core/types.ts";
-import type { TaskService } from "../tasks/tasks.ts";
+import { fmtWhen } from "../core/clock.ts";
+import type { ApproachKind, AttentionKind, Id, Task } from "../core/types.ts";
 import type { ToolSpec } from "../model/types.ts";
-import type { Store } from "../store/repos.ts";
-import type { MemoryService } from "../memory/memory.ts";
-import type { RoomService } from "../rooms/rooms.ts";
-import type { AttentionService } from "../inbox/attention.ts";
-import type { CommitmentService } from "../care/commitments.ts";
-import type { Planner } from "../planning/planner.ts";
-import type { Hands } from "./hands.ts";
+import { askFirst, describeOutreach, n, num, obj, parseOutreach, s, siteOf, str, type ToolDef } from "./kit.ts";
+import { CATALOG_TOOLS } from "./catalog/index.ts";
 
-export type ToolFamily = "plan" | "search" | "people" | "calls" | "community" | "memory" | "schedule" | "care" | "money";
-
-/** What a tool hands back to the runtime. */
-export interface ToolResult {
-  ok: boolean;
-  /** What the model sees. Objects are JSON-encoded. */
-  content: unknown;
-  /** Provider evidence that the effect happened. */
-  evidence?: string;
-  /** The run must pause until this attention item is answered. */
-  waitingOn?: AttentionItem;
-  /** The approach stalled (no results, no answer); the planner should count it. */
-  stall?: string;
-  /** Message the agent should relay to the room verbatim (e.g. "I've asked Ellie to OK that"). */
-  roomNotice?: string;
-  /** Plan progress signal when the tool embodies an approach. */
-  approach?: ApproachKind;
-  /** The run should end without saying anything; the reason goes in the record. */
-  quiet?: string;
-  /** The action was held (working hours, a decline): nothing happened, the plan step is not done. */
-  held?: boolean;
-}
-
-export type GateDecision = { granted: true; reason: string } | { granted: false; item: AttentionItem; notice?: string } | { granted: false; held: string };
-
-export interface ToolContext {
-  store: Store;
-  clock: Clock;
-  memory: MemoryService;
-  rooms: RoomService;
-  attention: AttentionService;
-  commitments: CommitmentService;
-  planner: Planner;
-  hands: Hands;
-  agent: AgentSpec;
-  room: Room;
-  session: Session;
-  run: Run;
-  requesterId?: Id;
-  tasks: TaskService;
-  /** Which services the person whose accounts this request may use has connected. Never the secrets. */
-  vault: { services(): string[]; has(service: string): boolean; use<T>(service: string, fn: (secret: string) => T): T | undefined };
-  /** Whose accounts this request may use (the requester with consent, else the owner). */
-  accountOwnerId: Id;
-  /** Hand a task to a task agent; it starts once this run has replied. */
-  delegate(task: Task): void;
-  /** Pass a note into a running task; false when it is not running. */
-  steerTask(taskId: Id, text: string): boolean;
-  /** Ask for a yes before an effect, or learn it was pre-authorised. */
-  gate(input: {
-    kind: AttentionKind;
-    title: string;
-    detail: string;
-    money?: number;
-    outreach?: { who: string; how: "phone" | "sms" | "email" | "community_post" };
-    /** What a yes permits: the tool and the payload that matters (number, text, amount, merchant). An approval covers exactly this. */
-    key: unknown[];
-  }): GateDecision;
-  /** Stop a run (a task's run) from a tool. */
-  stopRun(runId: Id): void;
-  /** Send a message to a person's private chat with the agent (cards, questions). */
-  dm(personId: Id, text: string): void;
-  /** Resolve a member by name or id inside this room. */
-  findMember(nameOrId: string): { id: Id; name: string } | undefined;
-  progress(text: string): void;
-}
-
-export interface ToolDef {
-  spec: ToolSpec;
-  family: ToolFamily;
-  labels: { running: string; done: string; failed?: string };
-  /** Writes or contacts someone. Side-effect tools ask first unless trusted. */
-  sideEffect: boolean;
-  run(input: Record<string, unknown>, ctx: ToolContext): Promise<ToolResult>;
-}
-
-const obj = (properties: Record<string, unknown>, required: string[] = []): ToolSpec["input_schema"] =>
-  ({ type: "object", properties, required, additionalProperties: false }) as ToolSpec["input_schema"];
-const str = (description: string) => ({ type: "string", description });
-const num = (description: string) => ({ type: "number", description });
-
-const s = (v: unknown) => (typeof v === "string" ? v : "");
-const n = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
-
-type Outreach = Authorization["disclosedOutreach"][number];
-const HOWS = new Set(["phone", "email", "sms", "community_post"]);
-/** Only well-formed entries become pre-approved outreach; anything else is dropped. */
-function parseOutreach(v: unknown): Outreach[] {
-  if (!Array.isArray(v)) return [];
-  const out: Outreach[] = [];
-  for (const x of v) {
-    if (!x || typeof x !== "object") continue;
-    const o = x as Record<string, unknown>;
-    if (typeof o.who === "string" && o.who.trim() && typeof o.how === "string" && HOWS.has(o.how))
-      out.push({ who: o.who.trim(), how: o.how as Outreach["how"], why: s(o.why) || "not stated" });
-  }
-  return out.slice(0, 10);
-}
-const describeOutreach = (xs: Outreach[]) => xs.map((d) => `${d.who} by ${d.how} (${d.why})`).join("; ");
-/** "https://www.ubereats.com/orders" and "ubereats.com" both mean ubereats.com. */
-export function siteOf(v: string): string {
-  return v
-    .trim()
-    .toLowerCase()
-    .replace(/^https?:\/\//, "")
-    .replace(/^www\./, "")
-    .split(/[/?#]/)[0]!
-    .replace(/[^a-z0-9.-]/g, "");
-}
+export type { GateDecision, ToolContext, ToolDef, ToolFamily, ToolResult } from "./kit.ts";
+export { siteOf } from "./kit.ts";
 
 // ----------------------------------------------------------------------------
 
-export const TOOLS: ToolDef[] = [
+export const CORE_TOOLS: ToolDef[] = [
   {
     spec: {
       name: "plan",
@@ -157,8 +44,42 @@ export const TOOLS: ToolDef[] = [
   },
   {
     spec: {
+      name: "revise_plan",
+      description:
+        "Rewrite the plan from what you have learned: a step stalled, a source was a dead end, or the evidence points somewhere better. Say in one line what you learned, then give the remaining steps. Finished steps are kept; the rest is replaced. Do this instead of repeating a failing approach.",
+      input_schema: obj(
+        {
+          evidence: str("What you learned that changes the course, one line."),
+          steps: {
+            type: "array",
+            items: obj(
+              {
+                text: str("The step."),
+                approach: { type: "string", enum: ["search", "ask_room", "ask_person", "call", "community_post", "browse", "wait"] },
+              },
+              ["text", "approach"],
+            ),
+          },
+        },
+        ["evidence", "steps"],
+      ),
+    },
+    family: "plan",
+    labels: { running: "Re-planning…", done: "Revised the plan" },
+    sideEffect: false,
+    async run(input, ctx) {
+      const steps = Array.isArray(input.steps) ? (input.steps as { text: string; approach: ApproachKind }[]) : [];
+      if (!steps.length) return { ok: false, content: "A revision needs at least one step." };
+      const revised = ctx.planner.revise(ctx.run.id, s(input.evidence), steps);
+      if (!revised) return { ok: false, content: "There is no plan to revise yet; call plan first." };
+      return { ok: true, content: ctx.planner.describe(revised) };
+    },
+  },
+  {
+    spec: {
       name: "web_search",
-      description: "Search the web. Use for businesses, hours, prices, how-tos and anything public. Returns titles, URLs and snippets.",
+      description:
+        "Search the web. Use for businesses, hours, prices, how-tos and anything public. Returns titles and URLs, with a snippet when the engine has one; read the page with browse_page before repeating a price, an hour or a number.",
       input_schema: obj({ query: str("Search query."), near: str("Optional place to bias results, e.g. a city.") }, ["query"]),
     },
     family: "search",
@@ -166,8 +87,9 @@ export const TOOLS: ToolDef[] = [
     sideEffect: false,
     async run(input, ctx) {
       const r = await ctx.hands.search.search(s(input.query), { near: s(input.near) || undefined, limit: 8 });
-      if (!r.results.length) return { ok: true, content: "No results.", evidence: r.evidence, stall: `no results for "${s(input.query)}"`, approach: "search" };
-      return { ok: true, content: r.results, evidence: r.evidence, approach: "search" };
+      const label = `Searched: ${s(input.query).slice(0, 60)}`;
+      if (!r.results.length) return { ok: true, content: "No results.", evidence: r.evidence, stall: `no results for "${s(input.query)}"`, approach: "search", label };
+      return { ok: true, content: r.results, evidence: r.evidence, approach: "search", label };
     },
   },
   {
@@ -204,7 +126,13 @@ export const TOOLS: ToolDef[] = [
         if (!r) return { ok: false, content: `${site} is not connected.` };
         if (!r.text.trim())
           return { ok: true, content: { url: r.url, title: r.title, text: "", links: r.links }, evidence: r.evidence, stall: `empty page at ${url}`, approach: "browse" };
-        return { ok: true, content: { url: r.url, title: r.title, text: r.text, links: r.links.slice(0, 30) }, evidence: r.evidence, approach: "browse" };
+        return {
+          ok: true,
+          content: { url: r.url, title: r.title, text: r.text, links: r.links.slice(0, 30) },
+          evidence: r.evidence,
+          approach: "browse",
+          label: `Read ${siteOf(url)}`,
+        };
       } catch (e) {
         return { ok: false, content: `Could not load ${url}: ${String((e as Error).message).slice(0, 200)}`, stall: `page failed: ${url}`, approach: "browse" };
       }
@@ -240,7 +168,7 @@ export const TOOLS: ToolDef[] = [
         requesterId: ctx.requesterId,
         kind: "connect_account",
         title: `Sign in to ${site}`,
-        detail: `${ctx.agent.name} needs your ${site} account to: ${s(input.why)}. Sign in inside the chat; ${ctx.agent.name} never sees your password, only the signed-in browser.`,
+        detail: `${ctx.agent.name} needs your ${site} account to: ${s(input.why).replace(/[.\s]+$/, "")}. Sign in inside the chat (on a phone, open the link to the app); ${ctx.agent.name} never sees your password, only the signed-in browser.`,
         card: { kind: "connect_account", itemId: "", site, liveViewUrl: live.liveViewUrl, status: "open" },
         ttlMs: 30 * 60 * 1000,
       });
@@ -255,6 +183,90 @@ export const TOOLS: ToolDef[] = [
         waitingOn: item,
         roomNotice: notice,
       };
+    },
+  },
+  {
+    spec: {
+      name: "find_person",
+      description:
+        "Look up someone the assistant knows: a member of any chat it is in. Matches on name, email or phone. Returns who they are and which chats you share; a phone number only when the request is from them or from the owner.",
+      input_schema: obj({ query: str("A name, part of a name, an email or a phone number.") }, ["query"]),
+    },
+    family: "people",
+    labels: { running: "Looking up people…", done: "Looked up people" },
+    sideEffect: false,
+    async run(input, ctx) {
+      const q = s(input.query).trim().toLowerCase();
+      if (q.length < 2) return { ok: false, content: "Give at least two characters." };
+      const rooms = ctx.store.listRooms(ctx.agent.id);
+      const seen = new Map<Id, { id: Id; name: string; rooms: string[]; phone?: string; email?: string }>();
+      for (const room of rooms) {
+        for (const id of ctx.rooms.memberIds(room.id)) {
+          const p = ctx.store.getPerson(id);
+          if (!p) continue;
+          const hay = [p.displayName, p.email ?? "", p.phoneE164 ?? ""].join(" ").toLowerCase();
+          if (!hay.includes(q)) continue;
+          const hit = seen.get(id) ?? { id, name: p.displayName, rooms: [] };
+          if (room.kind === "group") hit.rooms.push(room.name);
+          const mayContact = ctx.requesterId === id || ctx.requesterId === ctx.agent.ownerId;
+          if (mayContact) {
+            hit.phone = p.phoneE164;
+            hit.email = p.email;
+          }
+          seen.set(id, hit);
+        }
+      }
+      const out = [...seen.values()].slice(0, 10);
+      if (!out.length)
+        return { ok: true, content: `Nobody matching "${s(input.query)}" in the chats I'm in. Ask the room, or ask the owner to add them.`, label: `Looked up: ${s(input.query)}` };
+      return { ok: true, content: out, label: `Looked up: ${s(input.query)}` };
+    },
+  },
+  {
+    spec: {
+      name: "add_member",
+      description:
+        "Add someone to this chat: 'add my sister Mia, +1 415 555 0101' or 'add Sam, sam@example.com'. A phone or email lets their texts or sign-in land on them. Owner only; others are told to ask the owner. Guests are served through the owner; members can be trusted with their own accounts later.",
+      input_schema: obj(
+        { name: str("Their name."), phone: str("Phone in E.164, optional."), email: str("Email, optional."), role: { type: "string", enum: ["member", "guest"] } },
+        ["name"],
+      ),
+    },
+    family: "people",
+    labels: { running: "Adding someone…", done: "Added someone to the chat" },
+    sideEffect: false,
+    async run(input, ctx) {
+      if (ctx.requesterId !== ctx.agent.ownerId && ctx.rooms.role(ctx.room.id, ctx.requesterId ?? "") !== "owner")
+        return { ok: false, content: `Only ${ctx.store.getPerson(ctx.agent.ownerId)?.displayName ?? "the owner"} can add people to this chat; suggest they ask.` };
+      const person = ctx.rooms.findOrCreatePerson({ displayName: s(input.name), email: s(input.email) || undefined, phoneE164: s(input.phone) || undefined });
+      if (!person) return { ok: false, content: "Give a name." };
+      if (ctx.store.getMembership(ctx.room.id, person.id)) return { ok: true, content: `${person.displayName} is already in this chat.` };
+      const role = s(input.role) === "guest" ? "guest" : "member";
+      ctx.rooms.addMember(ctx.room.id, person.id, role);
+      return {
+        ok: true,
+        content: `Added ${person.displayName} as ${role}${person.phoneE164 || person.email ? "" : " (no phone or email yet, so their messages cannot be matched to them until one is added)"}.`,
+        evidence: `member:${person.id}`,
+        label: `Added ${person.displayName}`,
+      };
+    },
+  },
+  {
+    spec: {
+      name: "remove_member",
+      description: "Take someone out of this chat. Owner only. The owner cannot be removed.",
+      input_schema: obj({ name: str("Member name.") }, ["name"]),
+    },
+    family: "people",
+    labels: { running: "Removing someone…", done: "Removed someone from the chat" },
+    sideEffect: false,
+    async run(input, ctx) {
+      if (ctx.requesterId !== ctx.agent.ownerId && ctx.rooms.role(ctx.room.id, ctx.requesterId ?? "") !== "owner")
+        return { ok: false, content: `Only ${ctx.store.getPerson(ctx.agent.ownerId)?.displayName ?? "the owner"} can remove people from this chat.` };
+      const who = ctx.findMember(s(input.name));
+      if (!who) return { ok: false, content: `No member named "${s(input.name)}".` };
+      if (!ctx.rooms.removeMember(ctx.room.id, who.id)) return { ok: false, content: `${who.name} is the owner and stays.` };
+      return { ok: true, content: `Removed ${who.name} from this chat.`, evidence: `member-removed:${who.id}`, label: `Removed ${who.name}` };
     },
   },
   {
@@ -313,7 +325,7 @@ export const TOOLS: ToolDef[] = [
         kind,
         title: `${ctx.agent.name} has a question`,
         detail: s(input.question),
-        options: Array.isArray(input.options) ? (input.options as string[]) : undefined,
+        options: Array.isArray(input.options) ? input.options.filter((o): o is string => typeof o === "string").slice(0, 8) : undefined,
         ttlMs: 3 * 24 * 60 * 60 * 1000,
       });
       ctx.dm(who.id, s(input.question));
@@ -350,10 +362,10 @@ export const TOOLS: ToolDef[] = [
         roomId: ctx.room.id,
         runId: ctx.run.id,
         assigneeId: assignee,
-        kind: s(input.kind) as AttentionKind,
+        kind: (["decision", "information", "action"].includes(s(input.kind)) ? s(input.kind) : "information") as AttentionKind,
         title: "Your input is needed",
         detail: s(input.question),
-        options: Array.isArray(input.options) ? (input.options as string[]) : undefined,
+        options: Array.isArray(input.options) ? input.options.filter((o): o is string => typeof o === "string").slice(0, 8) : undefined,
         ttlMs: 7 * 24 * 60 * 60 * 1000,
       });
       return { ok: true, content: "Waiting.", waitingOn: item, roomNotice: s(input.question), approach: "wait" };
@@ -375,22 +387,23 @@ export const TOOLS: ToolDef[] = [
       ),
     },
     family: "calls",
+    needs: "phone",
     labels: { running: "On a call…", done: "Made a call", failed: "Call failed" },
     sideEffect: true,
     async run(input, ctx) {
+      const to = e164(s(input.to));
+      if (!to) return { ok: false, content: "Give the number in E.164, like +14085550100.", approach: "call" };
       const gate = ctx.gate({
         kind: "outreach_approval",
         title: `OK to call ${s(input.who)}?`,
-        detail: `${ctx.agent.name} wants to call ${s(input.who)} (${s(input.to)}) by phone to: ${s(input.objective)}`,
-        outreach: { who: s(input.who), how: "phone" },
-        key: ["place_call", s(input.to)],
+        detail: `${ctx.agent.name} wants to call ${s(input.who)} (${to}) by phone to: ${s(input.objective)}`,
+        outreach: { who: s(input.who), how: "phone", contact: to },
+        key: ["place_call", to],
       });
-      if (!gate.granted) {
-        if ("held" in gate) return { ok: true, content: gate.held, approach: "call", held: true };
-        return { ok: true, content: "Waiting for the owner's go-ahead. Nothing has been dialed.", waitingOn: gate.item, roomNotice: gate.notice, approach: "call" };
-      }
+      const held = askFirst(gate, "Waiting for the owner's go-ahead. Nothing has been dialed.", { approach: "call" });
+      if (held) return held;
       ctx.progress(`Calling ${s(input.who)}…`);
-      const r = await ctx.hands.phone.call({ to: s(input.to), objective: s(input.objective), callerName: ctx.agent.name, language: s(input.language) || undefined });
+      const r = await ctx.hands.phone.call({ to, objective: s(input.objective), callerName: ctx.agent.name, language: s(input.language) || undefined });
       const stalled = r.status !== "completed";
       return {
         ok: true,
@@ -408,6 +421,7 @@ export const TOOLS: ToolDef[] = [
       input_schema: obj({ to: str("E.164 number."), who: str("Who this is."), text: str("The message.") }, ["to", "who", "text"]),
     },
     family: "calls",
+    needs: "phone",
     labels: { running: "Sending a text…", done: "Sent a text" },
     sideEffect: true,
     async run(input, ctx) {
@@ -415,13 +429,11 @@ export const TOOLS: ToolDef[] = [
         kind: "outreach_approval",
         title: `OK to text ${s(input.who)}?`,
         detail: `${ctx.agent.name} wants to text ${s(input.who)} (${s(input.to)}): "${s(input.text)}"`,
-        outreach: { who: s(input.who), how: "sms" },
+        outreach: { who: s(input.who), how: "sms", contact: s(input.to) },
         key: ["send_sms", s(input.to), s(input.text)],
       });
-      if (!gate.granted) {
-        if ("held" in gate) return { ok: true, content: gate.held, held: true };
-        return { ok: true, content: "Waiting for the owner's go-ahead. Nothing was sent.", waitingOn: gate.item, roomNotice: gate.notice };
-      }
+      const held = askFirst(gate, "Waiting for the owner's go-ahead. Nothing was sent.");
+      if (held) return held;
       const r = await ctx.hands.phone.sendSms({ to: s(input.to), text: s(input.text), from: ctx.agent.name });
       return { ok: true, content: { sent: true, messageId: r.messageId }, evidence: r.evidence };
     },
@@ -442,6 +454,7 @@ export const TOOLS: ToolDef[] = [
       ),
     },
     family: "community",
+    needs: "community",
     labels: { running: "Asking a community…", done: "Posted to a community" },
     sideEffect: true,
     async run(input, ctx) {
@@ -452,10 +465,8 @@ export const TOOLS: ToolDef[] = [
         outreach: { who: s(input.community), how: "community_post" },
         key: ["post_community", s(input.community), s(input.title), s(input.body)],
       });
-      if (!gate.granted) {
-        if ("held" in gate) return { ok: true, content: gate.held, approach: "community_post", held: true };
-        return { ok: true, content: "Waiting for the owner's OK before posting anything public.", waitingOn: gate.item, roomNotice: gate.notice, approach: "community_post" };
-      }
+      const held = askFirst(gate, "Waiting for the owner's OK before posting anything public.", { approach: "community_post" });
+      if (held) return held;
       const r = await ctx.hands.community.post({ community: s(input.community), title: s(input.title), body: s(input.body), language: s(input.language) || undefined });
       return {
         ok: true,
@@ -472,6 +483,7 @@ export const TOOLS: ToolDef[] = [
       input_schema: obj({ postId: str("The post id returned by post_community.") }, ["postId"]),
     },
     family: "community",
+    needs: "community",
     labels: { running: "Reading replies…", done: "Read community replies" },
     sideEffect: false,
     async run(input, ctx) {
@@ -541,7 +553,8 @@ export const TOOLS: ToolDef[] = [
         text: stored === "observation" ? `[${type}] ${s(input.text)}` : s(input.text),
         aliases: Array.isArray(input.aliases) ? (input.aliases as string[]) : [],
         subjectPersonId: about?.id ?? ctx.requesterId,
-        visibleToRooms: input.private ? [ctx.room.id] : [ctx.room.id],
+        // Private: the note never leaves this chat; otherwise a group may see it (a DM is not a group, see deriveProfile).
+        visibleToRooms: input.private ? [] : [ctx.room.id],
         sourceRunId: ctx.run.id,
       });
       return { ok: true, content: `Noted (${m.id}).` };
@@ -582,7 +595,15 @@ export const TOOLS: ToolDef[] = [
           premise: str("What must still be true for this to make sense, e.g. 'the reservation is still unconfirmed'."),
           disclosedOutreach: {
             type: "array",
-            items: obj({ who: str("Name"), how: { type: "string", enum: ["phone", "email", "sms", "community_post"] }, why: str("Purpose") }, ["who", "how", "why"]),
+            items: obj(
+              {
+                who: str("Name"),
+                how: { type: "string", enum: ["phone", "email", "sms", "community_post"] },
+                why: str("Purpose"),
+                contact: str("Their number (E.164) or email when known; the first one used is bound otherwise."),
+              },
+              ["who", "how", "why"],
+            ),
           },
         },
         ["title", "prompt", "premise"],
@@ -599,19 +620,17 @@ export const TOOLS: ToolDef[] = [
       if (runAt !== undefined && !Number.isFinite(runAt)) return { ok: false, content: "runAt is not a valid ISO instant." };
       const outreach = parseOutreach(input.disclosedOutreach);
       // Only the owner may put the agent on a schedule without asking; disclosed outreach is an
-      // approval in advance, so anyone else (deciders included) needs the owner's yes for it.
+      // approval in advance, so anyone else needs the owner's yes for it.
       const role = ctx.requesterId ? ctx.rooms.role(ctx.room.id, ctx.requesterId) : undefined;
-      if (role !== "owner" && (role !== "decider" || outreach.length)) {
+      if (role !== "owner") {
         const gate = ctx.gate({
           kind: outreach.length ? "outreach_approval" : "decision",
           title: `OK to schedule "${s(input.title)}"?`,
           detail: `${s(input.prompt)}\nPremise: ${s(input.premise)}${outreach.length ? `\nIt may contact: ${describeOutreach(outreach)}` : ""}`,
           key: ["schedule_action", s(input.title), s(input.prompt), outreach],
         });
-        if (!gate.granted) {
-          if ("held" in gate) return { ok: true, content: gate.held, held: true };
-          return { ok: true, content: "Asked the owner before scheduling.", waitingOn: gate.item, roomNotice: gate.notice };
-        }
+        const held = askFirst(gate, "Asked the owner before scheduling.");
+        if (held) return held;
       }
       if (outreach.length && ctx.requesterId === ctx.agent.ownerId)
         ctx.dm(ctx.agent.ownerId, `Scheduled "${s(input.title)}" may contact without asking again: ${describeOutreach(outreach)}.`);
@@ -654,12 +673,13 @@ export const TOOLS: ToolDef[] = [
           owner: str("Member name, or 'me' for yourself."),
           beneficiary: str("Who it is for, if someone else."),
           dueAt: str("ISO 8601 instant, if any."),
+          overdue: { type: "boolean", description: "True when the due date is already past on purpose: it is owed now ('Sam owed this since Monday')." },
           detail: str("Context: address, confirmation numbers, what to bring."),
         },
         ["title", "owner"],
       ),
     },
-    family: "care",
+    family: "ledger",
     labels: { running: "Writing it down…", done: "Tracking a responsibility" },
     sideEffect: false,
     async run(input, ctx) {
@@ -668,6 +688,17 @@ export const TOOLS: ToolDef[] = [
       if (!owner) return { ok: false, content: `No member named "${s(input.owner)}".` };
       const ben = s(input.beneficiary) ? ctx.findMember(s(input.beneficiary)) : undefined;
       const due = s(input.dueAt) ? Date.parse(s(input.dueAt)) : undefined;
+      // A past due date is either something already owed ("since Monday", flagged overdue) or a slipped date
+      // (a wrong year, a past weekday) that would nudge at once. Unflagged, say what today is and let the model
+      // fix the date or say it is owed.
+      const past = due !== undefined && Number.isFinite(due) && due < ctx.clock.now() - 60 * 60 * 1000;
+      if (past && input.overdue !== true) {
+        const zone = ctx.store.getPerson(ctx.agent.ownerId)?.timezone ?? "UTC";
+        return {
+          ok: false,
+          content: `dueAt ${s(input.dueAt)} is in the past. Now is ${fmtWhen(ctx.clock.now(), zone)} (${new Date(ctx.clock.now()).toISOString()}). Check the year and day and call again; if it really is already owed, call again with overdue: true.`,
+        };
+      }
       const c = ctx.commitments.track({
         roomId: ctx.room.id,
         agentId: ctx.agent.id,
@@ -680,7 +711,7 @@ export const TOOLS: ToolDef[] = [
       });
       return {
         ok: true,
-        content: { commitmentId: c.id, owner: owner.name, nextNudgeAt: c.nextNudgeAt ? new Date(c.nextNudgeAt).toISOString() : null },
+        content: { commitmentId: c.id, owner: owner.name, ...(past ? { overdue: true } : {}), nextNudgeAt: c.nextNudgeAt ? new Date(c.nextNudgeAt).toISOString() : null },
         evidence: `commitment:${c.id}`,
       };
     },
@@ -700,7 +731,7 @@ export const TOOLS: ToolDef[] = [
         ["commitmentId"],
       ),
     },
-    family: "care",
+    family: "ledger",
     labels: { running: "Updating…", done: "Updated a responsibility" },
     sideEffect: false,
     async run(input, ctx) {
@@ -737,15 +768,15 @@ export const TOOLS: ToolDef[] = [
         title: `OK to spend $${amount.toFixed(2)}?`,
         detail: `${ctx.agent.name} wants to pay $${amount.toFixed(2)} at ${s(input.where)} for: ${s(input.what)}`,
         money: amount,
-        key: ["request_purchase", amount.toFixed(2), s(input.where), s(input.what)],
+        // The yes covers the money (to the next $10) and the merchant; the item's wording lives in the card, so a
+        // re-issue that says "$79.99" or paraphrases "what" after the yes does not open a second card.
+        key: ["request_purchase", Math.ceil(amount / 10) * 10, s(input.where).toLowerCase()],
       });
-      if (!gate.granted) {
-        if ("held" in gate) return { ok: true, content: gate.held, held: true };
-        return { ok: true, content: "Waiting for approval before paying.", waitingOn: gate.item, roomNotice: gate.notice };
-      }
+      const held = askFirst(gate, "Waiting for approval before paying.");
+      if (held) return held;
       return {
         ok: true,
-        content: `Approved: ${gate.reason}. The budget is cleared. No ordering tool is connected yet, so reply in one line that it is approved and that the order itself still has to be placed by hand, then stop. Do not ask anyone anything else and do not browse shops.`,
+        content: `Approved: ${gate.granted ? gate.reason : ""}. The budget is cleared for $${amount.toFixed(2)} at ${s(input.where)}. Next: search_products and add_to_cart, then checkout_cart, which confirms the budget against the cart but does not place the order: hand the person the item links, the amount and the address to finish, and never say it was ordered.`,
         evidence: `purchase-approved:${amount}`,
       };
     },
@@ -847,7 +878,7 @@ export const TOOLS: ToolDef[] = [
     spec: {
       name: "watch_for",
       description:
-        "Set an alert rule: check a condition every few hours and act only when it holds, otherwise stay quiet. For 'tell me when the pharmacy confirms', 'if the price drops under $100', 'once Ben replies'. Name any third party you would contact.",
+        "Set an alert rule: check a condition every few hours and act only when it holds, otherwise stay quiet. For 'tell me when the pharmacy confirms', 'if the price drops under $100', 'once Ben replies'. Needs no connection: each check can read your own inbox (email_load_unprocessed), your notes, the ledger, a page or a search. Name any third party you would contact.",
       input_schema: obj(
         {
           title: str("Short title."),
@@ -857,7 +888,15 @@ export const TOOLS: ToolDef[] = [
           untilDays: num("Stop after this many days (default 14)."),
           disclosedOutreach: {
             type: "array",
-            items: obj({ who: str("Name"), how: { type: "string", enum: ["phone", "email", "sms", "community_post"] }, why: str("Purpose") }, ["who", "how", "why"]),
+            items: obj(
+              {
+                who: str("Name"),
+                how: { type: "string", enum: ["phone", "email", "sms", "community_post"] },
+                why: str("Purpose"),
+                contact: str("Their number (E.164) or email when known; the first one used is bound otherwise."),
+              },
+              ["who", "how", "why"],
+            ),
           },
         },
         ["title", "condition", "action", "everyHours"],
@@ -870,17 +909,15 @@ export const TOOLS: ToolDef[] = [
       const every = Math.min(24, Math.max(1, n(input.everyHours) ?? 6));
       const outreach = parseOutreach(input.disclosedOutreach);
       const role = ctx.requesterId ? ctx.rooms.role(ctx.room.id, ctx.requesterId) : undefined;
-      if (role !== "owner" && (role !== "decider" || outreach.length)) {
+      if (role !== "owner") {
         const gate = ctx.gate({
           kind: outreach.length ? "outreach_approval" : "decision",
           title: `OK to watch for "${s(input.title)}"?`,
           detail: `Every ${every}h: ${s(input.condition)} → ${s(input.action)}${outreach.length ? `\nIt may contact: ${describeOutreach(outreach)}` : ""}`,
           key: ["watch_for", s(input.title), s(input.condition), s(input.action), outreach],
         });
-        if (!gate.granted) {
-          if ("held" in gate) return { ok: true, content: gate.held, held: true };
-          return { ok: true, content: "Asked the owner before setting the watch.", waitingOn: gate.item, roomNotice: gate.notice };
-        }
+        const held = askFirst(gate, "Asked the owner before setting the watch.");
+        if (held) return held;
       }
       if (outreach.length && ctx.requesterId === ctx.agent.ownerId)
         ctx.dm(ctx.agent.ownerId, `Watch "${s(input.title)}" may contact without asking again: ${describeOutreach(outreach)}.`);
@@ -907,8 +944,48 @@ export const TOOLS: ToolDef[] = [
   },
 ];
 
+/** A phone number as E.164, taking "(408) 555-0100" as US; anything else that is not +country… is refused. */
+export function e164(raw: string): string | undefined {
+  const digits = raw.replace(/[^+\d]/g, "");
+  const v = digits.startsWith("+") ? digits : digits.length === 10 ? `+1${digits}` : digits.length === 11 && digits.startsWith("1") ? `+${digits}` : "";
+  return /^\+\d{8,15}$/.test(v) ? v : undefined;
+}
+
+/** Every tool that exists: the core set plus the catalogue (Google, operator, knowledge, shopping, voice, contacts, email, MCP). */
+export const TOOLS: ToolDef[] = [...CORE_TOOLS, ...CATALOG_TOOLS];
 export const TOOL_INDEX = new Map(TOOLS.map((t) => [t.spec.name, t]));
 
-export function toolSpecs(): ToolSpec[] {
-  return TOOLS.map((t) => t.spec);
+/** The boot-level providers wired in src/main.ts. A tool with `needs` is only offered when its provider is here. */
+export type Providers = ReadonlySet<string>;
+
+/**
+ * The tools one run may call: the core set, plus catalogue tools whose provider
+ * is wired. The list is chosen once per run and never changes mid-run, so the
+ * prompt prefix caches; discovery of more happens through search_tools for the
+ * next run.
+ */
+export function toolsForRun(providers: Providers, allow?: string[]): ToolSpec[] {
+  return TOOLS.filter((t) => (!t.needs || providers.has(t.needs)) && allowedFor(t, allow)).map((t) => t.spec);
+}
+
+/** What every agent keeps whatever its tool list: planning, asking, the ledger, memory, hand-off and silence. */
+export const ALWAYS_TOOLS = new Set([
+  "plan",
+  "revise_plan",
+  "ask_room",
+  "ask_person",
+  "wait_for_user_input",
+  "track_commitment",
+  "update_commitment",
+  "remember",
+  "search_memory",
+  "delegate_task",
+  "update_task",
+  "steer_task",
+  "stay_quiet",
+]);
+
+/** A tool is allowed for an agent with no list, or when its name or family is on the list, or when it is core. */
+export function allowedFor(t: ToolDef, allow?: string[]): boolean {
+  return !allow || ALWAYS_TOOLS.has(t.spec.name) || allow.includes(t.spec.name) || allow.includes(t.family);
 }

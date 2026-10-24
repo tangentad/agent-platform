@@ -1,6 +1,7 @@
 import { newId } from "../core/ids.ts";
-import { DAY, HOUR, hourIn, nextOccurrence, type Clock } from "../core/clock.ts";
-import type { Authorization, Calendar, Commitment, Id, Schedule, StagedItem } from "../core/types.ts";
+import { DAY, HOUR, nextOccurrence, type Clock } from "../core/clock.ts";
+import type { DocState } from "../channels/artifacts.ts";
+import type { Authorization, Calendar, Commitment, Id, Schedule } from "../core/types.ts";
 import type { Store } from "../store/repos.ts";
 import type { Runtime } from "../runtime/runtime.ts";
 import type { CommitmentService } from "../care/commitments.ts";
@@ -10,7 +11,6 @@ import type { ModelClient } from "../model/types.ts";
 /**
  * Timers. One tick does five things, each idempotent by dedup key:
  *  1. fire due schedules (after re-checking the premise),
- *  2. deliver staged outreach once working hours begin,
  *  3. nudge owners of responsibilities that are due,
  *  4. expire stale attention items,
  *  5. heartbeat: wake the agent on standing work at most once a day per room.
@@ -23,8 +23,13 @@ export class Scheduler {
     private commitments: CommitmentService,
     private attention: AttentionService,
     private model: ModelClient,
-    private opts: { heartbeatEveryMs?: number } = {},
+    private opts: { heartbeatEveryMs?: number; onError?: (source: string, e: unknown) => void } = {},
   ) {}
+
+  private fail(source: string, e: unknown) {
+    if (this.opts.onError) this.opts.onError(source, e);
+    else console.error(`${source}:`, (e as Error).message);
+  }
 
   static createSchedule(
     store: Store,
@@ -72,42 +77,62 @@ export class Scheduler {
     this.store.putSchedule(s);
   }
 
-  async tick(): Promise<{ fired: number; staged: number; nudged: number; expired: number; heartbeats: number }> {
+  async tick(): Promise<{ fired: number; nudged: number; expired: number; heartbeats: number; edited: number }> {
     const now = this.clock.now();
-    const out = { fired: 0, staged: 0, nudged: 0, expired: 0, heartbeats: 0 };
+    const out = { fired: 0, nudged: 0, expired: 0, heartbeats: 0, edited: 0 };
 
     // Each item on its own: one bad firing must not skip the rest of the tick.
+    // A paused agent's work stays due and fires once it is back on.
+    const paused = (agentId: Id) => !!this.store.getAgent(agentId)?.paused;
     for (const s of this.store.dueSchedules(now)) {
+      if (paused(s.agentId)) continue;
       try {
         await this.fire(s, now);
         out.fired += 1;
       } catch (e) {
-        console.error(`schedule ${s.id} failed to fire:`, (e as Error).message);
+        this.fail(`schedule ${s.id}`, e);
       }
     }
 
-    for (const item of this.store.dueStaged(now)) {
-      const room = this.store.getRoom(item.roomId);
-      const zone = room ? (this.store.getPerson(this.store.getAgent(room.agentId)?.ownerId ?? "")?.timezone ?? "UTC") : "UTC";
-      const h = hourIn(zone, now);
-      if (room && (h < room.outreachHours.start || h >= room.outreachHours.end)) continue;
-      item.deliveredAt = now;
-      this.store.putStaged(item);
-      await this.runtime.startSystemRun({
-        roomId: item.roomId,
-        trigger: "scheduled_action",
-        source: "staged_outreach",
-        dedupKey: `staged:${item.id}`,
-        text: `Working hours began. Deliver the held outreach now: ${JSON.stringify(item.payload)}. Re-check that it is still needed first; if not, say what you found instead.`,
-      });
-      out.staged += 1;
+    // Page edits become events, at most one run per page per burst: the diff since the
+    // assistant last looked names the claims, and the run decides what is a commitment
+    // (multiplayer-spec §10.3: "Sam claimed: bring the stove" is a responsibility).
+    for (const id of JSON.parse(this.store.getKv("artedit:pending") ?? "[]") as string[]) {
+      const n = Number(this.store.getKv(`artedit:${id}`) ?? 0);
+      const seenN = Number(this.store.getKv(`artedit:seen:${id}`) ?? 0);
+      const latest = JSON.parse(this.store.getKv(`artedit:${id}:${n}`) ?? "null") as { state: DocState } | null;
+      const seen = JSON.parse(this.store.getKv(`artedit:${id}:${seenN}`) ?? "null") as { state: DocState } | null;
+      const art = this.store.getArtifact(id);
+      // Ticks and additions post nothing (multiplayer-spec §10.3), so only a change in who brings what costs a run.
+      const diff = n === seenN || !art?.roomId || !this.store.getRoom(art.roomId) ? "" : pageDiff(seen?.state, latest?.state, { claimsOnly: true });
+      const done = () => {
+        this.store.setKv(`artedit:seen:${id}`, String(n));
+        for (let i = seenN; i < n; i++) this.store.deleteKv(`artedit:${id}:${i}`); // keep only the newest snapshot
+        this.store.setKv("artedit:pending", JSON.stringify((JSON.parse(this.store.getKv("artedit:pending") ?? "[]") as string[]).filter((x) => x !== id)));
+      };
+      if (!diff || !art?.roomId) {
+        done();
+        continue;
+      }
+      try {
+        await this.runtime.handleEvent({
+          roomId: art.roomId,
+          source: "artifact_edit",
+          dedupKey: `art:${id}:${n}`,
+          summary: `The page "${art.title}" changed: ${diff}. Each claim a person made for themselves is a responsibility: read_page the page, then track_commitment with them as owner for claims not already in the ledger (put the page item in the detail). When someone put another member down, ask that member privately to confirm first (ask_person) and track it only on their yes. Ticks and additions need nothing.`,
+        });
+        out.edited += 1;
+        done();
+      } catch (e) {
+        this.fail(`artifact edit ${id}`, e);
+      }
     }
 
-    for (const c of this.commitments.takeDueNudges(now)) {
+    for (const c of this.commitments.takeDueNudges(now, (c) => paused(c.agentId))) {
       try {
         await this.nudge(c, now, out);
       } catch (e) {
-        console.error(`nudge for ${c.id} failed:`, (e as Error).message);
+        this.fail(`nudge ${c.id}`, e);
       }
     }
 
@@ -115,6 +140,7 @@ export class Scheduler {
 
     const every = this.opts.heartbeatEveryMs ?? DAY;
     for (const room of this.store.listRooms()) {
+      if (paused(room.agentId)) continue;
       const last = Number(this.store.getKv(`heartbeat:${room.id}`) ?? 0);
       if (now - last < every) continue;
       const open = this.commitments.open(room.id);
@@ -127,11 +153,11 @@ export class Scheduler {
           trigger: "heartbeat",
           source: "heartbeat",
           dedupKey: `heartbeat:${room.id}:${Math.floor(now / every)}`,
-          text: "Heartbeat check-in. Look at the ledger, the schedules and the tasks. Only speak if something changed, slipped, or needs a person; otherwise call stay_quiet.",
+          text: "Heartbeat check-in. Look at the ledger, the schedules and the tasks. Responsibilities are nudged automatically and schedules fire on their own: never reschedule, cancel or add a reminder for them here. Only speak if something changed, slipped, or needs a person; otherwise call stay_quiet.",
         });
         out.heartbeats += 1;
       } catch (e) {
-        console.error(`heartbeat for ${room.id} failed:`, (e as Error).message);
+        this.fail(`heartbeat ${room.id}`, e);
       }
     }
     return out;
@@ -142,14 +168,11 @@ export class Scheduler {
       const owner = this.store.getPerson(c.ownerId);
       const ben = c.beneficiaryId ? this.store.getPerson(c.beneficiaryId) : undefined;
       if (c.status === "blocked") {
-        // Nudging stopped working: a person must decide. Deciders first for someone cared for, else the owner.
+        // Nudging stopped working: the owner must decide.
         const room = this.store.getRoom(c.roomId);
         const agent = room ? this.store.getAgent(room.agentId) : undefined;
         if (room && agent) {
-          const members = this.store.listMembers(room.id);
-          const forCaredFor = !!c.beneficiaryId && members.some((m) => m.personId === c.beneficiaryId && m.role === "cared_for");
-          const deciders = members.filter((m) => m.role === "decider").map((m) => m.personId);
-          const assignee = (forCaredFor && deciders[0]) || agent.ownerId;
+          const assignee = agent.ownerId;
           const already = this.store.listAttention({ roomId: room.id, status: ["open"] }).some((a) => a.title === `"${c.title}" is stuck`);
           if (!already) {
             this.attention.open({
@@ -172,7 +195,7 @@ export class Scheduler {
         trigger: "follow_up",
         source: "commitment_nudge",
         dedupKey: `nudge:${c.id}:${c.nudges}`,
-        text: `Follow-up on responsibility [${c.id}] "${c.title}"${ben ? ` for ${ben.displayName}` : ""}, owned by ${owner?.displayName ?? (c.ownerId === c.agentId ? "you" : c.ownerId)}${c.dueAt ? `, due ${new Date(c.dueAt).toISOString()}` : ""}. Status: ${c.status}, nudges so far: ${c.nudges}. If you own it, do it or report what blocks it. If a person owns it, check in with them in one line (ask_person for private, or the room if it was agreed there) and update the ledger from their answer.`,
+        text: `Follow-up on responsibility [${c.id}] "${c.title}"${ben ? ` for ${ben.displayName}` : ""}, owned by ${owner?.displayName ?? (c.ownerId === c.agentId ? "you" : c.ownerId)}${c.dueAt ? `, due ${new Date(c.dueAt).toISOString()}` : ""}. Status: ${c.status}, nudges so far: ${c.nudges}. If you own it, do it or report what blocks it. If a person owns it, check in with them privately in one line with ask_person (multiplayer-spec §10.1: a nudge goes to the member's own chat, not the group; only a guest, who has no private chat with you, gets one line in the group naming them), and update the ledger from their answer.`,
       });
       out.nudged += 1;
     }
@@ -248,24 +271,40 @@ export class Scheduler {
         effort: "low",
         maxTokens: 300,
       });
-    } catch {
+    } catch (e) {
+      console.warn(`premise check for ${s.id} failed open:`, (e as Error).message);
       return { holds: true, note: "not verified (model unavailable); verify before acting" };
     }
     try {
       const j = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1));
       if (typeof j.holds === "boolean") return { holds: j.holds, note: String(j.note ?? "") };
     } catch {
-      /* fall through */
+      console.warn(`premise check for ${s.id} returned no JSON; failing open`);
     }
     return { holds: true, note: "not verified automatically; verify before acting" };
   }
+}
 
-  /** Hold an outreach payload until working hours. */
-  stage(input: Omit<StagedItem, "id" | "createdAt" | "deliveredAt">): StagedItem {
-    const item: StagedItem = { ...input, id: newId("stg"), createdAt: this.clock.now() };
-    this.store.putStaged(item);
-    return item;
+/** The human-readable delta between two page snapshots; empty when nothing a person did changed. */
+export function pageDiff(seen: DocState | null | undefined, latest: DocState | null | undefined, opts: { claimsOnly?: boolean } = {}): string {
+  if (!latest) return "";
+  const parts: string[] = [];
+  const claimed = latest.claimed ?? {};
+  const seenClaimed = seen?.claimed ?? {};
+  for (const [k, who] of Object.entries(claimed)) {
+    if (seenClaimed[k] === who) continue;
+    const by = latest.claimedBy?.[k];
+    parts.push(by && by !== who ? `${by} put ${who} down for "${k}" (${who} has not confirmed)` : `${who} claimed "${k}"`);
   }
+  for (const k of Object.keys(seenClaimed)) if (!(k in claimed)) parts.push(`the claim on "${k}" was dropped`);
+  if (opts.claimsOnly) return parts.join("; ");
+  const checked = latest.checked ?? {};
+  const seenChecked = seen?.checked ?? {};
+  for (const [k, who] of Object.entries(checked)) if (seenChecked[k] !== who) parts.push(`${who} ticked "${k}"`);
+  const added = Object.values(latest.added ?? {}).flat().length;
+  const seenAdded = Object.values(seen?.added ?? {}).flat().length;
+  if (added > seenAdded) parts.push(`${added - seenAdded} item(s) were added to the page`);
+  return parts.join("; ");
 }
 
 export function computeNext(s: Schedule, now: number): number | undefined {
