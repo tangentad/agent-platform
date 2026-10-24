@@ -8,9 +8,9 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23111' stroke-width='3'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Bricolage+Grotesque:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/landing.css" />
-<meta name="theme-color" content="#f3f3f1" />
+<meta name="theme-color" content="#f4e9e1" />
 </head>
 <body>
 
@@ -23,6 +23,16 @@
 </nav>
 
 <header class="hero">
+  <svg class="tunnel" id="tunnel" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <div class="scribbles hero-scribbles" aria-hidden="true">
+<svg class="doodle d-smile" viewBox="0 0 120 120" aria-hidden="true"><path d="M18 62c-3-26 18-46 44-45 25 1 42 20 41 44-1 27-21 43-44 42C34 102 20 86 18 62z" /><path d="M42 48c2 6 1 10-2 12M78 46c-3 5-2 10 1 12" /><path d="M36 74c6 12 20 16 32 12 6-2 11-6 14-12" /></svg>
+<svg class="doodle d-star" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 12l9 34 36 2-29 20 11 35-27-21-28 20 12-34L16 48l35-1z" /></svg>
+<svg class="doodle d-arrow" viewBox="0 0 160 80" aria-hidden="true"><path d="M8 40c30-22 60-26 90-14 20 8 34 10 54 2" /><path d="M136 12l18 14-20 14" /></svg>
+<svg class="doodle d-squig" viewBox="0 0 200 40" aria-hidden="true"><path d="M4 22c14-14 22-14 34 0s22 14 34 0 22-14 34 0 22 14 34 0 22-14 34 0 18 12 22 10" /></svg>
+<svg class="doodle d-bubble" viewBox="0 0 140 120" aria-hidden="true"><path d="M22 20c30-12 70-12 96 2 18 10 18 36 2 50-10 8-26 12-44 12l-30 24 4-26C26 76 10 60 14 42c2-9 2-18 8-22z" /><path d="M44 44h50M48 60h36" /></svg>
+<svg class="doodle d-check" viewBox="0 0 120 120" aria-hidden="true"><path d="M20 64l28 26C62 60 80 40 104 24" /><path d="M28 60l22 20" /></svg>
+<svg class="doodle d-heart" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 100C30 78 12 60 16 40c3-16 24-22 40-8l4 4 4-4c16-14 36-8 40 8 4 20-14 38-44 60z" /></svg>
+</div>
   <p class="eyebrow">For the group chat</p>
   <h1>One assistant. <span class="grad">Everyone in the chat can ask.</span></h1>
   <p class="lede">Add Circle to a group. It plans the trip, books hotels at wholesale, runs the group order, and asks before it pays.</p>
@@ -39,7 +49,7 @@
       <div class="island"></div>
       <div class="screen">
         <div class="status"><span class="time">9:41</span><span class="sig"><i></i><i></i><i></i><i></i></span><span class="wifi"></span><span class="batt"><i></i></span></div>
-        <div class="ihead"><span class="back">‹ <b>4</b></span><div class="iavatars" id="avatars"></div><div class="iname" id="chatName">Courchevel ski trip <span>›</span></div></div>
+        <div class="ihead"><span class="back"><b>4</b></span><div class="mid"><div class="iavatars" id="avatars"></div><div class="iname" id="chatName">Friday crew <span>›</span></div></div><span class="vid" aria-hidden="true"></span></div>
         <div class="thread play" id="thread" data-loop="16000"></div>
         <div class="compose"><span class="plus">+</span><span class="field">iMessage</span><span class="mic"></span></div>
         <div class="homebar"></div>
@@ -137,8 +147,17 @@
 </section>
 
 <section class="sec reveal" id="who">
+  <div class="scribbles who-scribbles" aria-hidden="true">
+<svg class="doodle d-smile" viewBox="0 0 120 120" aria-hidden="true"><path d="M18 62c-3-26 18-46 44-45 25 1 42 20 41 44-1 27-21 43-44 42C34 102 20 86 18 62z" /><path d="M42 48c2 6 1 10-2 12M78 46c-3 5-2 10 1 12" /><path d="M36 74c6 12 20 16 32 12 6-2 11-6 14-12" /></svg>
+<svg class="doodle d-star" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 12l9 34 36 2-29 20 11 35-27-21-28 20 12-34L16 48l35-1z" /></svg>
+<svg class="doodle d-arrow" viewBox="0 0 160 80" aria-hidden="true"><path d="M8 40c30-22 60-26 90-14 20 8 34 10 54 2" /><path d="M136 12l18 14-20 14" /></svg>
+<svg class="doodle d-squig" viewBox="0 0 200 40" aria-hidden="true"><path d="M4 22c14-14 22-14 34 0s22 14 34 0 22-14 34 0 22 14 34 0 22-14 34 0 18 12 22 10" /></svg>
+<svg class="doodle d-bubble" viewBox="0 0 140 120" aria-hidden="true"><path d="M22 20c30-12 70-12 96 2 18 10 18 36 2 50-10 8-26 12-44 12l-30 24 4-26C26 76 10 60 14 42c2-9 2-18 8-22z" /><path d="M44 44h50M48 60h36" /></svg>
+<svg class="doodle d-check" viewBox="0 0 120 120" aria-hidden="true"><path d="M20 64l28 26C62 60 80 40 104 24" /><path d="M28 60l22 20" /></svg>
+<svg class="doodle d-heart" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 100C30 78 12 60 16 40c3-16 24-22 40-8l4 4 4-4c16-14 36-8 40 8 4 20-14 38-44 60z" /></svg>
+</div>
   <p class="eyebrow">Who it's for</p>
-  <h2>Couples. Friend groups. Families.</h2>
+  <h2>Couples. <span class="circled">Friend groups.</span> Families.</h2>
   <div class="grid3 who">
     <article class="who-card c-pink"><h3>Couples</h3><div class="chips"><span>"Table for two near the station, Friday"</span><span>"Cheapest business fare to Lisbon in May"</span><span>"Remind us to renew the lease"</span></div></article>
     <article class="who-card c-sky"><h3>Friend groups</h3><div class="chips"><span>"Pip, 5-star in Courchevel for the four of us"</span><span>"Who still owes Sam for the Airbnb?"</span><span>"Open a Matchaful order"</span></div></article>
@@ -250,12 +269,16 @@
     const s = S[key];
     document.getElementById("chatName").innerHTML = `${esc(s.name)} <span>›</span>`;
     document.getElementById("avatars").innerHTML = s.people.map((p) => `<i>${esc(p)}</i>`).join("") + `<i class="pip">✦</i>`;
-    let i = 0;
+    let i = 0, prev = null;
+    const lastMe = [...s.lines].reverse().find((l) => l.who === s.me);
     thread.innerHTML = `<div class="stamp"><b>iMessage</b><br>Today 7:41 PM</div>` + s.lines.map((l) => {
       const side = l.who === s.me ? "me" : "them";
-      const who = side === "them" ? `<span class="who">${esc(l.who)}</span>` : "";
+      const named = side === "them" && prev !== l.who;
+      prev = l.who;
+      const who = named ? `<span class="who">${esc(l.who)}</span>` : "";
       const body = l.typing ? `<div class="bub dots"><i></i><i></i><i></i></div>` : `<div class="bub">${esc(l.text)}</div>`;
-      return `<div class="row ${side}${l.typing ? " typing" : ""}" style="--i:${i++}">${who}${body}</div>`;
+      const delivered = l === lastMe ? `<span class="delivered"><b>Delivered</b></span>` : "";
+      return `<div class="row ${side}${l.typing ? " typing" : ""}${named ? " named" : ""}" style="--i:${i++}">${who}${body}${delivered}</div>`;
     }).join("");
   };
   const play = () => { thread.classList.remove("go"); void thread.offsetWidth; thread.classList.add("go"); };
@@ -269,6 +292,41 @@
   if ("IntersectionObserver" in window && !reduce) {
     new IntersectionObserver((es) => { for (const e of es) { if (e.isIntersecting) { if (!loop) start(); } else { clearInterval(loop); loop = null; } } }, { threshold: 0.15 }).observe(thread);
   } else start();
+
+  // ---- the hero backdrop: a one-point perspective corridor in flat colour, drawn here so no image is shipped
+  const tunnel = document.getElementById("tunnel");
+  if (tunnel) {
+    const W = 1600, H = 900, cx = 800, cy = 470, ink = "#000";
+    const pal = ["#0072e3", "#ffb200", "#1be349", "#ab54f7", "#ea3737", "#ff5c38", "#00b2ff"];
+    const depths = [1, .78, .6, .46, .35, .27, .21, .16];
+    const rect = (d) => ({ x: cx - (cx) * d, y: cy - (cy) * d, w: W * d, h: H * d });
+    let out = "";
+    // coloured panels first: wall segments between two depths on the floor, ceiling and sides
+    const panels = [[0, "floor", .18, .34, pal[5]], [0, "floor", .66, .82, pal[1]], [1, "left", .3, .5, pal[0]], [0, "right", .2, .4, pal[3]], [2, "ceil", .12, .3, pal[2]], [3, "left", .5, .7, pal[4]], [2, "right", .55, .75, pal[6]], [4, "ceil", .6, .8, pal[0]], [5, "floor", .1, .3, pal[1]], [4, "left", .1, .3, pal[2]], [5, "right", .4, .6, pal[3]], [6, "floor", .6, .9, pal[4]]];
+    for (const [i, side, a, b, col] of panels) {
+      const o = rect(depths[i]), n = rect(depths[i + 1]); if (!n) continue;
+      let pts;
+      if (side === "floor") pts = [[o.x + o.w * a, o.y + o.h], [o.x + o.w * b, o.y + o.h], [n.x + n.w * b, n.y + n.h], [n.x + n.w * a, n.y + n.h]];
+      else if (side === "ceil") pts = [[o.x + o.w * a, o.y], [o.x + o.w * b, o.y], [n.x + n.w * b, n.y], [n.x + n.w * a, n.y]];
+      else if (side === "left") pts = [[o.x, o.y + o.h * a], [o.x, o.y + o.h * b], [n.x, n.y + n.h * b], [n.x, n.y + n.h * a]];
+      else pts = [[o.x + o.w, o.y + o.h * a], [o.x + o.w, o.y + o.h * b], [n.x + n.w, n.y + n.h * b], [n.x + n.w, n.y + n.h * a]];
+      out += `<polygon points="${pts.map((p) => p.join(",")).join(" ")}" fill="${col}"/>`;
+    }
+    for (const d of depths) { const r = rect(d); out += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="none" stroke="${ink}" stroke-width="2"/>`; }
+    const o = rect(1), n = rect(depths[depths.length - 1]);
+    for (const t of [0, .18, .34, .5, .66, .82, 1]) {
+      out += `<line x1="${o.x + o.w * t}" y1="${o.y}" x2="${n.x + n.w * t}" y2="${n.y}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w * t}" y1="${o.y + o.h}" x2="${n.x + n.w * t}" y2="${n.y + n.h}" stroke="${ink}" stroke-width="2"/>`;
+      out += `<line x1="${o.x}" y1="${o.y + o.h * t}" x2="${n.x}" y2="${n.y + n.h * t}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w}" y1="${o.y + o.h * t}" x2="${n.x + n.w}" y2="${n.y + n.h * t}" stroke="${ink}" stroke-width="2"/>`;
+    }
+    tunnel.innerHTML = out;
+  }
+  // ---- scribbles draw themselves on when their section shows
+  document.querySelectorAll(".doodle path").forEach((pth) => { const L = pth.getTotalLength(); pth.style.strokeDasharray = `${L}`; pth.style.strokeDashoffset = `${L}`; });
+  const drawIn = (box) => box.querySelectorAll(".doodle").forEach((d, i) => { d.classList.add("draw"); d.style.setProperty("--d", `${i * 0.18}s`); });
+  if (!reduce && "IntersectionObserver" in window) {
+    const dio = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) { drawIn(e.target); dio.unobserve(e.target); } }, { threshold: 0.2 });
+    document.querySelectorAll(".scribbles").forEach((b) => dio.observe(b));
+  } else document.querySelectorAll(".scribbles").forEach(drawIn);
 
   // ---- sections rise in once; readable without this
   if (!reduce && "IntersectionObserver" in window) {
@@ -355,7 +413,7 @@
     const ball = scene.querySelector(".ball");
     const index = [...scene.querySelectorAll(".format-index li")];
     const sticky = scene.querySelector(".format-sticky");
-    const colors = ["#ffb200", "#0072e3", "#ff8a00", "#5aa9ff"];
+    const colors = ["#ffb200", "#00b2ff", "#1be349", "#ab54f7"];
     let rects = [], W = 0, H = 0;
     const measure = () => {
       const base = sticky.getBoundingClientRect(); W = base.width; H = base.height;
