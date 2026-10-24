@@ -30,9 +30,13 @@ p { margin: 0 }
 .nav { position: sticky; top: 12px; z-index: 20; display: flex; gap: 10px; align-items: center; max-width: 1180px; margin: 12px auto 0 }
 .nav-pill { display: flex; align-items: center; gap: 22px; background: #fff; border-radius: 999px; padding: 10px 18px; flex: 1; min-width: 0; border: 1.5px solid var(--ink) }
 .nav-actions { flex: 0 0 auto; gap: 6px; padding: 6px }
-.logo { font: 700 22px/1 var(--sans); letter-spacing: -0.03em; display: inline-flex; align-items: center; gap: 3px }
+.logo { font: 600 23px/1 "Outfit", var(--sans); letter-spacing: -0.035em; display: inline-flex; align-items: center; gap: 3px }
 .logo.small { font-size: 18px }
 .eyes { display: inline-flex; gap: 1px }
+.eyes ellipse { transform-origin: 12px 14px; animation: blink 5.2s ease-in-out infinite } .eyes svg:last-child ellipse { animation-delay: .06s }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(1) } 96% { transform: scaleY(.08) } }
+.eyes .pp { transition: transform .25s cubic-bezier(.2,.7,.2,1) }
+@media (prefers-reduced-motion: reduce) { .eyes ellipse { animation: none } }
 .nav-links { display: flex; gap: 20px; font-size: 14px; color: var(--ink-2); overflow: hidden; white-space: nowrap }
 .nav-links a:hover { color: var(--ink) }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 12px; font: 500 14px var(--sans); white-space: nowrap; transition: transform .12s, background .12s; border: 1px solid transparent }
@@ -252,12 +256,13 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 /* glass photo bubbles: a photo inside a sphere with a highlight and a rim; used in the letters scene and the ending */
 .sphere { position: absolute; left: 0; top: 0; width: 120px; height: 120px; border-radius: 50%; background: var(--img) center / cover, #ddd; will-change: transform; z-index: 2; pointer-events: none; box-shadow: 0 14px 30px rgba(0,0,0,.2), inset 0 -12px 24px rgba(0,0,0,.18) }
 .sphere i { position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 30% 24%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.35) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 70% 90%, rgba(255,255,255,.25) 0%, rgba(255,255,255,0) 30%); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.55) }
-.ball .sphere { z-index: 2 }
+#orbs { position: fixed; inset: 0; z-index: 15; pointer-events: none; contain: layout style }
+#orbs .sphere { opacity: 0 }
 @media (prefers-reduced-motion: reduce) { .ball { display: block } }
 
 /* the end: six bubbles on a ring converge into one circle carrying the wordmark */
-.unite { height: 240vh; position: relative } .unite-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden }
+.unite { height: 150vh; position: relative } .unite-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden }
 .one { position: absolute; left: 0; top: 0; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; opacity: 0; will-change: transform, opacity }
 .big-logo { font-size: clamp(36px, 6vw, 84px); color: #fff; letter-spacing: -.04em; display: inline-flex; align-items: center; gap: 6px }
 .unite-text { position: absolute; left: 0; right: 0; bottom: clamp(24px, 8vh, 80px); text-align: center; display: grid; justify-items: center; gap: 10px; opacity: 0; z-index: 4 }
-.unite.still { height: auto } .unite.still .unite-sticky { position: static; height: auto; display: grid; justify-items: center; gap: 16px; padding-block: 64px } .unite.still .sphere.u { display: none } .unite.still .one { position: static; width: 220px; height: 220px; opacity: 1; transform: none } .unite.still .unite-text { position: static; opacity: 1 }
+.unite.still { height: auto } .unite.still .unite-sticky { position: static; height: auto; display: grid; justify-items: center; gap: 16px; padding-block: 64px } .unite.still .one { position: static; width: 220px; height: 220px; opacity: 1; transform: none } .unite.still .unite-text { position: static; opacity: 1 }
