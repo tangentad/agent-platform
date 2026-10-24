@@ -22,9 +22,9 @@
   <div class="nav-pill nav-actions"><a class="btn ghost" href="/#signin">Log in</a><a class="btn lime" href="/#signup">Start a circle</a></div>
 </nav>
 
-<section class="flow" id="flow" aria-label="Circle, in the chats you already have">
-  <div class="flow-sticky">
-    <div class="scribbles hero-scribbles" aria-hidden="true">
+<header class="hero">
+  <canvas class="tunnel" id="tunnel" aria-hidden="true"></canvas>
+  <div class="scribbles hero-scribbles" aria-hidden="true">
 <svg class="doodle d-smile" viewBox="0 0 120 120" aria-hidden="true"><path d="M18 62c-3-26 18-46 44-45 25 1 42 20 41 44-1 27-21 43-44 42C34 102 20 86 18 62z" /><path d="M42 48c2 6 1 10-2 12M78 46c-3 5-2 10 1 12" /><path d="M36 74c6 12 20 16 32 12 6-2 11-6 14-12" /></svg>
 <svg class="doodle d-star" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 12l9 34 36 2-29 20 11 35-27-21-28 20 12-34L16 48l35-1z" /></svg>
 <svg class="doodle d-arrow" viewBox="0 0 160 80" aria-hidden="true"><path d="M8 40c30-22 60-26 90-14 20 8 34 10 54 2" /><path d="M136 12l18 14-20 14" /></svg>
@@ -33,17 +33,18 @@
 <svg class="doodle d-check" viewBox="0 0 120 120" aria-hidden="true"><path d="M20 64l28 26C62 60 80 40 104 24" /><path d="M28 60l22 20" /></svg>
 <svg class="doodle d-heart" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 100C30 78 12 60 16 40c3-16 24-22 40-8l4 4 4-4c16-14 36-8 40 8 4 20-14 38-44 60z" /></svg>
 </div>
-  
-    <div class="hero-text" id="heroText">
-      <p class="eyebrow">For the group chat</p>
-      <h1>One assistant. <span class="grad">Everyone in the chat can ask.</span></h1>
-      <p class="lede">Add Circle to a group. It plans the trip, books the table, runs the group order, and asks before it pays.</p>
-      <div class="ctas"><a class="btn lime lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a><a class="btn ghost lg" href="#does">What it does</a></div>
-      <p class="fine">iMessage and web · Nothing to install for the rest of the chat</p>
-    </div>
-    <div class="cluster" id="cluster" aria-hidden="true"></div>
+  <p class="eyebrow">For the group chat</p>
+  <h1>One assistant. <span class="grad">Everyone in the chat can ask.</span></h1>
+  <p class="lede">Add Circle to a group. It plans the trip, books hotels at wholesale, runs the group order, and asks before it pays.</p>
+  <div class="ctas"><a class="btn lime lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a><a class="btn ghost lg" href="#demo">Watch it work</a></div>
+  <p class="fine">iMessage and web · Nothing to install for the rest of the chat</p>
+
+</header>
+
+<section class="flow" id="flow" aria-label="What Circle is, then the chat where it happens">
+  <div class="flow-sticky">
     <p class="big" id="bigline">Circle <span class="ph" data-t="0"></span> lives in the chat, <span class="ph" data-t="1"></span> prices the trip, <span class="ph" data-t="2"></span> books the table, <span class="ph" data-t="3"></span> runs the order, <span class="ph" data-t="4"></span> tracks who promised what, <span class="ph" data-t="5"></span> and asks before it spends.</p>
-    <div class="stage" id="demo" style="--sy:0px">
+  <div class="stage" id="demo">
     <div class="iphone" aria-label="An iMessage group chat with Circle">
       <div class="island"></div>
       <div class="screen">
@@ -63,22 +64,18 @@
       <button class="tab" role="tab" aria-selected="false" data-s="tickets"><span class="tab-ic" data-t="5"></span><b>Asks first</b><small>Nothing bought until the owner says yes</small></button>
     </div>
   </div>
-    <div class="sphere" data-t="0" style="--img:url(/img/hero-friends.jpg)"><i></i></div>
-    <div class="sphere" data-t="1" style="--img:url(/img/hero-ski.jpg)"><i></i></div>
-    <div class="sphere" data-t="2" style="--img:url(/img/hero-couple.jpg)"><i></i></div>
-    <div class="sphere" data-t="3" style="--img:url(/img/hero-unboxing.jpg)"><i></i></div>
-    <div class="sphere" data-t="4" style="--img:url(/img/hero-family.jpg)"><i></i></div>
-    <div class="sphere" data-t="5" style="--img:url(/img/hero-gifts.jpg)"><i></i></div>
-    <div class="sphere decor c-sky" data-d="0"><i></i></div>
-    <div class="sphere decor c-sun" data-d="1"><i></i></div>
-    <div class="sphere decor c-purple" data-d="2"><i></i></div>
-    <div class="sphere decor c-green" data-d="3"><i></i></div>
+    <div class="ftile grain c-sky" data-t="0"><span>💬</span></div>
+    <div class="ftile grain c-mint" data-t="1"><span>🏔️</span></div>
+    <div class="ftile grain c-orange" data-t="2"><span>🍽️</span></div>
+    <div class="ftile grain c-sun" data-t="3"><span>📦</span></div>
+    <div class="ftile grain c-red" data-t="4"><span>✅</span></div>
+    <div class="ftile grain c-pink" data-t="5"><span>🙋</span></div>
   </div>
 </section>
 
 <section class="format" id="scene" aria-label="One chat, one assistant, four jobs done">
   <div class="format-sticky">
-    <div class="ball" aria-hidden="true"></div>
+    <div class="ball" aria-hidden="true"><div class="sphere b" data-b="0" style="--img:url(/img/hero-friends.jpg)"><i></i></div><div class="sphere b" data-b="1" style="--img:url(/img/hero-ski.jpg)"><i></i></div><div class="sphere b" data-b="2" style="--img:url(/img/hero-couple.jpg)"><i></i></div><div class="sphere b" data-b="3" style="--img:url(/img/hero-unboxing.jpg)"><i></i></div><div class="sphere b" data-b="4" style="--img:url(/img/hero-family.jpg)"><i></i></div><div class="sphere b" data-b="5" style="--img:url(/img/hero-gifts.jpg)"><i></i></div></div>
     <h2 class="format-h" data-text="ONE CHAT|ONE ASSISTANT|FOUR JOBS DONE">ONE CHAT ONE ASSISTANT FOUR JOBS DONE</h2>
     <ol class="format-index" aria-hidden="true">
       <li data-step="0"><span class="n">1</span><span class="k">(Coordinate)</span><b>Who does what</b></li>
@@ -285,6 +282,72 @@
     new IntersectionObserver((es) => { for (const e of es) { if (e.isIntersecting) { if (!loop) start(); } else { clearInterval(loop); loop = null; } } }, { threshold: 0.15 }).observe(thread);
   } else start();
 
+  // ---- the hero backdrop: a one-point perspective corridor you fly through, on a canvas so a frame is a few draw
+  //      calls and no DOM churn. Panels carry the circle's own photos (family, couple, gifts, friends, ski, unboxing)
+  //      and flat palette blocks between them; rings sit at log-spaced depths so motion reads as constant speed.
+  const tunnel = document.getElementById("tunnel");
+  if (tunnel) {
+    const ctx = tunnel.getContext("2d");
+    const N = 9, dmin = 0.12, ink = "#000";
+    const pal = ["#0072e3", "#ffb200", "#1be349", "#ab54f7", "#ea3737", "#ff5c38", "#00b2ff"];
+    const photos = ["family", "couple", "gifts", "friends", "ski", "unboxing"].map((n) => { const im = new Image(); im.src = `/img/hero-${n}.jpg`; return im; });
+    // every ring owns one wall panel: even rings a photo, odd rings a colour block
+    const panels = [["floor", .08, .4], ["right", .12, .5], ["ceil", .05, .38], ["left", .42, .85], ["floor", .58, .92], ["right", .5, .88], ["ceil", .55, .95], ["left", .08, .45], ["floor", .3, .7]];
+    let t = 0, mx = 0, my = 0, tx = 0, ty = 0, last = 0, visible = true, W = 0, H = 0;
+    const size = () => { const r = tunnel.getBoundingClientRect(); const dpr = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height; tunnel.width = Math.round(W * dpr); tunnel.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    const rect = (d, cx, cy) => ({ x: cx - cx * d, y: cy - cy * d, w: W * d, h: H * d });
+    const quad = (o, n, side, a, b) => {
+      if (side === "floor") return [[o.x + o.w * a, o.y + o.h], [o.x + o.w * b, o.y + o.h], [n.x + n.w * b, n.y + n.h], [n.x + n.w * a, n.y + n.h]];
+      if (side === "ceil") return [[o.x + o.w * a, o.y], [o.x + o.w * b, o.y], [n.x + n.w * b, n.y], [n.x + n.w * a, n.y]];
+      if (side === "left") return [[o.x, o.y + o.h * a], [o.x, o.y + o.h * b], [n.x, n.y + n.h * b], [n.x, n.y + n.h * a]];
+      return [[o.x + o.w, o.y + o.h * a], [o.x + o.w, o.y + o.h * b], [n.x + n.w, n.y + n.h * b], [n.x + n.w, n.y + n.h * a]];
+    };
+    const path = (pts) => { ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.closePath(); };
+    const frame = (now) => {
+      const dt = Math.min(50, now - last) || 16; last = now;
+      if (!reduce) t += dt / 11000;
+      mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
+      const cx = W * 0.5 + mx * W * 0.06, cy = H * 0.52 + my * H * 0.05;
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1.8; ctx.strokeStyle = ink; ctx.lineJoin = "round";
+      const rings = Array.from({ length: N }, (_, k) => { const f = ((k / N + t) % 1 + 1) % 1; return { k, f, d: dmin * Math.pow(1 / dmin, f) }; }).sort((a, b) => a.d - b.d);
+      for (let i = 0; i < rings.length - 1; i++) {
+        const a = rings[i], b = rings[i + 1];
+        const o = rect(b.d, cx, cy), n = rect(a.d, cx, cy);
+        const [side, pa, pb] = panels[a.k % panels.length];
+        const pts = quad(o, n, side, pa, pb);
+        const fade = Math.min(1, a.f * 4) * Math.min(1, (1 - b.f) * 4 + 0.15);
+        ctx.globalAlpha = fade;
+        const im = a.k % 2 === 0 ? photos[(a.k / 2) % photos.length] : null;
+        if (im && im.complete && im.naturalWidth) {
+          const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+          const bx = Math.min(...xs), by = Math.min(...ys), bw = Math.max(...xs) - bx, bh = Math.max(...ys) - by;
+          const sc = Math.max(bw / im.naturalWidth, bh / im.naturalHeight), iw = im.naturalWidth * sc, ih = im.naturalHeight * sc;
+          ctx.save(); path(pts); ctx.clip(); ctx.drawImage(im, bx + (bw - iw) / 2, by + (bh - ih) / 2, iw, ih); ctx.restore();
+        } else { ctx.fillStyle = pal[a.k % pal.length]; path(pts); ctx.fill(); }
+        ctx.globalAlpha = 1; path(pts); ctx.stroke();
+      }
+      for (const r of rings) { const q = rect(r.d, cx, cy); ctx.globalAlpha = Math.min(1, r.f * 5); ctx.strokeRect(q.x, q.y, q.w, q.h); }
+      ctx.globalAlpha = 1;
+      const o = rect(1, cx, cy), n = rect(dmin, cx, cy);
+      ctx.beginPath();
+      for (const u of [0, .18, .34, .5, .66, .82, 1]) {
+        ctx.moveTo(o.x + o.w * u, o.y); ctx.lineTo(n.x + n.w * u, n.y); ctx.moveTo(o.x + o.w * u, o.y + o.h); ctx.lineTo(n.x + n.w * u, n.y + n.h);
+        ctx.moveTo(o.x, o.y + o.h * u); ctx.lineTo(n.x, n.y + n.h * u); ctx.moveTo(o.x + o.w, o.y + o.h * u); ctx.lineTo(n.x + n.w, n.y + n.h * u);
+      }
+      ctx.stroke();
+      if (visible && !reduce) requestAnimationFrame(frame);
+    };
+    addEventListener("pointermove", (e) => { tx = (e.clientX / innerWidth - 0.5) * 2; ty = (e.clientY / innerHeight - 0.5) * 2; }, { passive: true });
+    addEventListener("resize", size);
+    size();
+    const hero = tunnel.closest(".hero");
+    if (reduce) { last = performance.now(); frame(performance.now()); photos.forEach((im) => im.addEventListener("load", () => frame(performance.now()))); }
+    else {
+      new IntersectionObserver((es) => { for (const e of es) { const was = visible; visible = e.isIntersecting; if (visible && !was) { last = performance.now(); requestAnimationFrame(frame); } } }).observe(hero);
+      last = performance.now(); requestAnimationFrame(frame);
+    }
+  }
   // ---- the headline and lede rise in word by word on load (Butter's out curve), then the scribbles draw
   const split = (el) => {
     const words = el.innerHTML.split(/(\s+)/).map((w) => (/^\s+$/.test(w) ? w : w));
@@ -305,7 +368,7 @@
     walk(el);
     el.querySelectorAll(".w").forEach((w, i) => w.style.setProperty("--i", i));
   };
-  const h1 = document.querySelector(".hero-text h1"), lede = document.querySelector(".hero-text .lede");
+  const h1 = document.querySelector(".hero h1"), lede = document.querySelector(".hero .lede");
   if (h1 && !reduce) { split(h1); split(lede); requestAnimationFrame(() => requestAnimationFrame(() => { h1.classList.add("in"); lede.classList.add("in"); })); }
 
   // ---- scribbles draw themselves on when their section shows
@@ -343,84 +406,48 @@
   };
   const wake = () => { if (!running) { running = true; last = performance.now(); requestAnimationFrame(tick); } };
 
-  // ---- the flow, three phases on one sticky screen: the hero with a floating cluster of photo spheres; the spheres
-  //      fly down to become the tiles in the sentence; the sentence leaves and the chat demo rises while the spheres
-  //      land on its six tabs. Everything is transforms on a dozen elements, eased toward the scroll position.
+  // ---- the flow: the five tiles sit inside the sentence, then fly onto the scenario tabs as the chat demo rises into view
   const flow = document.getElementById("flow");
   const still = innerWidth < 760;
-  const lerpN = (a, z, q) => a + (z - a) * q;
   if (flow) {
-    const sticky = flow.querySelector(".flow-sticky"), heroText = document.getElementById("heroText"), line = document.getElementById("bigline"), stage = flow.querySelector(".stage"), cluster = document.getElementById("cluster");
-    const spheres = [...flow.querySelectorAll(".sphere:not(.decor)")], decor = [...flow.querySelectorAll(".sphere.decor")], phs = [...flow.querySelectorAll(".ph")], slots = [...flow.querySelectorAll(".tab-ic")];
-    const C = [[.42, .28, .34], [.72, .18, .26], [.80, .50, .30], [.50, .60, .38], [.22, .52, .28], [.62, .86, .24]];
-    const D = [[.08, .18, .16], [.92, .34, .12], [.16, .84, .14], [.86, .78, .18]];
-    let A = [], B = [], Z = [], rise = 0, t0 = performance.now();
+    const sticky = flow.querySelector(".flow-sticky"), line = document.getElementById("bigline"), stage = flow.querySelector(".stage");
+    const tiles = [...flow.querySelectorAll(".ftile")], phs = [...flow.querySelectorAll(".ph")], slots = [...flow.querySelectorAll(".tab-ic")];
+    let from = [], to = [], rise = 0;
     const measure = () => {
-      const b = sticky.getBoundingClientRect(), c = cluster.getBoundingClientRect();
+      const b = sticky.getBoundingClientRect();
       const rel = (r) => ({ x: r.left - b.left, y: r.top - b.top, w: r.width, h: r.height });
-      const cb = rel(c);
-      A = C.map(([fx, fy, fs]) => { const w = cb.w * fs; return { x: cb.x + cb.w * fx - w / 2, y: cb.y + cb.h * fy - w / 2, w, h: w }; });
-      B = phs.map((p) => rel(p.getBoundingClientRect()));
+      from = phs.map((p) => rel(p.getBoundingClientRect()));
       const prev = stage.style.getPropertyValue("--sy"); stage.style.setProperty("--sy", "0px");
-      Z = slots.map((sl) => rel(sl.getBoundingClientRect()));
+      to = slots.map((sl) => rel(sl.getBoundingClientRect()));
       stage.style.setProperty("--sy", prev);
-      rise = b.height;
-      decor.forEach((d, i) => { const w = cb.w * D[i][2]; d.style.width = d.style.height = `${w}px`; d.style.setProperty("--x", `${cb.x + cb.w * D[i][0] - w / 2}px`); d.style.setProperty("--y", `${cb.y + cb.h * D[i][1] - w / 2}px`); });
-    };
-    const place = (el, from, to, q, bob) => {
-      const w = lerpN(from.w, to.w, q);
-      el.style.width = el.style.height = `${w}px`;
-      el.style.transform = `translate(${lerpN(from.x, to.x, q)}px, ${lerpN(from.y, to.y, q) + bob}px)`;
+      rise = b.height; // the stage starts one screen below and rises to its place
+      tiles.forEach((t, i) => { t.style.width = `${to[i].w}px`; t.style.height = `${to[i].h}px`; });
     };
     const draw = (p) => {
-      const now = (performance.now() - t0) / 1000;
-      const pa = ease(clamp((p - 0.05) / 0.28));
-      const pb = ease(clamp((p - 0.52) / 0.4));
-      heroText.style.opacity = 1 - clamp(pa * 1.6); heroText.style.transform = `translateY(${-50 * pa}px)`;
-      heroText.style.pointerEvents = pa > 0.5 ? "none" : "";
-      line.style.opacity = Math.min(clamp((pa - 0.5) * 2.4), 1 - clamp(pb * 1.8)); line.style.transform = `translateY(${30 * (1 - clamp(pa * 1.2)) - 60 * pb}px)`;
-      stage.style.setProperty("--sy", `${rise * (1 - pb)}px`);
-      decor.forEach((d, i) => { d.style.opacity = 1 - clamp(pa * 2); d.style.transform = `translate(var(--x), calc(var(--y) + ${Math.sin(now * 0.9 + i) * 10}px))`; });
-      spheres.forEach((sp, i) => {
-        const a = A[i], b = B[i], z = Z[i]; if (!a || !b || !z) return;
-        const bob = (1 - pa) * Math.sin(now * 0.8 + i * 1.3) * 9;
-        if (pb <= 0) place(sp, a, b, ease(clamp((pa - i * 0.03) / 0.85)), bob);
-        else place(sp, b, { ...z, y: z.y + rise * (1 - pb) }, ease(clamp((pb - i * 0.04) / 0.8)), 0);
-        sp.style.setProperty("--round", `${lerpN(50, 32, pb)}%`);
+      const fade = 1 - clamp((p - 0.08) / 0.3);
+      line.style.opacity = fade; line.style.transform = `translateY(${-60 * (1 - fade)}px)`;
+      const up = ease(clamp((p - 0.12) / 0.6));
+      stage.style.setProperty("--sy", `${rise * (1 - up)}px`);
+      tiles.forEach((t, i) => {
+        const a = from[i], z = to[i]; if (!a || !z) return;
+        const q = ease(clamp((p - 0.1 - i * 0.04) / 0.6));
+        const zy = z.y + rise * (1 - up); // the slot moves with the stage until it has risen
+        const s0 = a.w / z.w;
+        const x = a.x + (z.x - a.x) * q, y = a.y + (zy - a.y) * q, s = s0 + (1 - s0) * q;
+        t.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
       });
     };
     if (still) {
+      // No scroll scene: the tiles sit in the sentence and on the tabs at the same time, so nothing is lost.
       flow.classList.add("still");
-      spheres.forEach((sp, i) => { phs[i]?.appendChild(sp.cloneNode(true)); slots[i]?.appendChild(sp); });
+      tiles.forEach((t, i) => { phs[i]?.appendChild(t.cloneNode(true)); slots[i]?.appendChild(t); });
     } else {
       measure(); draw(0);
-      const sc = { el: flow, p: 0, draw };
-      scenes.push(sc);
-      addEventListener("resize", () => { measure(); draw(sc.p); });
-      if (document.fonts?.ready) document.fonts.ready.then(() => { measure(); draw(sc.p); });
-      const idle = () => { if (sc.p < 0.3 && flow.getBoundingClientRect().bottom > 0) draw(sc.p); requestAnimationFrame(idle); };
-      requestAnimationFrame(idle);
+      scenes.push({ el: flow, p: 0, draw });
+      addEventListener("resize", () => { measure(); });
+      if (document.fonts?.ready) document.fonts.ready.then(() => { measure(); });
     }
   }
-  // ---- the end: six circles from the page come together into one
-  const unite = document.getElementById("unite");
-  if (unite && !still) {
-    const us = unite.querySelector(".unite-sticky"), one = unite.querySelector(".one"), txt = unite.querySelector(".unite-text"), orbs = [...unite.querySelectorAll(".sphere.u")];
-    const draw = (p) => {
-      const b = us.getBoundingClientRect(), cx = b.width / 2, cy = b.height / 2, R = Math.min(b.width, b.height) * 0.36, big = Math.min(b.width, b.height) * 0.42;
-      const q = ease(clamp(p / 0.7)), done = ease(clamp((p - 0.6) / 0.3));
-      orbs.forEach((o, i) => {
-        const ang = -Math.PI / 2 + (i / orbs.length) * Math.PI * 2;
-        const w = lerpN(Math.min(b.width, b.height) * 0.17, big, q);
-        const x = cx + Math.cos(ang) * R * (1 - q) - w / 2, y = cy + Math.sin(ang) * R * (1 - q) - w / 2;
-        o.style.width = o.style.height = `${w}px`; o.style.transform = `translate(${x}px, ${y}px)`; o.style.opacity = 1 - done;
-      });
-      one.style.width = one.style.height = `${big}px`; one.style.transform = `translate(${cx - big / 2}px, ${cy - big / 2}px) scale(${0.9 + 0.1 * done})`; one.style.opacity = done;
-      txt.style.opacity = done; txt.style.transform = `translateY(${20 * (1 - done)}px)`;
-    };
-    draw(0); scenes.push({ el: unite, p: 0, draw });
-    addEventListener("resize", () => draw(0));
-  } else if (unite) unite.classList.add("still");
 
   // ---- the ball scene: it rolls down through the headline and pushes letters aside; the index lights up by stage
   const scene = document.querySelector(".format");
@@ -434,10 +461,9 @@
       h.appendChild(row);
     }
     const letters = [...h.querySelectorAll(".ch")];
-    const ball = scene.querySelector(".ball");
+    const ball = scene.querySelector(".ball"), bubbles = [...ball.querySelectorAll(".sphere.b")];
     const index = [...scene.querySelectorAll(".format-index li")];
     const sticky = scene.querySelector(".format-sticky");
-    const colors = ["#ffb200", "#00b2ff", "#1be349", "#ab54f7"];
     let rects = [], W = 0, H = 0;
     const measure = () => {
       const base = sticky.getBoundingClientRect(); W = base.width; H = base.height;
@@ -449,8 +475,15 @@
       ball.style.transform = `translate(${bx - R}px, ${by - R}px)`;
       ball.style.width = ball.style.height = `${R * 2}px`;
       const stage = Math.min(3, Math.floor(p * 4));
-      ball.style.setProperty("--ballc", colors[stage]);
       index.forEach((li, i) => li.classList.toggle("on", i <= stage));
+      // six bubbles orbit inside the cluster, drifting as it rolls; the cluster is what pushes the letters
+      const spin = p * 6;
+      bubbles.forEach((bb, i) => {
+        const ang = spin + (i / bubbles.length) * Math.PI * 2, rad = R * (0.46 + 0.14 * Math.sin(spin * 1.7 + i));
+        const w = R * (0.62 + 0.16 * Math.cos(spin + i * 2.1));
+        bb.style.width = bb.style.height = `${w}px`;
+        bb.style.transform = `translate(${R + Math.cos(ang) * rad - w / 2}px, ${R + Math.sin(ang) * rad - w / 2}px)`;
+      });
       const reach = R + Math.min(W, H) * 0.12;
       for (let i = 0; i < letters.length; i++) {
         const r = rects[i], l = letters[i]; if (!r) continue;
@@ -468,6 +501,27 @@
       if (document.fonts?.ready) document.fonts.ready.then(measure);
     }
   }
+  // ---- the end: the six bubbles sit on a ring, converge and become one circle with the wordmark
+  const unite = document.getElementById("unite");
+  const lerpN = (a, z, q) => a + (z - a) * q;
+  if (unite && !still) {
+    const us = unite.querySelector(".unite-sticky"), one = unite.querySelector(".one"), txt = unite.querySelector(".unite-text"), orbs = [...unite.querySelectorAll(".sphere.u")];
+    const draw = (p) => {
+      const b = us.getBoundingClientRect(), cx = b.width / 2, cy = b.height / 2, R = Math.min(b.width, b.height) * 0.34, big = Math.min(b.width, b.height) * 0.42;
+      const q = ease(clamp(p / 0.7)), done = ease(clamp((p - 0.6) / 0.3));
+      orbs.forEach((o, i) => {
+        const ang = -Math.PI / 2 + (i / orbs.length) * Math.PI * 2;
+        const w = lerpN(Math.min(b.width, b.height) * 0.17, big, q);
+        o.style.width = o.style.height = `${w}px`;
+        o.style.transform = `translate(${cx + Math.cos(ang) * R * (1 - q) - w / 2}px, ${cy + Math.sin(ang) * R * (1 - q) - w / 2}px)`;
+        o.style.opacity = 1 - done;
+      });
+      one.style.width = one.style.height = `${big}px`; one.style.transform = `translate(${cx - big / 2}px, ${cy - big / 2}px) scale(${0.9 + 0.1 * done})`; one.style.opacity = done;
+      txt.style.opacity = done; txt.style.transform = `translateY(${20 * (1 - done)}px)`;
+    };
+    draw(0); scenes.push({ el: unite, p: 0, draw });
+    addEventListener("resize", () => draw(0));
+  } else if (unite) unite.classList.add("still");
   if (scenes.length) { addEventListener("scroll", wake, { passive: true }); wake(); }
 })();
 </script>
