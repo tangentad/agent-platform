@@ -48,12 +48,12 @@ p { margin: 0 }
 .hero .lede { margin-inline: auto }
 .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px }
 .hero .fine { margin-top: 14px }
-.stage { width: 100%; margin-top: 44px; background: radial-gradient(80% 60% at 100% 0%, #2a2a33 0%, var(--dark) 60%); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
+.stage { width: 100%; background: radial-gradient(80% 60% at 100% 0%, #2a2a33 0%, var(--dark) 60%); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
 
 /* an iPhone in Messages: island, status bar, group header, grey and blue bubbles, the compose bar */
 .iphone { position: relative; background: #0b0b0b; border-radius: 48px; padding: 10px; box-shadow: 0 30px 70px rgba(0,0,0,.5), inset 0 0 0 2px #2a2a2a; min-width: 0; justify-self: center; width: 100%; max-width: 390px }
 .island { position: absolute; left: 50%; top: 22px; width: 112px; height: 32px; background: #000; border-radius: 20px; transform: translateX(-50%); z-index: 2 }
-.screen { background: #fff; border-radius: 40px; overflow: hidden; color: #000; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; height: 680px; font-family: -apple-system, "SF Pro Text", "Helvetica Neue", var(--sans) }
+.screen { background: #fff; border-radius: 40px; overflow: hidden; color: #000; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; height: min(640px, 72vh); font-family: -apple-system, "SF Pro Text", "Helvetica Neue", var(--sans) }
 .status { display: flex; align-items: center; justify-content: space-between; padding: 18px 28px 4px; font: 600 15px/1 var(--sans) }
 .sig { display: inline-flex; gap: 2px; align-items: flex-end; margin-left: auto; margin-right: 6px } .sig i { width: 3px; background: #000; border-radius: 1px } .sig i:nth-child(1) { height: 4px } .sig i:nth-child(2) { height: 6px } .sig i:nth-child(3) { height: 8px } .sig i:nth-child(4) { height: 10px }
 .wifi { width: 14px; height: 10px; border: 2px solid #000; border-color: #000 transparent transparent; border-radius: 50% 50% 0 0; margin-right: 6px }
@@ -66,7 +66,7 @@ p { margin: 0 }
 .stamp { text-align: center; color: #8e8e93; font-size: 11px; margin: 4px 0 8px } .stamp b { font-weight: 600 }
 .row { display: grid; gap: 2px; max-width: 82% } .row.them { justify-self: start } .row.me { justify-self: end }
 .who { font-size: 11px; color: #8e8e93; padding: 0 12px }
-.bub { background: #e9e9eb; color: #000; border-radius: 18px; padding: 8px 12px; font-size: 14px; line-height: 1.35; display: inline-block; text-align: left }
+.bub { background: #e9e9eb; color: #000; border-radius: 18px; padding: 8px 12px; font-size: 14px; line-height: 1.35; display: inline-block; text-align: left; white-space: pre-line }
 .row.me .bub { background: #0b84fe; color: #fff }
 .card { background: #e9e9eb; border-radius: 16px; padding: 10px 12px; font-size: 13px; display: grid; gap: 5px; min-width: 0; width: 100% }
 .card-h { font: 500 11px var(--mono); color: #6d6d72; letter-spacing: .02em }
@@ -79,9 +79,8 @@ p { margin: 0 }
 
 /* scenario tabs: the stage's right-hand column */
 .tabs { display: grid; gap: 10px; min-width: 0 }
-.tab { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; gap: 2px 14px; align-items: center; text-align: left; background: #1f1f1f; border: 1px solid #2c2c2c; border-radius: 18px; padding: 14px 16px; color: var(--on-dark-2); cursor: pointer; font-family: var(--sans); transition: background .2s, transform .2s }
+.tab { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; gap: 2px 14px; align-items: center; text-align: left; background: #1f1f1f; border: 1px solid #2c2c2c; border-radius: 18px; padding: 12px 14px; color: var(--on-dark-2); cursor: pointer; font-family: var(--sans); transition: background .2s, transform .2s }
 .tab:hover { background: #262626 } .tab.on { background: #fff; color: var(--ink); border-color: #fff } .tab:focus-visible { outline: 3px solid var(--lime) }
-.tab-ic { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; background: var(--g) }
 .tab b { font-size: 16px; font-weight: 600; color: inherit } .tab small { font-size: 13px; opacity: .8 } .tab.on small { color: var(--ink-2); opacity: 1 }
 
 /* sections */
@@ -198,14 +197,15 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 @media (max-width: 760px) { .format { height: 260vh } .format-index { position: static; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; max-width: none } .format-index b { font-size: 12px } .format-h { max-width: none } .fl:nth-child(2) { padding-left: .3em } }
 @media (prefers-reduced-motion: reduce) { .format { height: auto } .format-sticky { position: static; height: auto; padding-top: 80px } .ball { display: none } .format-index li { color: #fff } }
 
-/* the flow: the sentence with five placeholders, a dark band with five slots, and five tiles that travel between them */
-.flow { height: 230vh; position: relative; margin-top: 24px }
-.flow-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; display: grid; grid-template-rows: 1fr auto; align-items: center; overflow: hidden; contain: layout paint }
-.big { font: 500 clamp(26px, 4.6vw, 58px)/1.18 var(--sans); letter-spacing: -0.03em; max-width: 1080px; margin: 0 auto; text-align: center; text-wrap: balance; will-change: transform, opacity; padding-top: 10vh }
+/* the flow: the sentence first, then the chat demo rises into the same screen while the five tiles fly onto its tabs */
+.flow { height: 260vh; position: relative; margin-top: 8px }
+.flow-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; contain: layout paint }
+.big { font: 500 clamp(26px, 4.6vw, 58px)/1.18 var(--sans); letter-spacing: -0.03em; max-width: 1080px; margin: 0 auto; text-align: center; text-wrap: balance; will-change: transform, opacity; position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; padding: 0 16px }
 .ph { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: -0.28em; margin: 0 0.08em; border-radius: .3em }
-.band { background: radial-gradient(70% 70% at 50% 120%, #2b2b35 0%, var(--dark) 70%); border-radius: var(--r) var(--r) 0 0; padding: clamp(14px, 3vw, 34px); display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(8px, 1.6vw, 18px); opacity: 0; will-change: transform, opacity; max-width: 1180px; width: 100%; margin: 0 auto }
-.slot { aspect-ratio: 1; border-radius: 22px }
-.ftile { position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 22px; background: var(--g); display: grid; place-content: center; gap: 8px; text-align: center; color: var(--ink); will-change: transform; box-shadow: inset 0 -6px 0 rgba(0,0,0,.08) }
-.ftile span { font-size: clamp(34px, 5vw, 64px); line-height: 1 } .ftile small { font: 500 11px var(--mono); letter-spacing: .04em; opacity: var(--q, 0) }
-.flow.still { height: auto } .flow.still .flow-sticky { position: static; height: auto; gap: 40px; padding-bottom: 20px } .flow.still .ph { background: var(--bg-2) } .flow.still .ftile { position: static; width: auto; height: auto; aspect-ratio: 1; transform: none } .flow.still .band { opacity: 1; grid-template-columns: repeat(5, 1fr) } .flow.still .band .slot { display: none } .flow.still .band { display: grid }
-@media (max-width: 760px) { .flow { height: 190vh } .band { gap: 8px; padding: 12px; border-radius: 20px 20px 0 0 } .slot, .ftile { border-radius: 14px } .ftile small { display: none } }
+.flow .stage { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 1180px; transform: translateY(var(--sy, 0px)); will-change: transform; border-radius: var(--r) var(--r) 0 0 }
+.tab-ic { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 14px }
+.ftile { position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 14px; background: var(--g); display: grid; place-items: center; color: var(--ink); will-change: transform; box-shadow: inset 0 -4px 0 rgba(0,0,0,.08); z-index: 3; pointer-events: none }
+.ftile span { font-size: 22px; line-height: 1 }
+.flow.still { height: auto } .flow.still .flow-sticky { position: static; height: auto; overflow: visible; contain: none } .flow.still .big { position: static; translate: none; padding: 40px 16px } .flow.still .stage { position: relative; transform: none; border-radius: var(--r) } .flow.still .ftile { display: none } .flow.still .ph { background: var(--bg-2) }
+.flow.still .tab-ic[data-t="0"] { background: var(--sky) } .flow.still .tab-ic[data-t="1"] { background: var(--mint) } .flow.still .tab-ic[data-t="2"] { background: var(--sun) } .flow.still .tab-ic[data-t="3"] { background: var(--lime) } .flow.still .tab-ic[data-t="4"] { background: var(--pink) }
+@media (max-width: 760px) { .flow.still .stage { margin-top: 10px } }

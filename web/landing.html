@@ -29,6 +29,11 @@
   <div class="ctas"><a class="btn lime lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a><a class="btn ghost lg" href="#demo">Watch it work</a></div>
   <p class="fine">iMessage and web · Nothing to install for the rest of the chat</p>
 
+</header>
+
+<section class="flow" id="flow" aria-label="What Circle is, then the chat where it happens">
+  <div class="flow-sticky">
+    <p class="big" id="bigline">Circle <span class="ph" data-t="0"></span> lives in the chat, <span class="ph" data-t="1"></span> prices the trip, <span class="ph" data-t="2"></span> runs the order, <span class="ph" data-t="3"></span> tracks who promised what, <span class="ph" data-t="4"></span> and asks before it spends.</p>
   <div class="stage" id="demo">
     <div class="iphone" aria-label="An iMessage group chat with Circle">
       <div class="island"></div>
@@ -41,25 +46,18 @@
       </div>
     </div>
     <div class="tabs" role="tablist" aria-label="Scenarios">
-      <button class="tab on" role="tab" aria-selected="true" data-s="ski"><span class="tab-ic c-sky">🏔️</span><b>Ski trip</b><small>Hotels at wholesale, booked with one yes</small></button>
-      <button class="tab" role="tab" aria-selected="false" data-s="order"><span class="tab-ic c-sun">📦</span><b>Group order</b><small>Everyone adds a line, Circle hits the minimum</small></button>
-      <button class="tab" role="tab" aria-selected="false" data-s="family"><span class="tab-ic c-mint">📞</span><b>Family</b><small>Calls the clinic so nobody has to</small></button>
-      <button class="tab" role="tab" aria-selected="false" data-s="couple"><span class="tab-ic c-pink">🍽️</span><b>Couple</b><small>Friday sorted in one message</small></button>
+      <button class="tab on" role="tab" aria-selected="true" data-s="friends"><span class="tab-ic" data-t="0"></span><b>The chat</b><small>Friends decide Friday in one thread</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="ski"><span class="tab-ic" data-t="1"></span><b>The trip</b><small>Hotels at wholesale, booked with one yes</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="order"><span class="tab-ic" data-t="2"></span><b>The order</b><small>Everyone adds a line, Circle hits the minimum</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="family"><span class="tab-ic" data-t="3"></span><b>Who does what</b><small>A call made, a reminder set, nobody chased</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="couple"><span class="tab-ic" data-t="4"></span><b>Asks first</b><small>Nothing booked until the owner says yes</small></button>
     </div>
   </div>
-</header>
-
-<section class="flow" id="flow" aria-label="What Circle is">
-  <div class="flow-sticky">
-    <p class="big" id="bigline">Circle <span class="ph" data-t="0"></span> lives in the chat, <span class="ph" data-t="1"></span> prices the trip, <span class="ph" data-t="2"></span> runs the order, <span class="ph" data-t="3"></span> tracks who promised what, <span class="ph" data-t="4"></span> and asks before it spends.</p>
-    <div class="band" id="band">
-      <div class="slot" data-t="0"></div><div class="slot" data-t="1"></div><div class="slot" data-t="2"></div><div class="slot" data-t="3"></div><div class="slot" data-t="4"></div>
-    </div>
-    <div class="ftile grain c-sky" data-t="0"><span>💬</span><small>the chat</small></div>
-    <div class="ftile grain c-mint" data-t="1"><span>🏔️</span><small>the trip</small></div>
-    <div class="ftile grain c-sun" data-t="2"><span>📦</span><small>the order</small></div>
-    <div class="ftile grain c-lime" data-t="3"><span>✅</span><small>who does what</small></div>
-    <div class="ftile grain c-pink" data-t="4"><span>🙋</span><small>asks first</small></div>
+    <div class="ftile grain c-sky" data-t="0"><span>💬</span></div>
+    <div class="ftile grain c-mint" data-t="1"><span>🏔️</span></div>
+    <div class="ftile grain c-sun" data-t="2"><span>📦</span></div>
+    <div class="ftile grain c-lime" data-t="3"><span>✅</span></div>
+    <div class="ftile grain c-pink" data-t="4"><span>🙋</span></div>
   </div>
 </section>
 
@@ -203,11 +201,19 @@
 
   // ---- scenarios: the viewer is the first member, their bubbles blue on the right; Pip and the others grey on the left
   const S = {
+    friends: { name: "Friday crew 🍻", people: ["R", "A", "S"], me: "Riley", lines: [
+      { who: "Riley", text: "Pip, who's in for Friday? Sam wants Thai, Alex said anywhere but last time." },
+      { who: "Pip", typing: true },
+      { who: "Pip", text: "I'll ask them here. Alex, Sam: Friday 8pm, Thai near Bedford Ave, yes or no?" },
+      { who: "Alex", text: "yes" },
+      { who: "Sam", text: "in, and I'll book since I picked" },
+      { who: "Pip", text: "Noted: Sam books Thai for 3 at 8, Friday. I'll remind Sam Thursday evening and post the address here." },
+    ] },
     ski: { name: "Courchevel ski trip", people: ["R", "A", "S"], me: "Riley", lines: [
       { who: "Riley", text: "Pip, 5-star in Courchevel 13–17 Jan for 2. What's the damage?" },
       { who: "Pip", typing: true },
       { who: "Pip", text: "Comparing our wholesale rate with Booking.com for the same rooms. 20 seconds." },
-      { who: "Pip", card: { h: "Hotels · Courchevel · 13–17 Jan", rows: [["Alpes Hôtel du Pralong ★★★★★", "$5,123", "$7,985"], ["Hotel Carlina ★★★★★", "$7,538", "$8,832"], ["Snow Lodge 1850 ★★★★★", "$12,260", "$12,934"]], f: "8 of 9 priced · open the page →" } },
+      { who: "Pip", text: "Courchevel, 13–17 Jan, 2 adults:\nAlpes Hôtel du Pralong ★★★★★ $5,123 (Booking $7,985)\nHotel Carlina ★★★★★ $7,538 (Booking $8,832)\nSnow Lodge 1850 ★★★★★ $12,260 (Booking $12,934)\nAll 9 on the page: circle.app/d/ski" },
       { who: "Sam", text: "Pralong. Book it?" },
       { who: "Pip", text: "It's on Alex's card, so I've asked Alex. Nothing is booked until they say yes." },
     ] },
@@ -216,7 +222,7 @@
       { who: "Pip", typing: true },
       { who: "Pip", text: "Open. Add lines like \"2 × ceremonial matcha\". I'll track the minimum and who owes what." },
       { who: "Mei", text: "3 × ceremonial, 1 × whisk" },
-      { who: "Pip", card: { h: "Group order · Matchaful", rows: [["Jo · 2 × ceremonial", "$96", ""], ["Mei · 3 × ceremonial, 1 whisk", "$168", ""], ["Total", "$864", "$336 to go"]], f: "Shared page updated →" } },
+      { who: "Pip", text: "Matchaful so far:\nJo · 2 × ceremonial · $96\nMei · 3 × ceremonial, 1 whisk · $168\n$864 in, $336 to go. Page: circle.app/d/matcha" },
       { who: "Tom", text: "Put me down for 4 ceremonial" },
       { who: "Pip", text: "$1,056 in. $144 to go, then Jo places it and I'll record what each of you owes." },
     ] },
@@ -224,15 +230,17 @@
       { who: "Mum", text: "Pip, move Dad's physio from Tuesday to Thursday afternoon." },
       { who: "Pip", typing: true },
       { who: "Pip", text: "Calling Riverside Physio now, for the family, Thursday after 2." },
-      { who: "Pip", card: { h: "Call · Riverside Physio · 1m 40s", rows: [["Moved to Thu 3:15pm with Sarah", "done", ""]], f: "On the family calendar · Dad reminded Wed night" } },
+      { who: "Pip", text: "Done. Call with Riverside Physio, 1m 40s: moved to Thursday 3:15pm with Sarah. On the family calendar, and I'll remind Dad Wednesday night." },
       { who: "Jo", text: "Can I get a ride with him?" },
       { who: "Pip", text: "Noted for Dad. I'll remind you both." },
     ] },
     couple: { name: "Alex 💛", people: ["E"], me: "Ellie", lines: [
       { who: "Ellie", text: "Pip, dinner for two Friday near Union Station, around 8." },
       { who: "Pip", typing: true },
-      { who: "Pip", card: { h: "Friday · 2 people · near Union Station", rows: [["Cosme · 8:15", "free", ""], ["Via Carota · 8:30", "free", ""], ["Le Coucou · 7:45", "free", ""]], f: "Say which and I'll book it" } },
+      { who: "Pip", text: "Three with a table free Friday:\nCosme · 8:15\nVia Carota · 8:30\nLe Coucou · 7:45\nSay which and I'll book it." },
       { who: "Alex", text: "Via Carota" },
+      { who: "Pip", text: "That one takes a card to hold the table. OK to use yours, Alex?" },
+      { who: "Alex", text: "yes" },
       { who: "Pip", text: "Booked, 8:30 under Alex. Confirmation's in both your chats." },
     ] },
   };
@@ -246,16 +254,14 @@
     thread.innerHTML = `<div class="stamp"><b>iMessage</b><br>Today 7:41 PM</div>` + s.lines.map((l) => {
       const side = l.who === s.me ? "me" : "them";
       const who = side === "them" ? `<span class="who">${esc(l.who)}</span>` : "";
-      const body = l.typing ? `<div class="bub dots"><i></i><i></i><i></i></div>`
-        : l.card ? `<div class="card"><div class="card-h">${esc(l.card.h)}</div>${l.card.rows.map((r) => `<div class="line"><span>${esc(r[0])}</span><b>${esc(r[1])}</b>${r[2] ? `<s>${esc(r[2])}</s>` : ""}</div>`).join("")}<div class="card-f">${esc(l.card.f)}</div></div>`
-        : `<div class="bub">${esc(l.text)}</div>`;
+      const body = l.typing ? `<div class="bub dots"><i></i><i></i><i></i></div>` : `<div class="bub">${esc(l.text)}</div>`;
       return `<div class="row ${side}${l.typing ? " typing" : ""}" style="--i:${i++}">${who}${body}</div>`;
     }).join("");
   };
   const play = () => { thread.classList.remove("go"); void thread.offsetWidth; thread.classList.add("go"); };
   let loop = null;
   const start = () => { clearInterval(loop); if (reduce) { thread.classList.add("go", "still"); return; } play(); loop = setInterval(play, Number(thread.dataset.loop) || 16000); };
-  render("ski");
+  render("friends");
   document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach((x) => { x.classList.toggle("on", x === t); x.setAttribute("aria-selected", x === t ? "true" : "false"); });
     render(t.dataset.s); start();
@@ -291,39 +297,43 @@
   };
   const wake = () => { if (!running) { running = true; last = performance.now(); requestAnimationFrame(tick); } };
 
-  // ---- the flow: five tiles sit inside the sentence, then travel into the dark band as you scroll
+  // ---- the flow: the five tiles sit inside the sentence, then fly onto the scenario tabs as the chat demo rises into view
   const flow = document.getElementById("flow");
+  const still = reduce || innerWidth < 760;
   if (flow) {
-    const sticky = flow.querySelector(".flow-sticky"), line = document.getElementById("bigline"), band = document.getElementById("band");
-    const tiles = [...flow.querySelectorAll(".ftile")], phs = [...flow.querySelectorAll(".ph")], slots = [...flow.querySelectorAll(".slot")];
-    let from = [], to = [];
+    const sticky = flow.querySelector(".flow-sticky"), line = document.getElementById("bigline"), stage = flow.querySelector(".stage");
+    const tiles = [...flow.querySelectorAll(".ftile")], phs = [...flow.querySelectorAll(".ph")], slots = [...flow.querySelectorAll(".tab-ic")];
+    let from = [], to = [], rise = 0;
     const measure = () => {
       const b = sticky.getBoundingClientRect();
       const rel = (r) => ({ x: r.left - b.left, y: r.top - b.top, w: r.width, h: r.height });
       from = phs.map((p) => rel(p.getBoundingClientRect()));
-      to = slots.map((s) => rel(s.getBoundingClientRect()));
+      const prev = stage.style.getPropertyValue("--sy"); stage.style.setProperty("--sy", "0px");
+      to = slots.map((sl) => rel(sl.getBoundingClientRect()));
+      stage.style.setProperty("--sy", prev);
+      rise = b.height; // the stage starts one screen below and rises to its place
       tiles.forEach((t, i) => { t.style.width = `${to[i].w}px`; t.style.height = `${to[i].h}px`; });
     };
     const draw = (p) => {
-      const fade = 1 - clamp((p - 0.12) / 0.3);
-      line.style.opacity = fade; line.style.transform = `translateY(${-40 * (1 - fade)}px)`;
-      const bandIn = ease(clamp((p - 0.3) / 0.45));
-      band.style.opacity = bandIn; band.style.transform = `translateY(${(1 - bandIn) * 60}px)`;
+      const fade = 1 - clamp((p - 0.08) / 0.3);
+      line.style.opacity = fade; line.style.transform = `translateY(${-60 * (1 - fade)}px)`;
+      const up = ease(clamp((p - 0.12) / 0.6));
+      stage.style.setProperty("--sy", `${rise * (1 - up)}px`);
       tiles.forEach((t, i) => {
         const a = from[i], z = to[i]; if (!a || !z) return;
-        const q = ease(clamp((p - 0.08 - i * 0.05) / 0.62));
+        const q = ease(clamp((p - 0.1 - i * 0.04) / 0.6));
+        const zy = z.y + rise * (1 - up); // the slot moves with the stage until it has risen
         const s0 = a.w / z.w;
-        const x = a.x + (z.x - a.x) * q, y = a.y + (z.y - a.y) * q, s = s0 + (1 - s0) * q;
+        const x = a.x + (z.x - a.x) * q, y = a.y + (zy - a.y) * q, s = s0 + (1 - s0) * q;
         t.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
-        t.style.setProperty("--q", q);
       });
     };
-    if (reduce) { flow.classList.add("still"); }
+    if (still) flow.classList.add("still");
     else {
       measure(); draw(0);
       scenes.push({ el: flow, p: 0, draw });
       addEventListener("resize", () => { measure(); });
-      if (document.fonts?.ready) document.fonts.ready.then(measure);
+      if (document.fonts?.ready) document.fonts.ready.then(() => { measure(); });
     }
   }
 
@@ -350,7 +360,7 @@
     };
     const draw = (p) => {
       const R = Math.min(W, H) * 0.14;
-      const bx = W * (0.5 + 0.32 * Math.sin(p * Math.PI * 2.2)), by = H * (0.08 + 0.84 * p);
+      const bx = W * (0.5 + 0.32 * Math.sin(p * Math.PI * 2.2)), by = H * (0.18 + 0.74 * p);
       ball.style.transform = `translate(${bx - R}px, ${by - R}px)`;
       ball.style.width = ball.style.height = `${R * 2}px`;
       const stage = Math.min(3, Math.floor(p * 4));
