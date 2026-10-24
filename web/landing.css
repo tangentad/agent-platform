@@ -266,13 +266,14 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 /* glass photo bubbles: the photo sits behind a lens; a vignette, a rim light, a bottom reflection and a sharp
    specular give the depth, a long soft shadow lifts it off the page */
 .sphere { position: absolute; left: 0; top: 0; width: 120px; height: 120px; border-radius: 50%; background: var(--img) center / 118% auto no-repeat, #ddd; will-change: transform; z-index: 2; pointer-events: none; isolation: isolate;
-  box-shadow: 0 34px 50px -24px rgba(0,0,0,.5), 0 12px 18px -10px rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.08) }
-.sphere::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 38% 32%, rgba(0,0,0,0) 38%, rgba(0,0,0,.14) 70%, rgba(0,0,0,.5) 100%); box-shadow: inset 0 -22px 34px rgba(0,0,0,.4), inset 0 14px 22px rgba(255,255,255,.22) }
+  --tint: #00b2ff; /* each bubble carries one colour from the palette: a tinted rim, a glow and a wash in the shadow side */
+  box-shadow: 0 34px 50px -24px color-mix(in srgb, var(--tint) 55%, rgba(0,0,0,.6)), 0 12px 18px -10px rgba(0,0,0,.25), 0 0 0 1px color-mix(in srgb, var(--tint) 40%, transparent), 0 0 0 5px color-mix(in srgb, var(--tint) 14%, transparent) }
+.sphere::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 38% 32%, rgba(0,0,0,0) 38%, color-mix(in srgb, var(--tint) 30%, rgba(0,0,0,.14)) 72%, color-mix(in srgb, var(--tint) 55%, rgba(0,0,0,.5)) 100%); box-shadow: inset 0 -22px 34px rgba(0,0,0,.4), inset 0 14px 22px rgba(255,255,255,.22) }
 .sphere i { position: absolute; inset: 0; border-radius: inherit; background:
   radial-gradient(ellipse 34% 24% at 34% 24%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.55) 40%, rgba(255,255,255,0) 100%),
   radial-gradient(ellipse 60% 22% at 50% 102%, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 100%),
   radial-gradient(circle at 80% 70%, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 30%);
-  box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.7), inset 0 0 0 3px rgba(255,255,255,.12) }
+  box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.75), inset 0 0 0 3.5px color-mix(in srgb, var(--tint) 45%, transparent) }
 .sphere i::after { content: ""; position: absolute; left: 26%; top: 15%; width: 12%; height: 7%; border-radius: 50%; background: #fff; filter: blur(.5px); opacity: .95 }
 #orbs { position: fixed; inset: 0; z-index: 15; pointer-events: none; contain: layout style }
 #orbs .sphere { opacity: 0 }
