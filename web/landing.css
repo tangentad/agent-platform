@@ -21,7 +21,7 @@ p { margin: 0 }
 .muted { color: var(--ink-3) }
 .eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 14px }
 .eyebrow.on-dark { color: var(--on-dark-2) }
-.on-dark { color: var(--on-dark) }
+.on-dark { color: #fff }
 .lede { color: var(--ink-2); font-size: 17px; max-width: 62ch; margin-top: 18px }
 .lede-s { color: var(--on-dark-2); max-width: 52ch; margin-top: 16px }
 .fine { color: var(--ink-3); font-size: 13px }
@@ -48,7 +48,7 @@ p { margin: 0 }
 .hero .lede { margin-inline: auto }
 .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px }
 .hero .fine { margin-top: 14px }
-.stage { width: 100%; background: var(--dark); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
+.stage { width: 100%; background: #fff; border: 1.5px solid var(--ink); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
 
 /* an iPhone in Messages: island, status bar, group header, grey and blue bubbles, the compose bar */
 /* An iPhone in Messages, drawn to iOS proportions: 393 by 852 points, titanium rim, Dynamic Island, SF text,
@@ -85,9 +85,9 @@ p { margin: 0 }
 
 /* scenario tabs: the stage's right-hand column */
 .tabs { display: grid; gap: 10px; min-width: 0 }
-.tab { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; gap: 2px 14px; align-items: center; text-align: left; background: #141414; border: 1px solid #2a2a2a; border-radius: 18px; padding: 12px 14px; color: var(--on-dark-2); cursor: pointer; font-family: var(--sans); transition: background .2s, transform .2s }
-.tab:hover { background: #262626 } .tab.on { background: var(--amber); color: var(--ink); border-color: var(--amber) } .tab:focus-visible { outline: 3px solid var(--lime) }
-.tab b { font-size: 16px; font-weight: 600; color: inherit } .tab small { font-size: 13px; opacity: .8 } .tab.on small { color: var(--ink-2); opacity: 1 }
+.tab { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; gap: 2px 14px; align-items: center; text-align: left; background: var(--bg); border: 1.5px solid var(--ink); border-radius: 18px; color: var(--ink); padding: 12px 14px; color: var(--on-dark-2); cursor: pointer; font-family: var(--sans); transition: background .2s, transform .2s }
+.tab:hover { background: #fff } .tab.on { background: var(--amber); color: var(--ink); border-color: var(--amber) } .tab:focus-visible { outline: 3px solid var(--lime) }
+.tab b { font-size: 16px; font-weight: 600; color: inherit } .tab small { font-size: 13px; color: var(--ink-2) } .tab.on small { color: var(--ink) }
 
 /* sections */
 .sec { max-width: 1180px; margin: 0 auto; padding-block: 72px }
@@ -189,16 +189,16 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 
 /* the scroll scene: a tall section with a sticky dark stage; the ball travels with scroll and shoves letters aside */
 .format { height: 320vh; position: relative; margin: 0 }
-.format-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; background: var(--dark); color: #fff; border-radius: 0 0 var(--r) var(--r); overflow: hidden; display: grid; align-content: end; padding: clamp(20px, 4vw, 56px); contain: layout paint }
-.ball { position: absolute; left: 0; top: 0; width: 160px; height: 160px; border-radius: 50%; background: var(--ballc, #ffb200); will-change: transform; transition: background .6s }
+.format-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; background: var(--bg); color: var(--ink); border-radius: 0 0 var(--r) var(--r); overflow: hidden; display: grid; align-content: end; padding: clamp(20px, 4vw, 56px); contain: layout paint; border-top: 1.5px solid var(--ink) }
+.ball { position: absolute; left: 0; top: 0; width: 160px; height: 160px; border-radius: 50%; background: var(--ballc, #ffb200); border: 2px solid var(--ink); will-change: transform; transition: background .6s }
 .format-h { font: 600 clamp(44px, 10.5vw, 150px)/.92 var(--sans); letter-spacing: -.045em; text-transform: uppercase; margin: 0; max-width: 11ch; display: grid; gap: .02em; position: relative; z-index: 1 }
 .fl { display: block; white-space: nowrap } .fl:nth-child(2) { padding-left: .9em } .ch { display: inline-block; will-change: transform }
 .format-index { list-style: none; margin: 0; padding: 0; position: absolute; right: clamp(20px, 4vw, 56px); top: clamp(20px, 4vw, 56px); display: grid; gap: 22px; font-size: 13px; z-index: 1; max-width: 240px }
-.format-index li { display: grid; grid-template-columns: 24px 1fr; gap: 2px 10px; color: #5a5a5a; transition: color .4s } .format-index li.on { color: #fff }
+.format-index li { display: grid; grid-template-columns: 24px 1fr; gap: 2px 10px; color: #b9ab9e; transition: color .4s } .format-index li.on { color: var(--ink) }
 .format-index .n { font: 500 11px var(--mono) } .format-index .k { font: 500 11px var(--mono); color: inherit; opacity: .7; grid-column: 2 } .format-index b { grid-column: 2; font-weight: 500 }
-.format-hint { position: absolute; left: clamp(20px, 4vw, 56px); top: clamp(20px, 4vw, 56px); font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #8a8a8a; margin: 0; z-index: 1 }
+.format-hint { position: absolute; left: clamp(20px, 4vw, 56px); top: clamp(20px, 4vw, 56px); font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin: 0; z-index: 1 }
 @media (max-width: 760px) { .format { height: 260vh } .format-index { position: static; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; max-width: none } .format-index b { font-size: 12px } .format-h { max-width: none } .fl:nth-child(2) { padding-left: .3em } }
-@media (prefers-reduced-motion: reduce) { .format { height: auto } .format-sticky { position: static; height: auto; padding-top: 80px } .ball { display: none } .format-index li { color: #fff } }
+@media (prefers-reduced-motion: reduce) { .format { height: auto } .format-sticky { position: static; height: auto; padding-top: 80px } .ball { display: none } .format-index li { color: var(--ink) } }
 
 /* the flow: the sentence first, then the chat demo rises into the same screen while the five tiles fly onto its tabs */
 .flow { height: 260vh; position: relative; margin-top: 8px }
@@ -228,3 +228,12 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 .circled { position: relative; display: inline-block } .circled::after { content: ""; position: absolute; inset: -12% -6%; border: 5px solid var(--amber); border-radius: 50% 48% 52% 50% / 60% 55% 45% 40%; transform: rotate(-2deg); pointer-events: none }
 @media (max-width: 760px) { .doodle { width: 56px } .hero-scribbles .d-arrow, .hero-scribbles .d-squig { display: none } .tunnel { opacity: .35 } }
 @media (prefers-reduced-motion: reduce) { .doodle path { transition: none } }
+
+/* word reveal: each word rises out of a clipped box; the blue phrase cycles through the palette */
+.wm { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 .02em; margin: 0 -.02em } .w { display: inline-block; transform: translateY(110%); opacity: 0; will-change: transform, opacity }
+.in .w { transform: none; opacity: 1; transition: transform .9s cubic-bezier(0,0,0,1), opacity .5s linear; transition-delay: calc(var(--i, 0) * 55ms) }
+.lede.in .w { transition-delay: calc(400ms + var(--i, 0) * 18ms) }
+.grad { animation: hue 9s ease-in-out infinite } @keyframes hue { 0%, 100% { color: #0072e3 } 30% { color: #00b2ff } 55% { color: #ab54f7 } 80% { color: #ea3737 } }
+.hero .lede { max-width: 56ch }
+.tunnel { opacity: .5 }
+@media (prefers-reduced-motion: reduce) { .w { transform: none; opacity: 1 } .grad { animation: none } }

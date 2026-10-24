@@ -293,36 +293,79 @@
     new IntersectionObserver((es) => { for (const e of es) { if (e.isIntersecting) { if (!loop) start(); } else { clearInterval(loop); loop = null; } } }, { threshold: 0.15 }).observe(thread);
   } else start();
 
-  // ---- the hero backdrop: a one-point perspective corridor in flat colour, drawn here so no image is shipped
+  // ---- the hero backdrop: a one-point perspective corridor you fly through, in flat colour, drawn every frame.
+  //      Rings sit at log-spaced depths so motion reads as constant speed; panels ride their ring outward and wrap.
   const tunnel = document.getElementById("tunnel");
   if (tunnel) {
-    const W = 1600, H = 900, cx = 800, cy = 470, ink = "#000";
+    const W = 1600, H = 900, N = 9, dmin = 0.12, ink = "#000";
     const pal = ["#0072e3", "#ffb200", "#1be349", "#ab54f7", "#ea3737", "#ff5c38", "#00b2ff"];
-    const depths = [1, .78, .6, .46, .35, .27, .21, .16];
-    const rect = (d) => ({ x: cx - (cx) * d, y: cy - (cy) * d, w: W * d, h: H * d });
-    let out = "";
-    // coloured panels first: wall segments between two depths on the floor, ceiling and sides
-    const panels = [[0, "floor", .18, .34, pal[5]], [0, "floor", .66, .82, pal[1]], [1, "left", .3, .5, pal[0]], [0, "right", .2, .4, pal[3]], [2, "ceil", .12, .3, pal[2]], [3, "left", .5, .7, pal[4]], [2, "right", .55, .75, pal[6]], [4, "ceil", .6, .8, pal[0]], [5, "floor", .1, .3, pal[1]], [4, "left", .1, .3, pal[2]], [5, "right", .4, .6, pal[3]], [6, "floor", .6, .9, pal[4]]];
-    for (const [i, side, a, b, col] of panels) {
-      const o = rect(depths[i]), n = rect(depths[i + 1]); if (!n) continue;
-      let pts;
-      if (side === "floor") pts = [[o.x + o.w * a, o.y + o.h], [o.x + o.w * b, o.y + o.h], [n.x + n.w * b, n.y + n.h], [n.x + n.w * a, n.y + n.h]];
-      else if (side === "ceil") pts = [[o.x + o.w * a, o.y], [o.x + o.w * b, o.y], [n.x + n.w * b, n.y], [n.x + n.w * a, n.y]];
-      else if (side === "left") pts = [[o.x, o.y + o.h * a], [o.x, o.y + o.h * b], [n.x, n.y + n.h * b], [n.x, n.y + n.h * a]];
-      else pts = [[o.x + o.w, o.y + o.h * a], [o.x + o.w, o.y + o.h * b], [n.x + n.w, n.y + n.h * b], [n.x + n.w, n.y + n.h * a]];
-      out += `<polygon points="${pts.map((p) => p.join(",")).join(" ")}" fill="${col}"/>`;
+    const panels = [[0, "floor", .18, .34], [1, "right", .2, .4], [2, "ceil", .12, .3], [3, "left", .5, .7], [4, "floor", .66, .82], [5, "right", .55, .75], [6, "ceil", .6, .8], [7, "left", .1, .3], [8, "floor", .4, .55]];
+    let t = 0, mx = 0, my = 0, tx = 0, ty = 0, last = 0, visible = true;
+    const rect = (d, cx, cy) => ({ x: cx - cx * d, y: cy - cy * d, w: W * d, h: H * d });
+    const quad = (o, n, side, a, b) => {
+      if (side === "floor") return [[o.x + o.w * a, o.y + o.h], [o.x + o.w * b, o.y + o.h], [n.x + n.w * b, n.y + n.h], [n.x + n.w * a, n.y + n.h]];
+      if (side === "ceil") return [[o.x + o.w * a, o.y], [o.x + o.w * b, o.y], [n.x + n.w * b, n.y], [n.x + n.w * a, n.y]];
+      if (side === "left") return [[o.x, o.y + o.h * a], [o.x, o.y + o.h * b], [n.x, n.y + n.h * b], [n.x, n.y + n.h * a]];
+      return [[o.x + o.w, o.y + o.h * a], [o.x + o.w, o.y + o.h * b], [n.x + n.w, n.y + n.h * b], [n.x + n.w, n.y + n.h * a]];
+    };
+    const frame = (now) => {
+      const dt = Math.min(50, now - last) || 16; last = now;
+      if (!reduce) t += dt / 9000; // one full ring cycle every nine seconds
+      mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
+      const cx = 800 + mx * 90, cy = 470 + my * 50;
+      const ring = (k) => { const f = ((k / N + t) % 1 + 1) % 1; return { d: dmin * Math.pow(1 / dmin, f), f }; };
+      const rings = Array.from({ length: N }, (_, k) => ({ k, ...ring(k) })).sort((a, b) => a.d - b.d);
+      let out = "";
+      for (let i = 0; i < rings.length - 1; i++) {
+        const a = rings[i], b = rings[i + 1];
+        const o = rect(b.d, cx, cy), n = rect(a.d, cx, cy);
+        const pn = panels[a.k % panels.length];
+        const fade = Math.min(1, a.f * 6) * Math.min(1, (1 - b.f) * 3 + 0.2);
+        out += `<polygon points="${quad(o, n, pn[1], pn[2], pn[3]).map((p) => p.join(",")).join(" ")}" fill="${pal[a.k % pal.length]}" opacity="${fade.toFixed(2)}"/>`;
+      }
+      for (const r of rings) { const q = rect(r.d, cx, cy); out += `<rect x="${q.x.toFixed(1)}" y="${q.y.toFixed(1)}" width="${q.w.toFixed(1)}" height="${q.h.toFixed(1)}" fill="none" stroke="${ink}" stroke-width="2" opacity="${Math.min(1, r.f * 5).toFixed(2)}"/>`; }
+      const o = rect(1, cx, cy), n = rect(dmin, cx, cy);
+      for (const u of [0, .18, .34, .5, .66, .82, 1]) {
+        out += `<line x1="${o.x + o.w * u}" y1="${o.y}" x2="${n.x + n.w * u}" y2="${n.y}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w * u}" y1="${o.y + o.h}" x2="${n.x + n.w * u}" y2="${n.y + n.h}" stroke="${ink}" stroke-width="2"/>`;
+        out += `<line x1="${o.x}" y1="${o.y + o.h * u}" x2="${n.x}" y2="${n.y + n.h * u}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w}" y1="${o.y + o.h * u}" x2="${n.x + n.w}" y2="${n.y + n.h * u}" stroke="${ink}" stroke-width="2"/>`;
+      }
+      tunnel.innerHTML = out;
+      if (visible && !reduce) requestAnimationFrame(frame);
+    };
+    addEventListener("pointermove", (e) => { tx = (e.clientX / innerWidth - 0.5) * 2; ty = (e.clientY / innerHeight - 0.5) * 2; }, { passive: true });
+    const hero = tunnel.closest(".hero");
+    if (reduce) { last = performance.now(); frame(performance.now()); }
+    else {
+      new IntersectionObserver((es) => { for (const e of es) { const was = visible; visible = e.isIntersecting; if (visible && !was) { last = performance.now(); requestAnimationFrame(frame); } } }).observe(hero);
+      last = performance.now(); requestAnimationFrame(frame);
     }
-    for (const d of depths) { const r = rect(d); out += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="none" stroke="${ink}" stroke-width="2"/>`; }
-    const o = rect(1), n = rect(depths[depths.length - 1]);
-    for (const t of [0, .18, .34, .5, .66, .82, 1]) {
-      out += `<line x1="${o.x + o.w * t}" y1="${o.y}" x2="${n.x + n.w * t}" y2="${n.y}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w * t}" y1="${o.y + o.h}" x2="${n.x + n.w * t}" y2="${n.y + n.h}" stroke="${ink}" stroke-width="2"/>`;
-      out += `<line x1="${o.x}" y1="${o.y + o.h * t}" x2="${n.x}" y2="${n.y + n.h * t}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w}" y1="${o.y + o.h * t}" x2="${n.x + n.w}" y2="${n.y + n.h * t}" stroke="${ink}" stroke-width="2"/>`;
-    }
-    tunnel.innerHTML = out;
   }
+  // ---- the headline and lede rise in word by word on load (Butter's out curve), then the scribbles draw
+  const split = (el) => {
+    const words = el.innerHTML.split(/(\s+)/).map((w) => (/^\s+$/.test(w) ? w : w));
+    el.innerHTML = el.innerHTML.replace(/(<span class="grad">)?([^<\s]+)(<\/span>)?/g, (m) => m); // keep markup
+    const walk = (node) => {
+      [...node.childNodes].forEach((c) => {
+        if (c.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach((w) => {
+            if (!w) return;
+            if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+            const m = document.createElement("span"); m.className = "wm"; const inner = document.createElement("span"); inner.className = "w"; inner.textContent = w; m.appendChild(inner); frag.appendChild(m);
+          });
+          node.replaceChild(frag, c);
+        } else if (c.nodeType === 1) walk(c);
+      });
+    };
+    walk(el);
+    el.querySelectorAll(".w").forEach((w, i) => w.style.setProperty("--i", i));
+  };
+  const h1 = document.querySelector(".hero h1"), lede = document.querySelector(".hero .lede");
+  if (h1 && !reduce) { split(h1); split(lede); requestAnimationFrame(() => requestAnimationFrame(() => { h1.classList.add("in"); lede.classList.add("in"); })); }
+
   // ---- scribbles draw themselves on when their section shows
   document.querySelectorAll(".doodle path").forEach((pth) => { const L = pth.getTotalLength(); pth.style.strokeDasharray = `${L}`; pth.style.strokeDashoffset = `${L}`; });
-  const drawIn = (box) => box.querySelectorAll(".doodle").forEach((d, i) => { d.classList.add("draw"); d.style.setProperty("--d", `${i * 0.18}s`); });
+  const drawIn = (box) => box.querySelectorAll(".doodle").forEach((d, i) => { d.classList.add("draw"); d.style.setProperty("--d", `${(box.classList.contains("hero-scribbles") ? 0.9 : 0) + i * 0.18}s`); });
   if (!reduce && "IntersectionObserver" in window) {
     const dio = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) { drawIn(e.target); dio.unobserve(e.target); } }, { threshold: 0.2 });
     document.querySelectorAll(".scribbles").forEach((b) => dio.observe(b));
