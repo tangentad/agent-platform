@@ -3,36 +3,238 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Circle — an assistant for the chats you already have</title>
+<title>Circle — one assistant for the whole chat</title>
+<meta name="description" content="Circle is an assistant that lives in your group chats. It coordinates the group, books hotels and flights at wholesale rates, runs group orders, and asks before it pays or contacts anyone." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23111' stroke-width='3'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rubik:wght@700;800;900&family=Caveat:wght@600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/landing.css" />
-<meta name="theme-color" content="#111" />
+<meta name="theme-color" content="#f3f3f1" />
 </head>
-<body class="gm">
-<nav class="gm-nav"><a class="gm-logo" href="/welcome">circle<span class="gm-eyes" aria-hidden="true"><svg width="13" height="15" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg><svg width="13" height="15" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg></span></a><div class="gm-links"></div><div class="gm-ctas" style="gap:14px"><a class="gm-btn dark" href="/#signin">Open your assistant</a></div></nav>
-<section class="gm-hero">
-  <svg class="gm-doodle" width="22" height="22" viewBox="0 0 40 40" style="left:12%;top:70px" aria-hidden="true"><path d="M20 2c1.6 9.6 8.4 16.4 18 18-9.6 1.6-16.4 8.4-18 18-1.6-9.6-8.4-16.4-18-18 9.6-1.6 16.4-8.4 18-18z" fill="#c6f432" stroke="#111" stroke-width="2.2" stroke-linejoin="round"/></svg>
-  <p class="gm-hand">psst… hover the letters ↓</p>
-  <div class="gm-title-wrap"><h1 class="ed-title" aria-label="one assistant"><span class="ed-word"><span class="ed-letter"><span class="ed-char">o</span></span><span class="ed-letter"><span class="ed-char">n</span></span><span class="ed-letter"><span class="ed-char">e</span></span></span><span class="ed-word"><span class="ed-letter"><span class="ed-char">a</span></span><span class="ed-letter"><span class="ed-char">s</span></span><span class="ed-letter"><span class="ed-char">s</span></span><span class="ed-letter"><span class="ed-char">i</span></span><span class="ed-letter"><span class="ed-char">s</span></span><span class="ed-letter"><span class="ed-char">t</span></span><span class="ed-letter"><span class="ed-char">a</span></span><span class="ed-letter"><span class="ed-char">n</span></span><span class="ed-letter"><span class="ed-char">t</span></span></span></h1></div>
-  <p class="gm-for"><span>for</span><span class="gm-rot"><span class="gm-rot-word">the whole chat</span>,</span><span class="gm-anywhere">then just ask.</span></p>
-  <p class="gm-sub">A personal assistant that lives in the chats you already have: you and your partner, the friends' group, the trip chat, the family thread, the people on your street. One person sets it up; everyone in the chat gets help without signing up. It coordinates, follows through, and asks the right person when a decision, an approval or a private detail is needed.</p>
-  <div class="gm-ctas"><a class="gm-btn dark" href="/#signin">Open your assistant</a></div>
-  <p class="gm-fine">Nothing to install · it earns trust one action at a time</p>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="nav-pill">
+    <a class="logo" href="/welcome">circle<span class="eyes" aria-hidden="true"><svg width="12" height="14" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg><svg width="12" height="14" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg></span></a>
+    <div class="nav-links"><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Open circles</a><a href="#who">Who it's for</a><a href="#pricing">Pricing</a></div>
+  </div>
+  <div class="nav-pill nav-actions"><a class="btn ghost" href="/#signin">Log in</a><a class="btn dark" href="/#signup">Start a circle</a></div>
+</nav>
+
+<header class="hero">
+  <p class="eyebrow">One assistant for the whole chat</p>
+  <h1>Plans for the group, <span class="muted">done by one assistant.</span></h1>
+  <p class="lede">Circle lives in the chats you already have: the trip, the flat, the family thread. One person adds it, everyone can ask. It compares hotels and flights at wholesale rates, runs group orders, keeps track of who promised what, and asks before it pays or contacts anyone.</p>
+  <div class="ctas"><a class="btn dark lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a><a class="btn ghost lg" href="#demo">See it in a chat</a></div>
+  <p class="fine">Works in iMessage and on the web · Nothing to install for the rest of the chat</p>
+
+  <div class="stage" id="demo">
+    <div class="phone" aria-label="A group chat where Pip compares hotel prices">
+      <div class="phone-top"><span class="faces"><i>A</i><i>S</i><i>R</i><i class="pip">✦</i></span><b>Courchevel ski trip</b><span class="count">4 people</span></div>
+      <div class="thread play" data-loop="15000">
+        <div class="row them" style="--i:0"><span class="who">Riley</span><div class="bub">Pip, 5-star in Courchevel 13–17 Jan for 2, what's the damage?</div></div>
+        <div class="row pip typing" style="--i:1"><div class="bub dots"><i></i><i></i><i></i></div></div>
+        <div class="row pip" style="--i:2"><span class="who">Pip</span><div class="bub">On it. Comparing our wholesale rate with what Booking.com charges for the same rooms, about 20 seconds.</div></div>
+        <div class="row pip" style="--i:3"><div class="card">
+          <div class="card-h">Hotels: Courchevel, 13–17 Jan 2027</div>
+          <div class="line"><span>Alpes Hôtel du Pralong ★★★★★</span><b>$5,123 us</b><s>$7,985 Booking</s></div>
+          <div class="line"><span>Hotel Carlina ★★★★★</span><b>$7,538 us</b><s>$8,832 Booking</s></div>
+          <div class="line"><span>Snow Lodge 1850 ★★★★★</span><b>$12,260 us</b><s>$12,934 Booking</s></div>
+          <div class="card-f">8 of 9 hotels priced · open the page for all of them →</div>
+        </div></div>
+        <div class="row them" style="--i:4"><span class="who">Sam</span><div class="bub">Pralong. Book it?</div></div>
+        <div class="row pip" style="--i:5"><span class="who">Pip</span><div class="bub">I'll ask Alex to OK it, it's on Alex's card. Nothing is booked until they say yes.</div></div>
+      </div>
+    </div>
+    <div class="tiles" aria-label="What Circle can do">
+      <div class="tile"><span class="glyph">🏨</span><small>hotels</small></div>
+      <div class="tile"><span class="glyph">✈️</span><small>flights</small></div>
+      <div class="tile"><span class="glyph">📦</span><small>group orders</small></div>
+      <div class="tile"><span class="glyph">📋</span><small>who does what</small></div>
+      <div class="tile"><span class="glyph">📞</span><small>calls</small></div>
+      <div class="tile"><span class="glyph">🗓️</span><small>reminders</small></div>
+    </div>
+  </div>
+</header>
+
+<section class="sec statement reveal" aria-label="What Circle is">
+  <p class="big">Circle <span class="itile t-chat" aria-hidden="true">💬</span> is the assistant that lives in your group chats, <span class="itile t-ski" aria-hidden="true">🏔️</span> prices the trip at wholesale, <span class="itile t-box" aria-hidden="true">📦</span> runs the group order and <span class="itile t-check" aria-hidden="true">✅</span> remembers who promised what, <span class="itile t-ask" aria-hidden="true">🙋</span> and asks before it spends.</p>
 </section>
-<section class="gm-sec gm-split" style="padding-top:20px">
-  <div class="gm-steps"><div class="gm-card" style="--c:#c6f432"><div class="gm-step"><span class="gm-num">1</span><div><b>Add it to a chat.</b><p>Share an invite link, or add its number to the group. Say what that chat mostly needs from it: the trip, the flat, the dinner rota. Everyone there gets help without signing up for anything.</p></div></div></div><div class="gm-card" style="--c:#ffe14d"><div class="gm-step"><span class="gm-num">2</span><div><b>Ask by name.</b><p>Say Pip and it answers. Guests are served through you: anything that needs your accounts or money becomes a card in your own chat, and your yes finishes the job in the group.</p></div></div></div><div class="gm-card" style="--c:#9be7c4"><div class="gm-step"><span class="gm-num">3</span><div><b>It earns trust one notch at a time.</b><p>Every write asks first. Allow a tool, set a dollar amount, pause spending. Every step is recorded, and the reply's footer comes from the record, never from its own words.</p></div></div></div></div>
-  <div class="phone ios" aria-hidden="true"><div class="scr">
-<div class="ios-status"><span>9:41</span><i class="ios-island"></i><span class="ios-icons"><span class="ios-batt"><i></i></span></span></div>
-<div class="ios-hd"><span class="ios-back"><b>4</b></span><div class="ios-faces"><span>A</span><span>S</span><span>R</span><span>✦</span></div><div class="ios-name">Tahoe trip 🏔</div></div>
-<div class="ios-thread"><div class="ios-stamp"><b>iMessage</b><br>Today 7:41 PM</div><div class="ios-row them tail" style="animation-delay:0.00s"><div class="ios-who">Riley</div><div class="ios-line"><span class="ios-av">R</span><div class="ios-bub">Pip, the cabin's hot tub is broken. Can you call Lakeview to sort it before Friday?</div></div></div><div class="ios-row them tail" style="animation-delay:0.35s"><div class="ios-who">Pip</div><div class="ios-line"><span class="ios-av">✦</span><div class="ios-bub">I've asked Alex to OK that.</div></div></div><div class="ios-row me tail" style="animation-delay:0.70s"><div class="ios-line"><div class="ios-bub">Yes, go ahead</div></div><div class="ios-receipt">Delivered</div></div><div class="ios-row them tail" style="animation-delay:1.05s"><div class="ios-who">Pip</div><div class="ios-line"><span class="ios-av">✦</span><div class="ios-bub">Sorted: Lakeview sends someone Thursday 2pm, no charge. Sam, can you let them in?</div></div></div><div class="ios-row them tail" style="animation-delay:1.40s"><div class="ios-who">Sam</div><div class="ios-line"><span class="ios-av">S</span><div class="ios-bub">👍 I'll be there</div></div></div><div class="ios-row them tail" style="animation-delay:1.75s"><div class="ios-who">Pip</div><div class="ios-line"><span class="ios-av">✦</span><div class="ios-bub">Noted: Sam, Thursday 2pm. I'll remind you Wednesday.</div></div></div></div>
-<div class="ios-compose"><span class="ios-plus">+</span><span class="ios-field">iMessage</span></div>
-</div></div>
+
+<section class="sec reveal" id="does">
+  <p class="eyebrow">What it does</p>
+  <h2>Four things a group chat never manages on its own.</h2>
+  <div class="four">
+    <article>
+      <div class="media light"><div class="mini-ledger"><div><i class="dot open"></i>Riley · book the cabin · Fri</div><div><i class="dot done"></i>Sam · bring the skis · done</div><div><i class="dot open"></i>Alex · OK the hotel · today</div></div></div>
+      <h3>Coordinate</h3><p>When someone says they'll do something, it is written down with a name and a time. Circle nudges the right person, not the whole chat.</p>
+    </article>
+    <article>
+      <div class="media dark"><div class="mini-price"><span>Through us</span><b>$5,123</b><span>Booking.com</span><s>$7,985</s></div></div>
+      <h3>Travel at wholesale</h3><p>Hotels and flights at the net rate travel agents pay, shown next to the public price for the same room, so you can see the difference before you book.</p>
+    </article>
+    <article>
+      <div class="media light"><div class="mini-order"><div>Matchaful · $1,200 minimum</div><div class="bar"><i style="width:72%"></i></div><div>$864 in · 4 people · $336 to go</div></div></div>
+      <h3>Buy together</h3><p>Open a group order from a wholesale brand. Everyone adds their lines in the chat, Circle tracks the minimum and who owes whom, and one person places it.</p>
+    </article>
+    <article>
+      <div class="media dark"><div class="mini-gate"><div>OK to spend $5,123 at Nuitée?</div><div class="gate-btns"><span>Yes</span><span>No</span></div></div></div>
+      <h3>Ask before acting</h3><p>Anything that spends money, uses an account or contacts a person outside the chat is a card for the owner first. The footer under every reply says what actually ran.</p>
+    </article>
+  </div>
 </section>
-<section class="gm-sec gm-end"><h2 class="gm-h2">Your group chat just got<br>a new <span class="gm-circled">friend<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M30 14C80 2 170 4 190 30s-40 44-110 42S6 58 10 36 50 10 100 10" fill="none" stroke="#c6f432" stroke-width="7" stroke-linecap="round"/></svg></span></h2>
-  <div class="gm-ctas"><a class="gm-btn dark" href="/#signin">Open your assistant</a></div>
-  <p class="gm-fine">It asks before it calls, books or pays · Private chats stay private</p></section>
+
+<section class="sec reveal" id="travel">
+  <div class="dark-panel">
+    <div class="dp-text">
+      <p class="eyebrow on-dark">Travel</p>
+      <h2 class="on-dark">The rate agents pay, in your group chat.</h2>
+      <p class="on-dark lede-s">Circle buys through Nuitée's wholesale network. Most people never see those rates. Say the dates and the city, and the comparison comes back with our price next to Booking.com's for the same hotel and dates, taxes in.</p>
+      <ul class="checks on-dark"><li>Hotels and flights, business or economy</li><li>Public price verified against the seller's checkout, not a scraped estimate</li><li>No markup during the beta</li></ul>
+      <a class="btn light" href="/#signup">Price a trip <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="dp-card">
+      <div class="dp-card-h">Measured 23 Oct 2026 · Courchevel, 13–17 Jan 2027, 2 adults</div>
+      <table>
+        <thead><tr><th>Hotel</th><th>Through us</th><th>Booking.com</th><th>Saving</th></tr></thead>
+        <tbody>
+          <tr><td>Alpes Hôtel du Pralong</td><td>$5,123</td><td>$7,985</td><td class="save">$2,862</td></tr>
+          <tr><td>Hotel Carlina</td><td>$7,538</td><td>$8,832</td><td class="save">$1,294</td></tr>
+          <tr><td>Lys Martagon</td><td>$10,283</td><td>$13,335</td><td class="save">$3,052</td></tr>
+          <tr><td>Fahrenheit Seven</td><td>$4,815</td><td>$5,538</td><td class="save">$723</td></tr>
+          <tr><td>Lake Hotel 1850</td><td>$2,029</td><td>$2,365</td><td class="save">$336</td></tr>
+        </tbody>
+      </table>
+      <p class="dp-note">Booking.com totals include the taxes and fees it lists at checkout. Each side is its cheapest room for the dates, so rooms can differ.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec reveal" id="circles">
+  <p class="eyebrow">Open circles</p>
+  <h2>Groups you can join, with the assistant already inside.</h2>
+  <p class="lede">Some circles are open to anyone. Join one and Circle is there from your first message, with the group's rules and history.</p>
+  <div class="grid3">
+    <a class="circle-card" href="/#signup"><span class="tag">Neighbourhood</span><h3>Buy Nothing</h3><p>Give away, ask for, lend. Circle keeps the list of who has what and arranges the handoff.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag">Wholesale</span><h3>Wholesale Club</h3><p>Pool orders to hit brand minimums on Faire: matcha, candles, kids' clothes. Pay your share, one person places it.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag">Travel</span><h3>Ski Trip Planners</h3><p>Compare chalets and flights at wholesale, split the cost, keep the packing list on one page.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag">Friends</span><h3>Dinner Rota</h3><p>Who hosts, who brings what, which Friday. Circle books the table when it is a restaurant week.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag">Family</span><h3>New Parents</h3><p>Hand-me-downs, sitter swaps, the pediatrician's number. Private details stay in your own chat.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag">Your own</span><h3>Start a circle</h3><p>Any chat you already have. Share an invite link, or add Circle's number to the group.</p><span class="join">Start now →</span></a>
+  </div>
+</section>
+
+<section class="sec reveal" id="who">
+  <p class="eyebrow">Who it's for</p>
+  <h2>Couples, friend groups, families.</h2>
+  <div class="grid3 who">
+    <article class="who-card">
+      <h3>Couples</h3>
+      <p>One shared assistant for the two of you. The dinner reservation, the flight home for the holidays, the dentist you both keep forgetting.</p>
+      <div class="chips"><span>"Book us something near the station Friday"</span><span>"Find the cheapest business fare to Lisbon in May"</span><span>"Remind us to renew the lease"</span></div>
+    </article>
+    <article class="who-card">
+      <h3>Friend groups</h3>
+      <p>The trip chat that never decides. Circle prices the options, collects the votes, tracks who paid, and chases the one who hasn't.</p>
+      <div class="chips"><span>"Pip, 5-star in Courchevel for the four of us"</span><span>"Who still owes Sam for the Airbnb?"</span><span>"Open a Matchaful group order"</span></div>
+    </article>
+    <article class="who-card">
+      <h3>Families</h3>
+      <p>Across time zones and generations. Grandma's flight, the school form, the sitter on Thursday. Anyone in the chat can ask; only the owner approves spending.</p>
+      <div class="chips"><span>"Call the clinic and move Dad's appointment"</span><span>"What's the plan for Thanksgiving?"</span><span>"Text me when the package lands"</span></div>
+    </article>
+  </div>
+  <div class="stage second">
+    <div class="phone" aria-label="A family chat where Pip moves an appointment">
+      <div class="phone-top"><span class="faces"><i>M</i><i>D</i><i>J</i><i class="pip">✦</i></span><b>Family 🏡</b><span class="count">4 people</span></div>
+      <div class="thread play" data-loop="14000">
+        <div class="row them" style="--i:0"><span class="who">Mum</span><div class="bub">Pip, can you move Dad's physio from Tuesday to Thursday afternoon?</div></div>
+        <div class="row pip typing" style="--i:1"><div class="bub dots"><i></i><i></i><i></i></div></div>
+        <div class="row pip" style="--i:2"><span class="who">Pip</span><div class="bub">Calling the clinic now. I'll say I'm calling for the family and ask for Thursday after 2pm.</div></div>
+        <div class="row pip" style="--i:3"><div class="card"><div class="card-h">Call · Riverside Physio · 1m 40s</div><div class="line"><span>Moved to Thursday 3:15pm with Sarah</span><b>done</b></div><div class="card-f">Added to the family calendar · Dad reminded Wednesday night</div></div></div>
+        <div class="row them" style="--i:4"><span class="who">Jo</span><div class="bub">Can I get a ride there with him?</div></div>
+        <div class="row pip" style="--i:5"><span class="who">Pip</span><div class="bub">Noted for Dad: Jo is coming along. I'll remind you both.</div></div>
+      </div>
+    </div>
+    <div class="stage-text">
+      <p class="eyebrow on-dark">In the chat</p>
+      <h3 class="on-dark big-h3">It talks to the clinic so nobody in the family has to.</h3>
+      <p class="lede-s">A call on the family's behalf, the result written back into the chat, the reminder set. If the clinic needs a decision, Pip asks Mum first.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec reveal" id="trust">
+  <div class="three-up">
+    <div><h3>Asks first</h3><p>Spending, calls, emails and sign-ins each need a yes from the person whose money or account it is.</p></div>
+    <div><h3>Private stays private</h3><p>What you tell it in your own chat never shows up in the group. What the group says stays with the group.</p></div>
+    <div><h3>Says what it did</h3><p>Every reply carries a footer built from the record of what actually ran. It cannot claim a booking it did not make.</p></div>
+  </div>
+</section>
+
+<section class="sec reveal" id="pricing">
+  <p class="eyebrow">Pricing</p>
+  <h2>Free during the beta.</h2>
+  <div class="price-row">
+    <div class="price-card">
+      <h3>Beta</h3><p class="price">$0</p>
+      <ul><li>Unlimited chats and members</li><li>Hotels and flights at the net rate, no markup</li><li>Group orders, reminders, calls</li><li>iMessage and web</li></ul>
+      <a class="btn dark" href="/#signup">Start a circle</a>
+    </div>
+    <div class="price-card soft">
+      <h3>Later</h3><p class="price">Paid plans</p>
+      <ul><li>Dedicated phone line for your circle</li><li>More channels</li><li>Business circles</li></ul>
+      <span class="fine">Beta members keep what they have.</span>
+    </div>
+  </div>
+</section>
+
+<section class="sec reveal" id="faq">
+  <h2>Questions</h2>
+  <div class="faq">
+    <details><summary>Does everyone in the chat need an account?</summary><p>No. One person sets Circle up and owns it. Everyone else just talks to it in the chat. Anything that needs the owner's money or accounts becomes a card for the owner.</p></details>
+    <details><summary>How is the hotel price so much lower?</summary><p>Circle books through Nuitée, a wholesale network that sells to travel agents at net rates. It shows that rate next to Booking.com's total for the same hotel and dates, taxes in, so you can check the difference yourself. No markup during the beta.</p></details>
+    <details><summary>Can it spend money on its own?</summary><p>Only below a limit the owner sets, and the default is zero. Everything else is a yes-or-no card. A single-use card for the exact amount is used at the shop.</p></details>
+    <details><summary>What about my private messages?</summary><p>Circle keeps what you say in your own chat with it separate from any group. Memory is scoped per person and per room, and the group never sees your private notes.</p></details>
+  </div>
+</section>
+
+<section class="sec reveal end">
+  <h2>Your group chat just got an assistant.</h2>
+  <div class="ctas"><a class="btn dark lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a></div>
+  <p class="fine">It asks before it calls, books or pays · Private chats stay private</p>
+</section>
+
+<footer class="foot">
+  <span class="logo small">circle</span>
+  <nav><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Open circles</a><a href="#pricing">Pricing</a><a href="/#signin">Log in</a></nav>
+  <span class="fine">© 2026 Circle</span>
+</footer>
+
+<script>
+(() => {
+  document.documentElement.classList.add("js");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Sections rise into view once; everything is readable without this.
+  if (!reduce && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }, { rootMargin: "0px 0px -10% 0px" });
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  } else document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+  // Chat screens play their conversation when they come into view, then loop.
+  const loops = new Map();
+  const play = (t) => { t.classList.remove("go"); void t.offsetWidth; t.classList.add("go"); };
+  const threads = document.querySelectorAll(".thread.play");
+  if (reduce) { threads.forEach((t) => t.classList.add("go", "still")); return; }
+  const tio = new IntersectionObserver((es) => {
+    for (const e of es) {
+      const t = e.target;
+      if (e.isIntersecting && !loops.has(t)) { play(t); loops.set(t, setInterval(() => play(t), Number(t.dataset.loop) || 15000)); }
+      else if (!e.isIntersecting && loops.has(t)) { clearInterval(loops.get(t)); loops.delete(t); }
+    }
+  }, { threshold: 0.15 });
+  threads.forEach((t) => tio.observe(t));
+})();
+</script>
 </body>
 </html>
