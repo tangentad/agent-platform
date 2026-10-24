@@ -44,8 +44,6 @@ p { margin: 0 }
 .btn:focus-visible, .nav-links a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent-soft); outline-offset: 2px }
 
 /* hero */
-.hero { max-width: none; margin: 0 auto; padding-block: 120px 96px; text-align: center; display: grid; justify-items: center; gap: 0; min-height: 86vh; align-content: center }
-.hero .lede { margin-inline: auto; background: rgba(244,233,225,.85); border-radius: 14px; padding: 8px 14px }
 .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px }
 .hero .fine { margin-top: 14px }
 .stage { width: 100%; background: #fff; border: 1.5px solid var(--ink); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
@@ -201,21 +199,35 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 @media (max-width: 760px) { .format { height: 260vh } .format-index { position: static; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; max-width: none } .format-index b { font-size: 12px } .format-h { max-width: none } .fl:nth-child(2) { padding-left: .3em } }
 @media (prefers-reduced-motion: reduce) { .format { height: auto } .format-sticky { position: static; height: auto; padding-top: 80px } .ball { display: none } .format-index li { color: var(--ink) } }
 
-/* the flow: the sentence first, then the chat demo rises into the same screen while the five tiles fly onto its tabs */
-.flow { height: 260vh; position: relative; margin-top: 8px }
-.flow-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden }
-.big { font: 500 clamp(26px, 4.6vw, 58px)/1.18 var(--sans); letter-spacing: -0.03em; max-width: 1080px; margin: 0 auto; text-align: center; text-wrap: balance; will-change: transform, opacity; position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; padding: 0 16px }
+/* the flow: one sticky screen for the hero, the sentence and the chat demo; photo spheres travel between them */
+.flow { height: 460vh; position: relative }
+.flow-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; isolation: isolate }
+.hero-text { position: absolute; left: clamp(16px, 5vw, 80px); top: 50%; translate: 0 -50%; width: min(560px, 48%); text-align: left; display: grid; gap: 14px; justify-items: start; z-index: 2 }
+.hero-text h1 { font-size: clamp(36px, 5.2vw, 72px) } .hero-text .lede { margin: 0; max-width: 46ch } .hero-text .ctas { justify-content: flex-start; margin-top: 6px }
+.cluster { position: absolute; right: clamp(16px, 5vw, 80px); top: 50%; translate: 0 -50%; width: min(46vw, 620px); aspect-ratio: 1; pointer-events: none }
+.big { font: 500 clamp(26px, 4.6vw, 58px)/1.18 var(--sans); letter-spacing: -0.03em; max-width: 1080px; margin: 0 auto; text-align: center; text-wrap: balance; position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; padding: 0 16px; opacity: 0; will-change: transform, opacity }
 .ph { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: -0.28em; margin: 0 0.08em; border-radius: .3em }
 .flow .stage { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 1180px; transform: translateY(var(--sy, 0px)); will-change: transform; border-radius: var(--r) var(--r) 0 0 }
-.tab-ic { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 14px }
-.ftile { position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 14px; background: var(--c); display: grid; place-items: center; color: var(--ink); will-change: transform; z-index: 3; pointer-events: none }
-.ftile span { font-size: 22px; line-height: 1 }
-.flow.still { height: auto } .flow.still .flow-sticky { position: static; height: auto; overflow: visible } .flow.still .big { position: static; translate: none; padding: 40px 16px } .flow.still .stage { position: relative; transform: none; border-radius: var(--r) } .flow.still .ftile { position: static; width: 100%; height: 100%; transform: none } .flow.still .ph { display: inline-grid } .flow.still .ph .ftile span { font-size: .78em }
-@media (max-width: 760px) { .flow.still .stage { margin-top: 10px } .iphone { max-width: 320px } }
+.tab-ic { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 14px; position: relative }
 
-/* the hero backdrop corridor: flat palette blocks and black lines, kept quiet behind the words */
-.hero { position: relative; isolation: isolate }
-.tunnel { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: 1; -webkit-mask-image: radial-gradient(70% 70% at 50% 46%, transparent 14%, rgba(0,0,0,.55) 34%, #000 58%); mask-image: radial-gradient(70% 70% at 50% 46%, transparent 14%, rgba(0,0,0,.55) 34%, #000 58%) }
+/* glass spheres with a photo inside: a highlight, a rim and a soft shadow make the ball; --round squares it off on landing */
+.sphere { position: absolute; left: 0; top: 0; width: 120px; height: 120px; border-radius: var(--round, 50%); background: var(--img) center / cover, var(--c, #ddd); will-change: transform; z-index: 3; pointer-events: none; box-shadow: 0 18px 40px rgba(0,0,0,.22), inset 0 -14px 28px rgba(0,0,0,.18) }
+.sphere i { position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 30% 24%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.35) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 70% 90%, rgba(255,255,255,.25) 0%, rgba(255,255,255,0) 30%); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.55) }
+.sphere.decor { z-index: 1; opacity: .9 }
+.flow.still { height: auto } .flow.still .flow-sticky { position: static; height: auto; overflow: visible; display: grid; gap: 28px; padding-block: 48px 0 }
+.flow.still .hero-text { position: static; translate: none; width: auto; justify-items: center; text-align: center } .flow.still .hero-text .ctas { justify-content: center }
+.flow.still .cluster, .flow.still .sphere.decor { display: none } .flow.still .big { position: static; translate: none; opacity: 1; padding: 20px 16px }
+.flow.still .stage { position: relative; transform: none; border-radius: var(--r) }
+.flow.still .sphere { position: static; width: 100%; height: 100%; transform: none; border-radius: 32%; box-shadow: none } .flow.still .ph { display: inline-grid } .flow.still .ph .sphere { border-radius: .3em }
+
+/* the end: six spheres on a ring converge into one circle carrying the wordmark */
+.unite { height: 240vh; position: relative } .unite-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden }
+.one { position: absolute; left: 0; top: 0; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; opacity: 0; will-change: transform, opacity }
+.big-logo { font-size: clamp(36px, 6vw, 84px); color: #fff; letter-spacing: -.04em; display: inline-flex; align-items: center; gap: 6px }
+.unite-text { position: absolute; left: 0; right: 0; bottom: clamp(24px, 8vh, 80px); text-align: center; display: grid; justify-items: center; gap: 10px; opacity: 0; z-index: 4 }
+.unite.still { height: auto } .unite.still .unite-sticky { position: static; height: auto; display: grid; justify-items: center; gap: 16px; padding-block: 64px } .unite.still .sphere.u { display: none } .unite.still .one { position: static; width: 220px; height: 220px; opacity: 1; transform: none } .unite.still .unite-text { position: static; opacity: 1 }
+@media (max-width: 980px) { .hero-text { width: min(520px, 52%) } .hero-text h1 { font-size: clamp(32px, 4.6vw, 60px) } }
+@media (max-width: 760px) { .flow.still .stage { margin-top: 10px } .iphone { max-width: 320px } }
 
 /* scribbles: marker doodles in Units green, drawn on with a stroke animation; absolute, never in the way of text */
 .scribbles { position: absolute; inset: 0; pointer-events: none; z-index: 0 }
@@ -227,15 +239,13 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 .who { position: relative } #who { position: relative } .who-scribbles .d-heart { left: 2%; top: 8%; width: 90px; stroke: var(--red); transform: rotate(-10deg) } .who-scribbles .d-check { right: 4%; top: 2%; width: 90px; transform: rotate(10deg) }
 .who-scribbles .d-star { right: 30%; top: -2%; width: 60px; stroke: var(--amber) } .who-scribbles .d-bubble { left: 38%; top: -4%; width: 80px; stroke: var(--sky); transform: rotate(-6deg) } .who-scribbles .d-smile, .who-scribbles .d-arrow, .who-scribbles .d-squig { display: none }
 .circled { position: relative; display: inline-block } .circled::after { content: ""; position: absolute; inset: -12% -6%; border: 5px solid var(--amber); border-radius: 50% 48% 52% 50% / 60% 55% 45% 40%; transform: rotate(-2deg); pointer-events: none }
-@media (max-width: 760px) { .doodle { width: 56px } .hero-scribbles .d-arrow, .hero-scribbles .d-squig { display: none } .tunnel { opacity: .35 } }
-@media (prefers-reduced-motion: reduce) { .doodle path { transition: none } }
+@media (max-width: 760px) { .doodle { width: 56px } .hero-scribbles .d-arrow, .hero-scribbles .d-squig { display: none } @media (prefers-reduced-motion: reduce) { .doodle path { transition: none } }
 
 /* word reveal: each word rises out of a clipped box; the blue phrase cycles through the palette */
 .wm { display: inline-block; overflow: hidden; vertical-align: top; padding: .1em .04em .14em; margin: -.1em -.04em -.14em } .w { display: inline-block; transform: translateY(115%); opacity: 0; will-change: transform, opacity }
 .in .w { transform: none; opacity: 1; transition: transform .9s cubic-bezier(0,0,0,1), opacity .5s linear; transition-delay: calc(var(--i, 0) * 55ms) }
 .lede.in .w { transition-delay: calc(400ms + var(--i, 0) * 18ms) }
 .grad { animation: hue 9s ease-in-out infinite } @keyframes hue { 0%, 100% { color: #0072e3 } 30% { color: #00b2ff } 55% { color: #ab54f7 } 80% { color: #ea3737 } }
-.hero .lede { max-width: 56ch }
 @media (prefers-reduced-motion: reduce) { .w { transform: none; opacity: 1 } .grad { animation: none } }
 
 /* capability map: six flat cards in the palette, each a short list; a slim proof strip under them */

@@ -14,7 +14,9 @@ const shots: [string, string][] = [
   ["ski", "Three friends in ski jackets on a snowy mountain terrace with a chalet behind them, bright sun, laughing with hot drinks."],
   ["unboxing", "Two housemates unboxing a delivery of matcha tins and ceramics on a kitchen counter, excited, morning light."],
 ];
+const only = (process.env.ONLY ?? "").split(",").filter(Boolean);
 for (const [name, prompt] of shots) {
+  if (only.length && !only.includes(name)) continue;
   const r = await gen.generate({ prompt: `${style} ${prompt}` });
   const ext = r.mimeType === "image/jpeg" ? "jpg" : r.mimeType.split("/")[1];
   const path = `web/img/hero-${name}.${ext}`;
