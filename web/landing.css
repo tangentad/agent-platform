@@ -212,8 +212,11 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 .ph { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: -0.28em; margin: 0 0.08em; border-radius: .3em }
 .flow .stage { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 1180px; transform: translateY(var(--sy, 0px)); will-change: transform; border-radius: var(--r) var(--r) 0 0 }
 .tab-ic { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 14px }
-.ftile { position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 14px; background: var(--c); display: grid; place-items: center; color: var(--ink); will-change: transform; z-index: 3; pointer-events: none }
-.ftile span { font-size: 22px; line-height: 1 }
+.ftile { position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 14px; display: grid; place-items: center; will-change: transform; z-index: 3; pointer-events: none;
+  /* app-icon finish: the flat colour lit from the top, a hairline inner highlight, a soft lift */
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 78%, #fff) 0%, var(--c) 55%, color-mix(in srgb, var(--c) 86%, #000) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 rgba(0,0,0,.12), 0 8px 18px -8px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.12) }
+.ftile svg { width: 56%; height: 56%; filter: drop-shadow(0 1px 1px rgba(0,0,0,.25)) }
 .flow.still { height: auto } .flow.still .flow-sticky { position: static; height: auto; overflow: visible } .flow.still .big { position: static; translate: none; padding: 40px 16px } .flow.still .stage { position: relative; transform: none; border-radius: var(--r) } .flow.still .ftile { position: static; width: 100%; height: 100%; transform: none } .flow.still .ph { display: inline-grid } .flow.still .ph .ftile span { font-size: .78em }
 @media (max-width: 760px) { .flow.still .stage { margin-top: 10px } .iphone { max-width: 320px } }
 
