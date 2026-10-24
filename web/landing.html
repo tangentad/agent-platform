@@ -532,19 +532,19 @@
       // on short layouts the ending is static, so the merge follows the circle's place on screen instead of scroll depth
       const upr = still ? clamp((H * 0.8 - or.top) / (H * 0.5)) : clamp((sy - unite.offsetTop) / Math.max(1, unite.offsetHeight - H));
       const close = ease(clamp(upr / 0.5)), done = ease(clamp((upr - 0.45) / 0.3));
-      const gutter = Math.max(0, (W - 1180) / 2), wl = Math.max(56, H * 0.085);
+      const wl = Math.max(56, H * 0.085);
       orbs.forEach((o, i) => {
         const ang = spin + (i / orbs.length) * Math.PI * 2, rad = c.R * (0.46 + 0.14 * Math.sin(spin * 1.7 + i));
         const cw = c.R * (0.62 + 0.16 * Math.cos(spin + i * 2.1));
         const cx = c.x + Math.cos(ang) * rad, cy = stickyTop + c.y + Math.sin(ang) * rad;
         const [side, f] = lanes[i];
-        const lx = side < 0 ? Math.max(gutter * 0.5, wl * 0.4) : W - Math.max(gutter * 0.5, wl * 0.4);
+        const lx = side < 0 ? -wl : W + wl; // parked just off the edge until the ending calls them back
         const ly = H * f + Math.sin(t / 1100 + i * 1.3) * 9 - (sy - sEnd) * 0.025;
         const ra = -Math.PI / 2 + (i / orbs.length) * Math.PI * 2, ring = Math.min(W, H) * 0.3 * (1 - close);
         const rx = ocx + Math.cos(ra) * ring, ry = ocy + Math.sin(ra) * ring, rw = lerpN(Math.min(W, H) * 0.16, or.width, close);
         let x = lerpN(cx, lx, scatter), y = lerpN(cy, ly, scatter), w = lerpN(cw, wl, scatter);
         x = lerpN(x, rx, gather); y = lerpN(y, ry, gather); w = lerpN(w, rw, gather);
-        place(o, x, y, w, show * (1 - done));
+        place(o, x, y, w, show * (1 - scatter * (1 - gather)) * (1 - done));
       });
     };
     scenes.push({ el: document.documentElement, p: 0, draw, timed: true });

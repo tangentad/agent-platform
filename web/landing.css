@@ -253,9 +253,17 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 @media (max-width: 980px) { .caps { grid-template-columns: repeat(2, 1fr) } } @media (max-width: 600px) { .caps { grid-template-columns: 1fr } .proof-row { grid-template-columns: 1fr auto; row-gap: 2px } .proof-row s, .proof-row em { grid-column: 2 } }
 .tabs { gap: 8px } .tab { padding: 10px 14px } .tab small { font-size: 12.5px }
 
-/* glass photo bubbles: a photo inside a sphere with a highlight and a rim; used in the letters scene and the ending */
-.sphere { position: absolute; left: 0; top: 0; width: 120px; height: 120px; border-radius: 50%; background: var(--img) center / cover, #ddd; will-change: transform; z-index: 2; pointer-events: none; box-shadow: 0 14px 30px rgba(0,0,0,.2), inset 0 -12px 24px rgba(0,0,0,.18) }
-.sphere i { position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 30% 24%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.35) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 70% 90%, rgba(255,255,255,.25) 0%, rgba(255,255,255,0) 30%); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.55) }
+/* glass photo bubbles: the photo sits behind a lens; a vignette, a rim light, a bottom reflection and a sharp
+   specular give the depth, a long soft shadow lifts it off the page */
+.sphere { position: absolute; left: 0; top: 0; width: 120px; height: 120px; border-radius: 50%; background: var(--img) center / 118% auto no-repeat, #ddd; will-change: transform; z-index: 2; pointer-events: none; isolation: isolate;
+  box-shadow: 0 34px 50px -24px rgba(0,0,0,.5), 0 12px 18px -10px rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.08) }
+.sphere::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 38% 32%, rgba(0,0,0,0) 38%, rgba(0,0,0,.14) 70%, rgba(0,0,0,.5) 100%); box-shadow: inset 0 -22px 34px rgba(0,0,0,.4), inset 0 14px 22px rgba(255,255,255,.22) }
+.sphere i { position: absolute; inset: 0; border-radius: inherit; background:
+  radial-gradient(ellipse 34% 24% at 34% 24%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.55) 40%, rgba(255,255,255,0) 100%),
+  radial-gradient(ellipse 60% 22% at 50% 102%, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 100%),
+  radial-gradient(circle at 80% 70%, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 30%);
+  box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.7), inset 0 0 0 3px rgba(255,255,255,.12) }
+.sphere i::after { content: ""; position: absolute; left: 26%; top: 15%; width: 12%; height: 7%; border-radius: 50%; background: #fff; filter: blur(.5px); opacity: .95 }
 #orbs { position: fixed; inset: 0; z-index: 15; pointer-events: none; contain: layout style }
 #orbs .sphere { opacity: 0 }
 @media (prefers-reduced-motion: reduce) { .ball { display: block } }
