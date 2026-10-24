@@ -17,7 +17,7 @@
 <nav class="nav" aria-label="Main">
   <div class="nav-pill">
     <a class="logo" href="/welcome">circle<span class="eyes" aria-hidden="true"><svg width="12" height="14" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg><svg width="12" height="14" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg></span></a>
-    <div class="nav-links"><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Circles</a><a href="#pricing">Pricing</a></div>
+    <div class="nav-links"><a href="#does">What it does</a><a href="#circles">Circles</a><a href="#who">Who it's for</a><a href="#pricing">Pricing</a></div>
   </div>
   <div class="nav-pill nav-actions"><a class="btn ghost" href="/#signin">Log in</a><a class="btn lime" href="/#signup">Start a circle</a></div>
 </nav>
@@ -43,7 +43,7 @@
 
 <section class="flow" id="flow" aria-label="What Circle is, then the chat where it happens">
   <div class="flow-sticky">
-    <p class="big" id="bigline">Circle <span class="ph" data-t="0"></span> lives in the chat, <span class="ph" data-t="1"></span> prices the trip, <span class="ph" data-t="2"></span> runs the order, <span class="ph" data-t="3"></span> tracks who promised what, <span class="ph" data-t="4"></span> and asks before it spends.</p>
+    <p class="big" id="bigline">Circle <span class="ph" data-t="0"></span> lives in the chat, <span class="ph" data-t="1"></span> prices the trip, <span class="ph" data-t="2"></span> books the table, <span class="ph" data-t="3"></span> runs the order, <span class="ph" data-t="4"></span> tracks who promised what, <span class="ph" data-t="5"></span> and asks before it spends.</p>
   <div class="stage" id="demo">
     <div class="iphone" aria-label="An iMessage group chat with Circle">
       <div class="island"></div>
@@ -58,16 +58,18 @@
     <div class="tabs" role="tablist" aria-label="Scenarios">
       <button class="tab on" role="tab" aria-selected="true" data-s="friends"><span class="tab-ic" data-t="0"></span><b>The chat</b><small>Friends decide Friday in one thread</small></button>
       <button class="tab" role="tab" aria-selected="false" data-s="ski"><span class="tab-ic" data-t="1"></span><b>The trip</b><small>Hotels at wholesale, booked with one yes</small></button>
-      <button class="tab" role="tab" aria-selected="false" data-s="order"><span class="tab-ic" data-t="2"></span><b>The order</b><small>Everyone adds a line, Circle hits the minimum</small></button>
-      <button class="tab" role="tab" aria-selected="false" data-s="family"><span class="tab-ic" data-t="3"></span><b>Who does what</b><small>A call made, a reminder set, nobody chased</small></button>
-      <button class="tab" role="tab" aria-selected="false" data-s="couple"><span class="tab-ic" data-t="4"></span><b>Asks first</b><small>Nothing booked until the owner says yes</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="couple"><span class="tab-ic" data-t="2"></span><b>Reservations</b><small>A table found and held, in one message</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="order"><span class="tab-ic" data-t="3"></span><b>The order</b><small>Everyone adds a line, Circle hits the minimum</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="family"><span class="tab-ic" data-t="4"></span><b>Who does what</b><small>A call made, a reminder set, nobody chased</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="tickets"><span class="tab-ic" data-t="5"></span><b>Asks first</b><small>Nothing bought until the owner says yes</small></button>
     </div>
   </div>
     <div class="ftile grain c-sky" data-t="0"><span>💬</span></div>
     <div class="ftile grain c-mint" data-t="1"><span>🏔️</span></div>
-    <div class="ftile grain c-sun" data-t="2"><span>📦</span></div>
-    <div class="ftile grain c-lime" data-t="3"><span>✅</span></div>
-    <div class="ftile grain c-pink" data-t="4"><span>🙋</span></div>
+    <div class="ftile grain c-orange" data-t="2"><span>🍽️</span></div>
+    <div class="ftile grain c-sun" data-t="3"><span>📦</span></div>
+    <div class="ftile grain c-red" data-t="4"><span>✅</span></div>
+    <div class="ftile grain c-pink" data-t="5"><span>🙋</span></div>
   </div>
 </section>
 
@@ -87,49 +89,24 @@
 
 <section class="sec reveal" id="does">
   <p class="eyebrow">What it does</p>
-  <h2>Four jobs. One chat.</h2>
-  <div class="four">
-    <article>
-      <div class="media grain c-lime"><div class="mini-ledger"><div><i class="dot open"></i>Riley · book the cabin · Fri</div><div><i class="dot done"></i>Sam · bring the skis · done</div><div><i class="dot open"></i>Alex · OK the hotel · today</div></div></div>
-      <h3>Coordinate</h3><p>Promises get a name and a date. Circle nudges the one person, not the whole chat.</p>
-    </article>
-    <article>
-      <div class="media dark"><div class="mini-price"><span>Through us</span><b>$5,123</b><span>Booking.com</span><s>$7,985</s></div></div>
-      <h3>Travel at wholesale</h3><p>The rate travel agents pay, next to the public price. No markup.</p>
-    </article>
-    <article>
-      <div class="media grain c-sun"><div class="mini-order"><div>Matchaful · $1,200 minimum</div><div class="bar"><i style="width:72%"></i></div><div>$864 in · 4 people · $336 to go</div></div></div>
-      <h3>Buy together</h3><p>Wholesale brands, split across the chat. One person places it.</p>
-    </article>
-    <article>
-      <div class="media grain c-tang"><div class="mini-gate"><div>OK to spend $5,123?</div><div class="gate-btns"><span>Yes</span><span>No</span></div></div></div>
-      <h3>Ask first</h3><p>Money, accounts, outside calls: a yes from the owner, every time.</p>
-    </article>
+  <h2>More than four jobs.</h2>
+  <p class="lede">A hundred-odd tools, grouped by what they do for a chat. Everything that spends, contacts someone or uses an account asks first.</p>
+  <div class="caps">
+    <div class="cap c-sky"><h3>Plans and books</h3><ul><li>Hotels and flights at wholesale rates</li><li>Restaurant tables and appointments, by phone when there is no form</li><li>Compares options on one shared page</li></ul></div>
+    <div class="cap c-sun"><h3>Buys</h3><ul><li>Carts and checkout with a one-time card for the exact amount</li><li>Group orders from wholesale brands, split by person</li><li>Spending limits per owner</li></ul></div>
+    <div class="cap c-lime"><h3>Coordinates</h3><ul><li>Who does what, with a name and a date</li><li>Polls the group, nudges one person</li><li>Reminders, follow-ups and watches</li><li>Shared checklists and pages</li></ul></div>
+    <div class="cap c-orange"><h3>Reaches out</h3><ul><li>Calls and texts on the group's behalf</li><li>Email from its own address</li><li>Finds a person's number, with permission</li></ul></div>
+    <div class="cap c-mint"><h3>Works with your apps</h3><ul><li>Google Calendar, Gmail, Drive, Sheets, Slides, Forms</li><li>Slack and WhatsApp summaries</li><li>Any MCP server or HTTP API you connect</li></ul></div>
+    <div class="cap c-pink"><h3>Remembers</h3><ul><li>Per person and per chat</li><li>Your own chat never leaks into the group</li><li>Every reply shows what actually ran</li></ul></div>
   </div>
-</section>
-
-<section class="sec reveal" id="travel">
-  <div class="dark-panel">
-    <div class="dp-text">
-      <p class="eyebrow on-dark">Travel</p>
-      <h2 class="on-dark">The rate agents pay.</h2>
-      <p class="lede-s">Say the city and the dates. Circle shows its wholesale price next to Booking.com's for the same hotel, taxes in.</p>
-      <a class="btn light" href="/#signup">Price a trip <span aria-hidden="true">→</span></a>
-    </div>
-    <div class="dp-card">
-      <div class="dp-card-h">Measured 23 Oct 2026 · Courchevel · 13–17 Jan · 2 adults</div>
-      <table>
-        <thead><tr><th>Hotel</th><th>Circle</th><th>Booking.com</th><th>Saving</th></tr></thead>
-        <tbody>
-          <tr><td>Alpes Hôtel du Pralong</td><td>$5,123</td><td>$7,985</td><td class="save">$2,862</td></tr>
-          <tr><td>Hotel Carlina</td><td>$7,538</td><td>$8,832</td><td class="save">$1,294</td></tr>
-          <tr><td>Lys Martagon</td><td>$10,283</td><td>$13,335</td><td class="save">$3,052</td></tr>
-          <tr><td>Fahrenheit Seven</td><td>$4,815</td><td>$5,538</td><td class="save">$723</td></tr>
-          <tr><td>Lake Hotel 1850</td><td>$2,029</td><td>$2,365</td><td class="save">$336</td></tr>
-        </tbody>
-      </table>
-      <p class="dp-note">Booking.com totals include its checkout taxes and fees. Cheapest room on each side; rooms can differ.</p>
-    </div>
+  <div class="proof">
+    <div class="proof-h"><b>Measured, not promised.</b> Courchevel, 13–17 Jan 2027, 2 adults, through Circle against Booking.com's checkout total, 23 Oct 2026.</div>
+    <div class="proof-row"><span>Alpes Hôtel du Pralong</span><b>$5,123</b><s>$7,985</s><em>−$2,862</em></div>
+    <div class="proof-row"><span>Lys Martagon</span><b>$10,283</b><s>$13,335</s><em>−$3,052</em></div>
+    <div class="proof-row"><span>Hotel Carlina</span><b>$7,538</b><s>$8,832</s><em>−$1,294</em></div>
+    <div class="proof-row"><span>Fahrenheit Seven</span><b>$4,815</b><s>$5,538</s><em>−$723</em></div>
+    <div class="proof-row"><span>Lake Hotel 1850</span><b>$2,029</b><s>$2,365</s><em>−$336</em></div>
+    <a class="btn lime" href="/#signup">Price a trip <span aria-hidden="true">→</span></a>
   </div>
 </section>
 
@@ -207,7 +184,7 @@
 
 <footer class="foot">
   <span class="logo small">circle</span>
-  <nav><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Circles</a><a href="#pricing">Pricing</a><a href="/#signin">Log in</a></nav>
+  <nav><a href="#does">What it does</a><a href="#circles">Circles</a><a href="#pricing">Pricing</a><a href="/#signin">Log in</a></nav>
   <span class="fine">© 2026 Circle</span>
 </footer>
 
@@ -254,13 +231,18 @@
       { who: "Pip", text: "Noted for Dad. I'll remind you both." },
     ] },
     couple: { name: "Alex 💛", people: ["E"], me: "Ellie", lines: [
-      { who: "Ellie", text: "Pip, dinner for two Friday near Union Station, around 8." },
+      { who: "Ellie", text: "Pip, table for two Friday near Union Station, around 8." },
       { who: "Pip", typing: true },
       { who: "Pip", text: "Three with a table free Friday:\nCosme · 8:15\nVia Carota · 8:30\nLe Coucou · 7:45\nSay which and I'll book it." },
       { who: "Alex", text: "Via Carota" },
-      { who: "Pip", text: "That one takes a card to hold the table. OK to use yours, Alex?" },
-      { who: "Alex", text: "yes" },
-      { who: "Pip", text: "Booked, 8:30 under Alex. Confirmation's in both your chats." },
+      { who: "Pip", text: "Booked. Via Carota, Friday 8:30, under Alex. I called to confirm and they'll hold it 15 minutes. Reminder set for 7." },
+    ] },
+    tickets: { name: "Alex 💛", people: ["E"], me: "Ellie", lines: [
+      { who: "Ellie", text: "Pip, two tickets for the Khruangbin show on the 14th if they're under $80 each" },
+      { who: "Pip", typing: true },
+      { who: "Pip", text: "Two in section 204 at $73 each, $162 with fees. That's on your card, Ellie. OK to buy?" },
+      { who: "Ellie", text: "yes" },
+      { who: "Pip", text: "Bought with a one-time card for $162. Tickets are in your email, and I put the 14th on both your calendars." },
     ] },
   };
   const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -419,7 +401,7 @@
 
   // ---- the flow: the five tiles sit inside the sentence, then fly onto the scenario tabs as the chat demo rises into view
   const flow = document.getElementById("flow");
-  const still = reduce || innerWidth < 760;
+  const still = innerWidth < 760;
   if (flow) {
     const sticky = flow.querySelector(".flow-sticky"), line = document.getElementById("bigline"), stage = flow.querySelector(".stage");
     const tiles = [...flow.querySelectorAll(".ftile")], phs = [...flow.querySelectorAll(".ph")], slots = [...flow.querySelectorAll(".tab-ic")];
