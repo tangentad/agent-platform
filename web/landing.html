@@ -23,7 +23,7 @@
 </nav>
 
 <header class="hero">
-  <svg class="tunnel" id="tunnel" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <canvas class="tunnel" id="tunnel" aria-hidden="true"></canvas>
   <div class="scribbles hero-scribbles" aria-hidden="true">
 <svg class="doodle d-smile" viewBox="0 0 120 120" aria-hidden="true"><path d="M18 62c-3-26 18-46 44-45 25 1 42 20 41 44-1 27-21 43-44 42C34 102 20 86 18 62z" /><path d="M42 48c2 6 1 10-2 12M78 46c-3 5-2 10 1 12" /><path d="M36 74c6 12 20 16 32 12 6-2 11-6 14-12" /></svg>
 <svg class="doodle d-star" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 12l9 34 36 2-29 20 11 35-27-21-28 20 12-34L16 48l35-1z" /></svg>
@@ -293,14 +293,19 @@
     new IntersectionObserver((es) => { for (const e of es) { if (e.isIntersecting) { if (!loop) start(); } else { clearInterval(loop); loop = null; } } }, { threshold: 0.15 }).observe(thread);
   } else start();
 
-  // ---- the hero backdrop: a one-point perspective corridor you fly through, in flat colour, drawn every frame.
-  //      Rings sit at log-spaced depths so motion reads as constant speed; panels ride their ring outward and wrap.
+  // ---- the hero backdrop: a one-point perspective corridor you fly through, on a canvas so a frame is a few draw
+  //      calls and no DOM churn. Panels carry the circle's own photos (family, couple, gifts, friends, ski, unboxing)
+  //      and flat palette blocks between them; rings sit at log-spaced depths so motion reads as constant speed.
   const tunnel = document.getElementById("tunnel");
   if (tunnel) {
-    const W = 1600, H = 900, N = 9, dmin = 0.12, ink = "#000";
+    const ctx = tunnel.getContext("2d");
+    const N = 9, dmin = 0.12, ink = "#000";
     const pal = ["#0072e3", "#ffb200", "#1be349", "#ab54f7", "#ea3737", "#ff5c38", "#00b2ff"];
-    const panels = [[0, "floor", .18, .34], [1, "right", .2, .4], [2, "ceil", .12, .3], [3, "left", .5, .7], [4, "floor", .66, .82], [5, "right", .55, .75], [6, "ceil", .6, .8], [7, "left", .1, .3], [8, "floor", .4, .55]];
-    let t = 0, mx = 0, my = 0, tx = 0, ty = 0, last = 0, visible = true;
+    const photos = ["family", "couple", "gifts", "friends", "ski", "unboxing"].map((n) => { const im = new Image(); im.src = `/img/hero-${n}.jpg`; return im; });
+    // every ring owns one wall panel: even rings a photo, odd rings a colour block
+    const panels = [["floor", .08, .4], ["right", .12, .5], ["ceil", .05, .38], ["left", .42, .85], ["floor", .58, .92], ["right", .5, .88], ["ceil", .55, .95], ["left", .08, .45], ["floor", .3, .7]];
+    let t = 0, mx = 0, my = 0, tx = 0, ty = 0, last = 0, visible = true, W = 0, H = 0;
+    const size = () => { const r = tunnel.getBoundingClientRect(); const dpr = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height; tunnel.width = Math.round(W * dpr); tunnel.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
     const rect = (d, cx, cy) => ({ x: cx - cx * d, y: cy - cy * d, w: W * d, h: H * d });
     const quad = (o, n, side, a, b) => {
       if (side === "floor") return [[o.x + o.w * a, o.y + o.h], [o.x + o.w * b, o.y + o.h], [n.x + n.w * b, n.y + n.h], [n.x + n.w * a, n.y + n.h]];
@@ -308,33 +313,47 @@
       if (side === "left") return [[o.x, o.y + o.h * a], [o.x, o.y + o.h * b], [n.x, n.y + n.h * b], [n.x, n.y + n.h * a]];
       return [[o.x + o.w, o.y + o.h * a], [o.x + o.w, o.y + o.h * b], [n.x + n.w, n.y + n.h * b], [n.x + n.w, n.y + n.h * a]];
     };
+    const path = (pts) => { ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.closePath(); };
     const frame = (now) => {
       const dt = Math.min(50, now - last) || 16; last = now;
-      if (!reduce) t += dt / 9000; // one full ring cycle every nine seconds
+      if (!reduce) t += dt / 11000;
       mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
-      const cx = 800 + mx * 90, cy = 470 + my * 50;
-      const ring = (k) => { const f = ((k / N + t) % 1 + 1) % 1; return { d: dmin * Math.pow(1 / dmin, f), f }; };
-      const rings = Array.from({ length: N }, (_, k) => ({ k, ...ring(k) })).sort((a, b) => a.d - b.d);
-      let out = "";
+      const cx = W * 0.5 + mx * W * 0.06, cy = H * 0.52 + my * H * 0.05;
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1.8; ctx.strokeStyle = ink; ctx.lineJoin = "round";
+      const rings = Array.from({ length: N }, (_, k) => { const f = ((k / N + t) % 1 + 1) % 1; return { k, f, d: dmin * Math.pow(1 / dmin, f) }; }).sort((a, b) => a.d - b.d);
       for (let i = 0; i < rings.length - 1; i++) {
         const a = rings[i], b = rings[i + 1];
         const o = rect(b.d, cx, cy), n = rect(a.d, cx, cy);
-        const pn = panels[a.k % panels.length];
-        const fade = Math.min(1, a.f * 6) * Math.min(1, (1 - b.f) * 3 + 0.2);
-        out += `<polygon points="${quad(o, n, pn[1], pn[2], pn[3]).map((p) => p.join(",")).join(" ")}" fill="${pal[a.k % pal.length]}" opacity="${fade.toFixed(2)}"/>`;
+        const [side, pa, pb] = panels[a.k % panels.length];
+        const pts = quad(o, n, side, pa, pb);
+        const fade = Math.min(1, a.f * 4) * Math.min(1, (1 - b.f) * 4 + 0.15);
+        ctx.globalAlpha = fade;
+        const im = a.k % 2 === 0 ? photos[(a.k / 2) % photos.length] : null;
+        if (im && im.complete && im.naturalWidth) {
+          const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+          const bx = Math.min(...xs), by = Math.min(...ys), bw = Math.max(...xs) - bx, bh = Math.max(...ys) - by;
+          const sc = Math.max(bw / im.naturalWidth, bh / im.naturalHeight), iw = im.naturalWidth * sc, ih = im.naturalHeight * sc;
+          ctx.save(); path(pts); ctx.clip(); ctx.drawImage(im, bx + (bw - iw) / 2, by + (bh - ih) / 2, iw, ih); ctx.restore();
+        } else { ctx.fillStyle = pal[a.k % pal.length]; path(pts); ctx.fill(); }
+        ctx.globalAlpha = 1; path(pts); ctx.stroke();
       }
-      for (const r of rings) { const q = rect(r.d, cx, cy); out += `<rect x="${q.x.toFixed(1)}" y="${q.y.toFixed(1)}" width="${q.w.toFixed(1)}" height="${q.h.toFixed(1)}" fill="none" stroke="${ink}" stroke-width="2" opacity="${Math.min(1, r.f * 5).toFixed(2)}"/>`; }
+      for (const r of rings) { const q = rect(r.d, cx, cy); ctx.globalAlpha = Math.min(1, r.f * 5); ctx.strokeRect(q.x, q.y, q.w, q.h); }
+      ctx.globalAlpha = 1;
       const o = rect(1, cx, cy), n = rect(dmin, cx, cy);
+      ctx.beginPath();
       for (const u of [0, .18, .34, .5, .66, .82, 1]) {
-        out += `<line x1="${o.x + o.w * u}" y1="${o.y}" x2="${n.x + n.w * u}" y2="${n.y}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w * u}" y1="${o.y + o.h}" x2="${n.x + n.w * u}" y2="${n.y + n.h}" stroke="${ink}" stroke-width="2"/>`;
-        out += `<line x1="${o.x}" y1="${o.y + o.h * u}" x2="${n.x}" y2="${n.y + n.h * u}" stroke="${ink}" stroke-width="2"/><line x1="${o.x + o.w}" y1="${o.y + o.h * u}" x2="${n.x + n.w}" y2="${n.y + n.h * u}" stroke="${ink}" stroke-width="2"/>`;
+        ctx.moveTo(o.x + o.w * u, o.y); ctx.lineTo(n.x + n.w * u, n.y); ctx.moveTo(o.x + o.w * u, o.y + o.h); ctx.lineTo(n.x + n.w * u, n.y + n.h);
+        ctx.moveTo(o.x, o.y + o.h * u); ctx.lineTo(n.x, n.y + n.h * u); ctx.moveTo(o.x + o.w, o.y + o.h * u); ctx.lineTo(n.x + n.w, n.y + n.h * u);
       }
-      tunnel.innerHTML = out;
+      ctx.stroke();
       if (visible && !reduce) requestAnimationFrame(frame);
     };
     addEventListener("pointermove", (e) => { tx = (e.clientX / innerWidth - 0.5) * 2; ty = (e.clientY / innerHeight - 0.5) * 2; }, { passive: true });
+    addEventListener("resize", size);
+    size();
     const hero = tunnel.closest(".hero");
-    if (reduce) { last = performance.now(); frame(performance.now()); }
+    if (reduce) { last = performance.now(); frame(performance.now()); photos.forEach((im) => im.addEventListener("load", () => frame(performance.now()))); }
     else {
       new IntersectionObserver((es) => { for (const e of es) { const was = visible; visible = e.isIntersecting; if (visible && !was) { last = performance.now(); requestAnimationFrame(frame); } } }).observe(hero);
       last = performance.now(); requestAnimationFrame(frame);

@@ -44,8 +44,8 @@ p { margin: 0 }
 .btn:focus-visible, .nav-links a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent-soft); outline-offset: 2px }
 
 /* hero */
-.hero { max-width: 1180px; margin: 0 auto; padding-block: 72px 24px; text-align: center; display: grid; justify-items: center }
-.hero .lede { margin-inline: auto }
+.hero { max-width: none; margin: 0 auto; padding-block: 120px 96px; text-align: center; display: grid; justify-items: center; gap: 0; min-height: 86vh; align-content: center }
+.hero .lede { margin-inline: auto; background: rgba(244,233,225,.85); border-radius: 14px; padding: 8px 14px }
 .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px }
 .hero .fine { margin-top: 14px }
 .stage { width: 100%; background: #fff; border: 1.5px solid var(--ink); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
@@ -214,7 +214,7 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 
 /* the hero backdrop corridor: flat palette blocks and black lines, kept quiet behind the words */
 .hero { position: relative; isolation: isolate }
-.tunnel { position: absolute; inset: -40px 0 0; width: 100%; height: 100%; z-index: -1; opacity: .42; -webkit-mask-image: radial-gradient(75% 75% at 50% 42%, transparent 34%, #000 74%); mask-image: radial-gradient(75% 75% at 50% 42%, transparent 34%, #000 74%) }
+.tunnel { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: 1; -webkit-mask-image: radial-gradient(70% 70% at 50% 46%, transparent 14%, rgba(0,0,0,.55) 34%, #000 58%); mask-image: radial-gradient(70% 70% at 50% 46%, transparent 14%, rgba(0,0,0,.55) 34%, #000 58%) }
 
 /* scribbles: marker doodles in Units green, drawn on with a stroke animation; absolute, never in the way of text */
 .scribbles { position: absolute; inset: 0; pointer-events: none; z-index: 0 }
@@ -230,10 +230,9 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 @media (prefers-reduced-motion: reduce) { .doodle path { transition: none } }
 
 /* word reveal: each word rises out of a clipped box; the blue phrase cycles through the palette */
-.wm { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 .02em; margin: 0 -.02em } .w { display: inline-block; transform: translateY(110%); opacity: 0; will-change: transform, opacity }
+.wm { display: inline-block; overflow: hidden; vertical-align: top; padding: .1em .04em .14em; margin: -.1em -.04em -.14em } .w { display: inline-block; transform: translateY(115%); opacity: 0; will-change: transform, opacity }
 .in .w { transform: none; opacity: 1; transition: transform .9s cubic-bezier(0,0,0,1), opacity .5s linear; transition-delay: calc(var(--i, 0) * 55ms) }
 .lede.in .w { transition-delay: calc(400ms + var(--i, 0) * 18ms) }
 .grad { animation: hue 9s ease-in-out infinite } @keyframes hue { 0%, 100% { color: #0072e3 } 30% { color: #00b2ff } 55% { color: #ab54f7 } 80% { color: #ea3737 } }
 .hero .lede { max-width: 56ch }
-.tunnel { opacity: .5 }
 @media (prefers-reduced-motion: reduce) { .w { transform: none; opacity: 1 } .grad { animation: none } }

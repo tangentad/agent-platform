@@ -1308,6 +1308,15 @@ export function startWebServer(app: App, opts: WebOptions = {}) {
       if (p === "/app.js") return asset("app.js", "text/javascript; charset=utf-8");
       if (p === "/welcome") return asset("landing.html", "text/html; charset=utf-8");
       if (p === "/landing.css") return asset("landing.css", "text/css; charset=utf-8");
+      if (/^\/img\/[a-z0-9-]+\.(jpg|png|webp|svg)$/.test(p)) {
+        const ext = p.slice(p.lastIndexOf(".") + 1);
+        const type = ext === "jpg" ? "image/jpeg" : ext === "svg" ? "image/svg+xml" : `image/${ext}`;
+        try {
+          return new Response(readFileSync(join(webDir, p.slice(1))), { headers: { "content-type": type, "cache-control": "public, max-age=86400" } });
+        } catch {
+          return bad("not found", 404);
+        }
+      }
       if (p === "/styles.css") return asset("styles.css", "text/css; charset=utf-8");
       if (p === "/health") return json({ ok: true, now: app.clock.now(), auth: !!auth });
       if (p === "/oauth/google/callback") {
