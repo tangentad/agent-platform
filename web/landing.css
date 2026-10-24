@@ -3,14 +3,14 @@
 :root {
   --bg: #f3f3f1; --bg-2: #e9e9e6; --ink: #121212; --ink-2: #5f5f5a; --ink-3: #8c8c86; --line: #dcdcd7;
   --panel: #fff; --dark: #141414; --dark-2: #1f1f1f; --on-dark: #f3f3f1; --on-dark-2: #b9b9b3;
-  --accent: #4f7a65; --accent-soft: #dfeae3; --save: #2f8f5b;
-  --lime: #c6f432; --sun: #ffe14d; --sky: #7fb5ff; --tang: #ff7a45; --mint: #9be7c4; --pink: #f7a8c4;
+  --accent: #0072e3; --accent-soft: #dbeafe; --save: #0b7a3b;
+  --blue: #0072e3; --amber: #ffb200; --lime: #ffb200; --sun: #ffb200; --sky: #0072e3; --tang: #ff8a00; --mint: #5aa9ff; --pink: #ffd266;
   --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif; --mono: "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
   --r: 28px; --r-s: 16px;
 }
 * { box-sizing: border-box }
 html { color-scheme: light; scroll-behavior: smooth }
-body { margin: 0; background: radial-gradient(55% 38% at 12% 2%, rgba(198,244,50,.55), transparent 62%), radial-gradient(45% 36% at 88% 0%, rgba(127,181,255,.55), transparent 60%), radial-gradient(40% 30% at 55% 18%, rgba(247,168,196,.45), transparent 60%), radial-gradient(45% 30% at 30% 30%, rgba(255,225,77,.35), transparent 60%), linear-gradient(180deg, var(--bg-2) 0, var(--bg) 640px); color: var(--ink); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+body { margin: 0; background: radial-gradient(55% 38% at 10% 0%, rgba(0,114,227,.28), transparent 62%), radial-gradient(45% 36% at 90% 2%, rgba(255,178,0,.38), transparent 60%), radial-gradient(40% 28% at 55% 22%, rgba(90,169,255,.22), transparent 60%), linear-gradient(180deg, var(--bg-2) 0, var(--bg) 640px); color: var(--ink); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
 a { color: inherit; text-decoration: none }
 h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -0.02em }
@@ -48,12 +48,12 @@ p { margin: 0 }
 .hero .lede { margin-inline: auto }
 .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px }
 .hero .fine { margin-top: 14px }
-.stage { width: 100%; background: radial-gradient(80% 60% at 100% 0%, #2a2a33 0%, var(--dark) 60%); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
+.stage { width: 100%; background: radial-gradient(70% 60% at 100% 0%, #16305a 0%, var(--dark) 60%); border-radius: var(--r); padding: clamp(14px, 3vw, 36px); display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: clamp(16px, 3vw, 48px); align-items: center; text-align: left }
 
 /* an iPhone in Messages: island, status bar, group header, grey and blue bubbles, the compose bar */
 .iphone { position: relative; background: #0b0b0b; border-radius: 48px; padding: 10px; box-shadow: 0 30px 70px rgba(0,0,0,.5), inset 0 0 0 2px #2a2a2a; min-width: 0; justify-self: center; width: 100%; max-width: 390px }
 .island { position: absolute; left: 50%; top: 22px; width: 112px; height: 32px; background: #000; border-radius: 20px; transform: translateX(-50%); z-index: 2 }
-.screen { background: #fff; border-radius: 40px; overflow: hidden; color: #000; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; height: min(640px, 72vh); font-family: -apple-system, "SF Pro Text", "Helvetica Neue", var(--sans) }
+.screen { background: #fff; border-radius: 40px; overflow: hidden; color: #000; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; height: min(640px, 78vh); font-family: -apple-system, "SF Pro Text", "Helvetica Neue", var(--sans) }
 .status { display: flex; align-items: center; justify-content: space-between; padding: 18px 28px 4px; font: 600 15px/1 var(--sans) }
 .sig { display: inline-flex; gap: 2px; align-items: flex-end; margin-left: auto; margin-right: 6px } .sig i { width: 3px; background: #000; border-radius: 1px } .sig i:nth-child(1) { height: 4px } .sig i:nth-child(2) { height: 6px } .sig i:nth-child(3) { height: 8px } .sig i:nth-child(4) { height: 10px }
 .wifi { width: 14px; height: 10px; border: 2px solid #000; border-color: #000 transparent transparent; border-radius: 50% 50% 0 0; margin-right: 6px }
@@ -80,7 +80,7 @@ p { margin: 0 }
 /* scenario tabs: the stage's right-hand column */
 .tabs { display: grid; gap: 10px; min-width: 0 }
 .tab { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; gap: 2px 14px; align-items: center; text-align: left; background: #1f1f1f; border: 1px solid #2c2c2c; border-radius: 18px; padding: 12px 14px; color: var(--on-dark-2); cursor: pointer; font-family: var(--sans); transition: background .2s, transform .2s }
-.tab:hover { background: #262626 } .tab.on { background: #fff; color: var(--ink); border-color: #fff } .tab:focus-visible { outline: 3px solid var(--lime) }
+.tab:hover { background: #262626 } .tab.on { background: #fff; color: var(--ink); border-color: #ffb200; box-shadow: 0 0 0 2px #ffb200 } .tab:focus-visible { outline: 3px solid var(--lime) }
 .tab b { font-size: 16px; font-weight: 600; color: inherit } .tab small { font-size: 13px; opacity: .8 } .tab.on small { color: var(--ink-2); opacity: 1 }
 
 /* sections */
@@ -97,7 +97,7 @@ p { margin: 0 }
 .mini-order { display: grid; gap: 10px; font-size: 13px; width: 100% } .bar { height: 10px; border-radius: 999px; background: var(--bg-2); overflow: hidden } .bar i { display: block; height: 100%; background: var(--accent) }
 .mini-gate { display: grid; gap: 12px; text-align: center; font-size: 14px } .gate-btns { display: flex; gap: 8px; justify-content: center } .gate-btns span { padding: 7px 18px; border-radius: 10px; background: #fff; color: var(--ink); font-weight: 600 } .gate-btns span + span { background: #2a2a2a; color: var(--on-dark-2) }
 
-.dark-panel { background: radial-gradient(70% 60% at 0% 100%, #243330 0%, var(--dark) 60%); border-radius: var(--r); padding: clamp(24px, 4vw, 56px); display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: center }
+.dark-panel { background: radial-gradient(70% 60% at 0% 100%, #3a2a00 0%, var(--dark) 60%); border-radius: var(--r); padding: clamp(24px, 4vw, 56px); display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: center }
 .checks { list-style: none; padding: 0; margin: 20px 0 26px; display: grid; gap: 8px; color: var(--on-dark-2); font-size: 15px }
 .checks li::before { content: "✓"; color: var(--accent-soft); margin-right: 10px }
 .dp-card { background: #fff; color: var(--ink); border-radius: 20px; padding: 18px 20px; min-width: 0; overflow-x: auto }
@@ -168,25 +168,25 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 @media (prefers-reduced-motion: reduce) { .bub.dots i { animation: none } .js .reveal { opacity: 1; transform: none; transition: none } }
 
 /* playful colour: the brand's own sheets of colour on tiles, tags, cards and the primary button */
-.c-lime { --c: var(--lime); --g: radial-gradient(120% 90% at 10% 0%, #f2ffb0 0%, #c6f432 45%, #6fd48a 100%) }
-.c-sun  { --c: var(--sun);  --g: radial-gradient(120% 90% at 15% 0%, #fff6c2 0%, #ffe14d 45%, #ff9a3c 100%) }
-.c-sky  { --c: var(--sky);  --g: radial-gradient(120% 90% at 10% 0%, #e6f0ff 0%, #7fb5ff 45%, #6a5cff 100%) }
-.c-tang { --c: var(--tang); --g: radial-gradient(120% 90% at 10% 0%, #ffd9c4 0%, #ff7a45 50%, #e8306b 100%) }
-.c-mint { --c: var(--mint); --g: radial-gradient(120% 90% at 10% 0%, #e4fff1 0%, #9be7c4 45%, #38b6ff 100%) }
-.c-pink { --c: var(--pink); --g: radial-gradient(120% 90% at 10% 0%, #ffe3ee 0%, #f7a8c4 45%, #b07cff 100%) }
+.c-lime { --c: var(--amber); --g: radial-gradient(120% 90% at 10% 0%, #fff3cc 0%, #ffb200 48%, #ff8a00 100%) }
+.c-sun  { --c: var(--amber); --g: radial-gradient(120% 90% at 15% 0%, #ffe9a8 0%, #ffb200 40%, #0072e3 130%) }
+.c-sky  { --c: var(--blue);  --g: radial-gradient(120% 90% at 10% 0%, #8fc4ff 0%, #0072e3 50%, #003f9e 100%) }
+.c-tang { --c: var(--tang);  --g: linear-gradient(135deg, #0072e3 0%, #4b8fe8 35%, #ffb200 100%) }
+.c-mint { --c: var(--mint);  --g: radial-gradient(120% 90% at 10% 0%, #dff0ff 0%, #5aa9ff 55%, #0072e3 100%) }
+.c-pink { --c: var(--pink);  --g: radial-gradient(120% 90% at 10% 0%, #fff8e6 0%, #ffd266 50%, #ffb200 100%) }
 .grain { position: relative } .grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .18; mix-blend-mode: multiply; border-radius: inherit;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E") }
 .tag[class*="c-"] { background: var(--g); color: var(--ink) }
 .media[class*="c-"] { background: var(--g); color: var(--ink); border: 0 }
 .media.c-tang .gate-btns span + span { background: rgba(0,0,0,.18); color: var(--ink) } .media.c-tang .gate-btns span { background: #fff }
 .who-card[class*="c-"] { background: var(--g) } .who-card[class*="c-"] .chips span { background: rgba(255,255,255,.75); border-color: transparent; color: var(--ink) }
-.btn.lime { background: linear-gradient(135deg, #e9ff8a, #c6f432 50%, #8fe07a); color: var(--ink); font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,.6) } .btn.lime:hover { filter: saturate(1.15) brightness(1.03) }
-.grad { background: linear-gradient(90deg, #6a5cff 0%, #38b6ff 30%, #22a06b 60%, #e8306b 100%); -webkit-background-clip: text; background-clip: text; color: transparent }
+.btn.lime { background: linear-gradient(135deg, #ffd266, #ffb200 55%, #ff9a00); color: var(--ink); font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,.6) } .btn.lime:hover { filter: saturate(1.15) brightness(1.03) }
+.grad { background: linear-gradient(90deg, #0072e3 0%, #4b8fe8 45%, #ffb200 100%); -webkit-background-clip: text; background-clip: text; color: transparent }
 .circle-card:hover { border-color: var(--ink) }
 
 /* the scroll scene: a tall section with a sticky dark stage; the ball travels with scroll and shoves letters aside */
 .format { height: 320vh; position: relative; margin: 0 }
-.format-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; background: var(--dark); color: #fff; border-radius: 0 0 var(--r) var(--r); overflow: hidden; display: grid; align-content: end; padding: clamp(20px, 4vw, 56px); contain: layout paint }
+.format-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; background: radial-gradient(60% 50% at 80% 10%, #10264a 0%, var(--dark) 60%); color: #fff; border-radius: 0 0 var(--r) var(--r); overflow: hidden; display: grid; align-content: end; padding: clamp(20px, 4vw, 56px); contain: layout paint }
 .ball { position: absolute; left: 0; top: 0; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.7) 0%, rgba(255,255,255,0) 40%), radial-gradient(circle at 70% 80%, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 55%), var(--ballc, #c6f432); will-change: transform; transition: background-color .6s; background-color: var(--ballc, #c6f432) }
 .format-h { font: 600 clamp(44px, 10.5vw, 150px)/.92 var(--sans); letter-spacing: -.045em; text-transform: uppercase; margin: 0; max-width: 11ch; display: grid; gap: .02em; position: relative; z-index: 1 }
 .fl { display: block; white-space: nowrap } .fl:nth-child(2) { padding-left: .9em } .ch { display: inline-block; will-change: transform }
@@ -199,13 +199,12 @@ details p { color: var(--ink-2); padding-bottom: 14px; max-width: 64ch }
 
 /* the flow: the sentence first, then the chat demo rises into the same screen while the five tiles fly onto its tabs */
 .flow { height: 260vh; position: relative; margin-top: 8px }
-.flow-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; contain: layout paint }
+.flow-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden }
 .big { font: 500 clamp(26px, 4.6vw, 58px)/1.18 var(--sans); letter-spacing: -0.03em; max-width: 1080px; margin: 0 auto; text-align: center; text-wrap: balance; will-change: transform, opacity; position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; padding: 0 16px }
 .ph { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: -0.28em; margin: 0 0.08em; border-radius: .3em }
 .flow .stage { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 1180px; transform: translateY(var(--sy, 0px)); will-change: transform; border-radius: var(--r) var(--r) 0 0 }
 .tab-ic { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 14px }
 .ftile { position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 14px; background: var(--g); display: grid; place-items: center; color: var(--ink); will-change: transform; box-shadow: inset 0 -4px 0 rgba(0,0,0,.08); z-index: 3; pointer-events: none }
 .ftile span { font-size: 22px; line-height: 1 }
-.flow.still { height: auto } .flow.still .flow-sticky { position: static; height: auto; overflow: visible; contain: none } .flow.still .big { position: static; translate: none; padding: 40px 16px } .flow.still .stage { position: relative; transform: none; border-radius: var(--r) } .flow.still .ftile { display: none } .flow.still .ph { background: var(--bg-2) }
-.flow.still .tab-ic[data-t="0"] { background: var(--sky) } .flow.still .tab-ic[data-t="1"] { background: var(--mint) } .flow.still .tab-ic[data-t="2"] { background: var(--sun) } .flow.still .tab-ic[data-t="3"] { background: var(--lime) } .flow.still .tab-ic[data-t="4"] { background: var(--pink) }
+.flow.still { height: auto } .flow.still .flow-sticky { position: static; height: auto; overflow: visible } .flow.still .big { position: static; translate: none; padding: 40px 16px } .flow.still .stage { position: relative; transform: none; border-radius: var(--r) } .flow.still .ftile { position: static; width: 100%; height: 100%; transform: none } .flow.still .ph { display: inline-grid } .flow.still .ph .ftile span { font-size: .78em }
 @media (max-width: 760px) { .flow.still .stage { margin-top: 10px } }

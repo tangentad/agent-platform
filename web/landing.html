@@ -328,8 +328,11 @@
         t.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
       });
     };
-    if (still) flow.classList.add("still");
-    else {
+    if (still) {
+      // No scroll scene: the tiles sit in the sentence and on the tabs at the same time, so nothing is lost.
+      flow.classList.add("still");
+      tiles.forEach((t, i) => { phs[i]?.appendChild(t.cloneNode(true)); slots[i]?.appendChild(t); });
+    } else {
       measure(); draw(0);
       scenes.push({ el: flow, p: 0, draw });
       addEventListener("resize", () => { measure(); });
@@ -352,7 +355,7 @@
     const ball = scene.querySelector(".ball");
     const index = [...scene.querySelectorAll(".format-index li")];
     const sticky = scene.querySelector(".format-sticky");
-    const colors = ["#c6f432", "#ffe14d", "#ff7a45", "#7fb5ff"];
+    const colors = ["#ffb200", "#0072e3", "#ff8a00", "#5aa9ff"];
     let rects = [], W = 0, H = 0;
     const measure = () => {
       const base = sticky.getBoundingClientRect(); W = base.width; H = base.height;
