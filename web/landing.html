@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Circle — one assistant for the whole chat</title>
-<meta name="description" content="Circle is an assistant that lives in your group chats. It coordinates the group, books hotels and flights at wholesale rates, runs group orders, and asks before it pays or contacts anyone." />
+<title>Circle — one assistant for the group chat</title>
+<meta name="description" content="Circle is an assistant that lives in your group chat. It plans the trip, books hotels at wholesale, runs the group order, and asks before it pays." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23111' stroke-width='3'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,59 +17,60 @@
 <nav class="nav" aria-label="Main">
   <div class="nav-pill">
     <a class="logo" href="/welcome">circle<span class="eyes" aria-hidden="true"><svg width="12" height="14" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg><svg width="12" height="14" viewBox="0 0 24 28"><ellipse cx="12" cy="14" rx="10.5" ry="12.5" fill="#fff" stroke="#111" stroke-width="2.2"/><circle cx="13.5" cy="15.5" r="4.6" fill="#111"/><circle cx="15" cy="14" r="1.3" fill="#fff"/></svg></span></a>
-    <div class="nav-links"><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Open circles</a><a href="#who">Who it's for</a><a href="#pricing">Pricing</a></div>
+    <div class="nav-links"><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Circles</a><a href="#pricing">Pricing</a></div>
   </div>
   <div class="nav-pill nav-actions"><a class="btn ghost" href="/#signin">Log in</a><a class="btn lime" href="/#signup">Start a circle</a></div>
 </nav>
 
 <header class="hero">
-  <p class="eyebrow">One assistant for the whole chat</p>
-  <h1>Plans for the group, <span class="grad">done by one assistant.</span></h1>
-  <p class="lede">Circle lives in the chats you already have: the trip, the flat, the family thread. One person adds it, everyone can ask. It compares hotels and flights at wholesale rates, runs group orders, keeps track of who promised what, and asks before it pays or contacts anyone.</p>
-  <div class="ctas"><a class="btn lime lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a><a class="btn ghost lg" href="#demo">See it in a chat</a></div>
-  <p class="fine">Works in iMessage and on the web · Nothing to install for the rest of the chat</p>
+  <p class="eyebrow">For the group chat</p>
+  <h1>One assistant. <span class="grad">Everyone in the chat can ask.</span></h1>
+  <p class="lede">Add Circle to a group. It plans the trip, books hotels at wholesale, runs the group order, and asks before it pays.</p>
+  <div class="ctas"><a class="btn lime lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a><a class="btn ghost lg" href="#demo">Watch it work</a></div>
+  <p class="fine">iMessage and web · Nothing to install for the rest of the chat</p>
 
   <div class="stage" id="demo">
-    <div class="phone" aria-label="A group chat where Pip compares hotel prices">
-      <div class="phone-top"><span class="faces"><i>A</i><i>S</i><i>R</i><i class="pip">✦</i></span><b>Courchevel ski trip</b><span class="count">4 people</span></div>
-      <div class="thread play" data-loop="15000">
-        <div class="row them" style="--i:0"><span class="who">Riley</span><div class="bub">Pip, 5-star in Courchevel 13–17 Jan for 2, what's the damage?</div></div>
-        <div class="row pip typing" style="--i:1"><div class="bub dots"><i></i><i></i><i></i></div></div>
-        <div class="row pip" style="--i:2"><span class="who">Pip</span><div class="bub">On it. Comparing our wholesale rate with what Booking.com charges for the same rooms, about 20 seconds.</div></div>
-        <div class="row pip" style="--i:3"><div class="card">
-          <div class="card-h">Hotels: Courchevel, 13–17 Jan 2027</div>
-          <div class="line"><span>Alpes Hôtel du Pralong ★★★★★</span><b>$5,123 us</b><s>$7,985 Booking</s></div>
-          <div class="line"><span>Hotel Carlina ★★★★★</span><b>$7,538 us</b><s>$8,832 Booking</s></div>
-          <div class="line"><span>Snow Lodge 1850 ★★★★★</span><b>$12,260 us</b><s>$12,934 Booking</s></div>
-          <div class="card-f">8 of 9 hotels priced · open the page for all of them →</div>
-        </div></div>
-        <div class="row them" style="--i:4"><span class="who">Sam</span><div class="bub">Pralong. Book it?</div></div>
-        <div class="row pip" style="--i:5"><span class="who">Pip</span><div class="bub">I'll ask Alex to OK it, it's on Alex's card. Nothing is booked until they say yes.</div></div>
+    <div class="iphone" aria-label="An iMessage group chat with Circle">
+      <div class="island"></div>
+      <div class="screen">
+        <div class="status"><span class="time">9:41</span><span class="sig"><i></i><i></i><i></i><i></i></span><span class="wifi"></span><span class="batt"><i></i></span></div>
+        <div class="ihead"><span class="back">‹ <b>4</b></span><div class="iavatars" id="avatars"></div><div class="iname" id="chatName">Courchevel ski trip <span>›</span></div></div>
+        <div class="thread play" id="thread" data-loop="16000"></div>
+        <div class="compose"><span class="plus">+</span><span class="field">iMessage</span><span class="mic"></span></div>
+        <div class="homebar"></div>
       </div>
     </div>
-    <div class="tiles" aria-label="What Circle can do">
-      <div class="tile c-sky"><span class="glyph">🏨</span><small>hotels</small></div>
-      <div class="tile c-mint"><span class="glyph">✈️</span><small>flights</small></div>
-      <div class="tile c-sun"><span class="glyph">📦</span><small>group orders</small></div>
-      <div class="tile c-lime"><span class="glyph">📋</span><small>who does what</small></div>
-      <div class="tile c-tang"><span class="glyph">📞</span><small>calls</small></div>
-      <div class="tile c-pink"><span class="glyph">🗓️</span><small>reminders</small></div>
+    <div class="tabs" role="tablist" aria-label="Scenarios">
+      <button class="tab on" role="tab" aria-selected="true" data-s="ski"><span class="tab-ic c-sky">🏔️</span><b>Ski trip</b><small>Hotels at wholesale, booked with one yes</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="order"><span class="tab-ic c-sun">📦</span><b>Group order</b><small>Everyone adds a line, Circle hits the minimum</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="family"><span class="tab-ic c-mint">📞</span><b>Family</b><small>Calls the clinic so nobody has to</small></button>
+      <button class="tab" role="tab" aria-selected="false" data-s="couple"><span class="tab-ic c-pink">🍽️</span><b>Couple</b><small>Friday sorted in one message</small></button>
     </div>
   </div>
 </header>
 
-<section class="sec statement reveal" aria-label="What Circle is">
-  <p class="big">Circle <span class="itile t-chat" aria-hidden="true">💬</span> is the assistant that lives in your group chats, <span class="itile t-ski" aria-hidden="true">🏔️</span> prices the trip at wholesale, <span class="itile t-box" aria-hidden="true">📦</span> runs the group order and <span class="itile t-check" aria-hidden="true">✅</span> remembers who promised what, <span class="itile t-ask" aria-hidden="true">🙋</span> and asks before it spends.</p>
+<section class="flow" id="flow" aria-label="What Circle is">
+  <div class="flow-sticky">
+    <p class="big" id="bigline">Circle <span class="ph" data-t="0"></span> lives in the chat, <span class="ph" data-t="1"></span> prices the trip, <span class="ph" data-t="2"></span> runs the order, <span class="ph" data-t="3"></span> tracks who promised what, <span class="ph" data-t="4"></span> and asks before it spends.</p>
+    <div class="band" id="band">
+      <div class="slot" data-t="0"></div><div class="slot" data-t="1"></div><div class="slot" data-t="2"></div><div class="slot" data-t="3"></div><div class="slot" data-t="4"></div>
+    </div>
+    <div class="ftile grain c-sky" data-t="0"><span>💬</span><small>the chat</small></div>
+    <div class="ftile grain c-mint" data-t="1"><span>🏔️</span><small>the trip</small></div>
+    <div class="ftile grain c-sun" data-t="2"><span>📦</span><small>the order</small></div>
+    <div class="ftile grain c-lime" data-t="3"><span>✅</span><small>who does what</small></div>
+    <div class="ftile grain c-pink" data-t="4"><span>🙋</span><small>asks first</small></div>
+  </div>
 </section>
 
-<section class="format" id="scene" aria-label="One assistant for coordination, travel, buying together and asking first">
+<section class="format" id="scene" aria-label="One chat, one assistant, four jobs done">
   <div class="format-sticky">
     <div class="ball" aria-hidden="true"></div>
     <h2 class="format-h" data-text="ONE CHAT|ONE ASSISTANT|FOUR JOBS DONE">ONE CHAT ONE ASSISTANT FOUR JOBS DONE</h2>
     <ol class="format-index" aria-hidden="true">
       <li data-step="0"><span class="n">1</span><span class="k">(Coordinate)</span><b>Who does what</b></li>
       <li data-step="1"><span class="n">2</span><span class="k">(Travel)</span><b>Hotels and flights at wholesale</b></li>
-      <li data-step="2"><span class="n">3</span><span class="k">(Buy together)</span><b>Group orders that hit the minimum</b></li>
+      <li data-step="2"><span class="n">3</span><span class="k">(Buy together)</span><b>Group orders</b></li>
       <li data-step="3"><span class="n">4</span><span class="k">(Trust)</span><b>Asks before it spends</b></li>
     </ol>
     <p class="format-hint" aria-hidden="true">keep scrolling ↓</p>
@@ -78,23 +79,23 @@
 
 <section class="sec reveal" id="does">
   <p class="eyebrow">What it does</p>
-  <h2>Four things a group chat never manages on its own.</h2>
+  <h2>Four jobs. One chat.</h2>
   <div class="four">
     <article>
-      <div class="media c-lime"><div class="mini-ledger"><div><i class="dot open"></i>Riley · book the cabin · Fri</div><div><i class="dot done"></i>Sam · bring the skis · done</div><div><i class="dot open"></i>Alex · OK the hotel · today</div></div></div>
-      <h3>Coordinate</h3><p>When someone says they'll do something, it is written down with a name and a time. Circle nudges the right person, not the whole chat.</p>
+      <div class="media grain c-lime"><div class="mini-ledger"><div><i class="dot open"></i>Riley · book the cabin · Fri</div><div><i class="dot done"></i>Sam · bring the skis · done</div><div><i class="dot open"></i>Alex · OK the hotel · today</div></div></div>
+      <h3>Coordinate</h3><p>Promises get a name and a date. Circle nudges the one person, not the whole chat.</p>
     </article>
     <article>
       <div class="media dark"><div class="mini-price"><span>Through us</span><b>$5,123</b><span>Booking.com</span><s>$7,985</s></div></div>
-      <h3>Travel at wholesale</h3><p>Hotels and flights at the net rate travel agents pay, shown next to the public price for the same room, so you can see the difference before you book.</p>
+      <h3>Travel at wholesale</h3><p>The rate travel agents pay, next to the public price. No markup.</p>
     </article>
     <article>
-      <div class="media c-sun"><div class="mini-order"><div>Matchaful · $1,200 minimum</div><div class="bar"><i style="width:72%"></i></div><div>$864 in · 4 people · $336 to go</div></div></div>
-      <h3>Buy together</h3><p>Open a group order from a wholesale brand. Everyone adds their lines in the chat, Circle tracks the minimum and who owes whom, and one person places it.</p>
+      <div class="media grain c-sun"><div class="mini-order"><div>Matchaful · $1,200 minimum</div><div class="bar"><i style="width:72%"></i></div><div>$864 in · 4 people · $336 to go</div></div></div>
+      <h3>Buy together</h3><p>Wholesale brands, split across the chat. One person places it.</p>
     </article>
     <article>
-      <div class="media c-tang"><div class="mini-gate"><div>OK to spend $5,123 at Nuitée?</div><div class="gate-btns"><span>Yes</span><span>No</span></div></div></div>
-      <h3>Ask before acting</h3><p>Anything that spends money, uses an account or contacts a person outside the chat is a card for the owner first. The footer under every reply says what actually ran.</p>
+      <div class="media grain c-tang"><div class="mini-gate"><div>OK to spend $5,123?</div><div class="gate-btns"><span>Yes</span><span>No</span></div></div></div>
+      <h3>Ask first</h3><p>Money, accounts, outside calls: a yes from the owner, every time.</p>
     </article>
   </div>
 </section>
@@ -103,15 +104,14 @@
   <div class="dark-panel">
     <div class="dp-text">
       <p class="eyebrow on-dark">Travel</p>
-      <h2 class="on-dark">The rate agents pay, in your group chat.</h2>
-      <p class="on-dark lede-s">Circle buys through Nuitée's wholesale network. Most people never see those rates. Say the dates and the city, and the comparison comes back with our price next to Booking.com's for the same hotel and dates, taxes in.</p>
-      <ul class="checks on-dark"><li>Hotels and flights, business or economy</li><li>Public price verified against the seller's checkout, not a scraped estimate</li><li>No markup during the beta</li></ul>
+      <h2 class="on-dark">The rate agents pay.</h2>
+      <p class="lede-s">Say the city and the dates. Circle shows its wholesale price next to Booking.com's for the same hotel, taxes in.</p>
       <a class="btn light" href="/#signup">Price a trip <span aria-hidden="true">→</span></a>
     </div>
     <div class="dp-card">
-      <div class="dp-card-h">Measured 23 Oct 2026 · Courchevel, 13–17 Jan 2027, 2 adults</div>
+      <div class="dp-card-h">Measured 23 Oct 2026 · Courchevel · 13–17 Jan · 2 adults</div>
       <table>
-        <thead><tr><th>Hotel</th><th>Through us</th><th>Booking.com</th><th>Saving</th></tr></thead>
+        <thead><tr><th>Hotel</th><th>Circle</th><th>Booking.com</th><th>Saving</th></tr></thead>
         <tbody>
           <tr><td>Alpes Hôtel du Pralong</td><td>$5,123</td><td>$7,985</td><td class="save">$2,862</td></tr>
           <tr><td>Hotel Carlina</td><td>$7,538</td><td>$8,832</td><td class="save">$1,294</td></tr>
@@ -120,70 +120,39 @@
           <tr><td>Lake Hotel 1850</td><td>$2,029</td><td>$2,365</td><td class="save">$336</td></tr>
         </tbody>
       </table>
-      <p class="dp-note">Booking.com totals include the taxes and fees it lists at checkout. Each side is its cheapest room for the dates, so rooms can differ.</p>
+      <p class="dp-note">Booking.com totals include its checkout taxes and fees. Cheapest room on each side; rooms can differ.</p>
     </div>
   </div>
 </section>
 
 <section class="sec reveal" id="circles">
   <p class="eyebrow">Open circles</p>
-  <h2>Groups you can join, with the assistant already inside.</h2>
-  <p class="lede">Some circles are open to anyone. Join one and Circle is there from your first message, with the group's rules and history.</p>
+  <h2>Join a group that already has one.</h2>
   <div class="grid3">
-    <a class="circle-card" href="/#signup"><span class="tag c-mint">Neighbourhood</span><h3>Buy Nothing</h3><p>Give away, ask for, lend. Circle keeps the list of who has what and arranges the handoff.</p><span class="join">Ask to join →</span></a>
-    <a class="circle-card" href="/#signup"><span class="tag c-sun">Wholesale</span><h3>Wholesale Club</h3><p>Pool orders to hit brand minimums on Faire: matcha, candles, kids' clothes. Pay your share, one person places it.</p><span class="join">Ask to join →</span></a>
-    <a class="circle-card" href="/#signup"><span class="tag c-sky">Travel</span><h3>Ski Trip Planners</h3><p>Compare chalets and flights at wholesale, split the cost, keep the packing list on one page.</p><span class="join">Ask to join →</span></a>
-    <a class="circle-card" href="/#signup"><span class="tag c-tang">Friends</span><h3>Dinner Rota</h3><p>Who hosts, who brings what, which Friday. Circle books the table when it is a restaurant week.</p><span class="join">Ask to join →</span></a>
-    <a class="circle-card" href="/#signup"><span class="tag c-pink">Family</span><h3>New Parents</h3><p>Hand-me-downs, sitter swaps, the pediatrician's number. Private details stay in your own chat.</p><span class="join">Ask to join →</span></a>
-    <a class="circle-card" href="/#signup"><span class="tag c-lime">Your own</span><h3>Start a circle</h3><p>Any chat you already have. Share an invite link, or add Circle's number to the group.</p><span class="join">Start now →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag c-mint">Neighbourhood</span><h3>Buy Nothing</h3><p>Give, ask, lend. Circle tracks who has what.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag c-sun">Wholesale</span><h3>Wholesale Club</h3><p>Pool orders to hit Faire minimums.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag c-sky">Travel</span><h3>Ski Trip Planners</h3><p>Chalets and flights at wholesale, cost split.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag c-tang">Friends</span><h3>Dinner Rota</h3><p>Who hosts, who brings what, which Friday.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag c-pink">Family</span><h3>New Parents</h3><p>Hand-me-downs and sitter swaps.</p><span class="join">Ask to join →</span></a>
+    <a class="circle-card" href="/#signup"><span class="tag c-lime">Your own</span><h3>Start a circle</h3><p>Any chat you already have.</p><span class="join">Start now →</span></a>
   </div>
 </section>
 
 <section class="sec reveal" id="who">
   <p class="eyebrow">Who it's for</p>
-  <h2>Couples, friend groups, families.</h2>
+  <h2>Couples. Friend groups. Families.</h2>
   <div class="grid3 who">
-    <article class="who-card c-pink">
-      <h3>Couples</h3>
-      <p>One shared assistant for the two of you. The dinner reservation, the flight home for the holidays, the dentist you both keep forgetting.</p>
-      <div class="chips"><span>"Book us something near the station Friday"</span><span>"Find the cheapest business fare to Lisbon in May"</span><span>"Remind us to renew the lease"</span></div>
-    </article>
-    <article class="who-card c-sky">
-      <h3>Friend groups</h3>
-      <p>The trip chat that never decides. Circle prices the options, collects the votes, tracks who paid, and chases the one who hasn't.</p>
-      <div class="chips"><span>"Pip, 5-star in Courchevel for the four of us"</span><span>"Who still owes Sam for the Airbnb?"</span><span>"Open a Matchaful group order"</span></div>
-    </article>
-    <article class="who-card c-mint">
-      <h3>Families</h3>
-      <p>Across time zones and generations. Grandma's flight, the school form, the sitter on Thursday. Anyone in the chat can ask; only the owner approves spending.</p>
-      <div class="chips"><span>"Call the clinic and move Dad's appointment"</span><span>"What's the plan for Thanksgiving?"</span><span>"Text me when the package lands"</span></div>
-    </article>
-  </div>
-  <div class="stage second">
-    <div class="phone" aria-label="A family chat where Pip moves an appointment">
-      <div class="phone-top"><span class="faces"><i>M</i><i>D</i><i>J</i><i class="pip">✦</i></span><b>Family 🏡</b><span class="count">4 people</span></div>
-      <div class="thread play" data-loop="14000">
-        <div class="row them" style="--i:0"><span class="who">Mum</span><div class="bub">Pip, can you move Dad's physio from Tuesday to Thursday afternoon?</div></div>
-        <div class="row pip typing" style="--i:1"><div class="bub dots"><i></i><i></i><i></i></div></div>
-        <div class="row pip" style="--i:2"><span class="who">Pip</span><div class="bub">Calling the clinic now. I'll say I'm calling for the family and ask for Thursday after 2pm.</div></div>
-        <div class="row pip" style="--i:3"><div class="card"><div class="card-h">Call · Riverside Physio · 1m 40s</div><div class="line"><span>Moved to Thursday 3:15pm with Sarah</span><b>done</b></div><div class="card-f">Added to the family calendar · Dad reminded Wednesday night</div></div></div>
-        <div class="row them" style="--i:4"><span class="who">Jo</span><div class="bub">Can I get a ride there with him?</div></div>
-        <div class="row pip" style="--i:5"><span class="who">Pip</span><div class="bub">Noted for Dad: Jo is coming along. I'll remind you both.</div></div>
-      </div>
-    </div>
-    <div class="stage-text">
-      <p class="eyebrow on-dark">In the chat</p>
-      <h3 class="on-dark big-h3">It talks to the clinic so nobody in the family has to.</h3>
-      <p class="lede-s">A call on the family's behalf, the result written back into the chat, the reminder set. If the clinic needs a decision, Pip asks Mum first.</p>
-    </div>
+    <article class="who-card c-pink"><h3>Couples</h3><div class="chips"><span>"Table for two near the station, Friday"</span><span>"Cheapest business fare to Lisbon in May"</span><span>"Remind us to renew the lease"</span></div></article>
+    <article class="who-card c-sky"><h3>Friend groups</h3><div class="chips"><span>"Pip, 5-star in Courchevel for the four of us"</span><span>"Who still owes Sam for the Airbnb?"</span><span>"Open a Matchaful order"</span></div></article>
+    <article class="who-card c-mint"><h3>Families</h3><div class="chips"><span>"Move Dad's physio to Thursday"</span><span>"What's the Thanksgiving plan?"</span><span>"Text me when the package lands"</span></div></article>
   </div>
 </section>
 
 <section class="sec reveal" id="trust">
   <div class="three-up">
-    <div><h3>Asks first</h3><p>Spending, calls, emails and sign-ins each need a yes from the person whose money or account it is.</p></div>
-    <div><h3>Private stays private</h3><p>What you tell it in your own chat never shows up in the group. What the group says stays with the group.</p></div>
-    <div><h3>Says what it did</h3><p>Every reply carries a footer built from the record of what actually ran. It cannot claim a booking it did not make.</p></div>
+    <div><h3>Asks first</h3><p>Spending, calls, sign-ins: a yes from whoever's money or account it is.</p></div>
+    <div><h3>Private stays private</h3><p>Your own chat never leaks into the group.</p></div>
+    <div><h3>Shows its work</h3><p>Every reply lists what actually ran. No invented bookings.</p></div>
   </div>
 </section>
 
@@ -193,12 +162,12 @@
   <div class="price-row">
     <div class="price-card">
       <h3>Beta</h3><p class="price">$0</p>
-      <ul><li>Unlimited chats and members</li><li>Hotels and flights at the net rate, no markup</li><li>Group orders, reminders, calls</li><li>iMessage and web</li></ul>
-      <a class="btn dark" href="/#signup">Start a circle</a>
+      <ul><li>Unlimited chats and members</li><li>Hotels and flights at wholesale, no markup</li><li>Group orders, reminders, calls</li><li>iMessage and web</li></ul>
+      <a class="btn lime" href="/#signup">Start a circle</a>
     </div>
     <div class="price-card soft">
       <h3>Later</h3><p class="price">Paid plans</p>
-      <ul><li>Dedicated phone line for your circle</li><li>More channels</li><li>Business circles</li></ul>
+      <ul><li>A dedicated number for your circle</li><li>More channels</li><li>Business circles</li></ul>
       <span class="fine">Beta members keep what they have.</span>
     </div>
   </div>
@@ -207,22 +176,21 @@
 <section class="sec reveal" id="faq">
   <h2>Questions</h2>
   <div class="faq">
-    <details><summary>Does everyone in the chat need an account?</summary><p>No. One person sets Circle up and owns it. Everyone else just talks to it in the chat. Anything that needs the owner's money or accounts becomes a card for the owner.</p></details>
-    <details><summary>How is the hotel price so much lower?</summary><p>Circle books through Nuitée, a wholesale network that sells to travel agents at net rates. It shows that rate next to Booking.com's total for the same hotel and dates, taxes in, so you can check the difference yourself. No markup during the beta.</p></details>
-    <details><summary>Can it spend money on its own?</summary><p>Only below a limit the owner sets, and the default is zero. Everything else is a yes-or-no card. A single-use card for the exact amount is used at the shop.</p></details>
-    <details><summary>What about my private messages?</summary><p>Circle keeps what you say in your own chat with it separate from any group. Memory is scoped per person and per room, and the group never sees your private notes.</p></details>
+    <details><summary>Does everyone need an account?</summary><p>No. One person owns Circle. Everyone else just talks to it in the chat. Anything that needs the owner's money or accounts becomes a card for the owner.</p></details>
+    <details><summary>Why is the hotel cheaper?</summary><p>Circle books through Nuitée, a wholesale network that sells to travel agents at net rates. It shows that rate next to Booking.com's total so you can check. No markup during the beta.</p></details>
+    <details><summary>Can it spend money on its own?</summary><p>Only under a limit the owner sets. The default is zero. Everything else is a yes-or-no card, paid with a single-use card for the exact amount.</p></details>
   </div>
 </section>
 
-<section class="sec reveal end">
+<section class="sec end reveal">
   <h2>Your group chat just got an assistant.</h2>
   <div class="ctas"><a class="btn lime lg" href="/#signup">Start a circle <span aria-hidden="true">→</span></a></div>
-  <p class="fine">It asks before it calls, books or pays · Private chats stay private</p>
+  <p class="fine">Asks before it calls, books or pays</p>
 </section>
 
 <footer class="foot">
   <span class="logo small">circle</span>
-  <nav><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Open circles</a><a href="#pricing">Pricing</a><a href="/#signin">Log in</a></nav>
+  <nav><a href="#does">What it does</a><a href="#travel">Travel</a><a href="#circles">Circles</a><a href="#pricing">Pricing</a><a href="/#signin">Log in</a></nav>
   <span class="fine">© 2026 Circle</span>
 </footer>
 
@@ -230,34 +198,144 @@
 (() => {
   document.documentElement.classList.add("js");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  // Sections rise into view once; everything is readable without this.
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+  // ---- scenarios: the viewer is the first member, their bubbles blue on the right; Pip and the others grey on the left
+  const S = {
+    ski: { name: "Courchevel ski trip", people: ["R", "A", "S"], me: "Riley", lines: [
+      { who: "Riley", text: "Pip, 5-star in Courchevel 13–17 Jan for 2. What's the damage?" },
+      { who: "Pip", typing: true },
+      { who: "Pip", text: "Comparing our wholesale rate with Booking.com for the same rooms. 20 seconds." },
+      { who: "Pip", card: { h: "Hotels · Courchevel · 13–17 Jan", rows: [["Alpes Hôtel du Pralong ★★★★★", "$5,123", "$7,985"], ["Hotel Carlina ★★★★★", "$7,538", "$8,832"], ["Snow Lodge 1850 ★★★★★", "$12,260", "$12,934"]], f: "8 of 9 priced · open the page →" } },
+      { who: "Sam", text: "Pralong. Book it?" },
+      { who: "Pip", text: "It's on Alex's card, so I've asked Alex. Nothing is booked until they say yes." },
+    ] },
+    order: { name: "Flat 4B 🧋", people: ["J", "M", "T"], me: "Jo", lines: [
+      { who: "Jo", text: "Pip, open a Matchaful group order. Minimum is $1,200." },
+      { who: "Pip", typing: true },
+      { who: "Pip", text: "Open. Add lines like \"2 × ceremonial matcha\". I'll track the minimum and who owes what." },
+      { who: "Mei", text: "3 × ceremonial, 1 × whisk" },
+      { who: "Pip", card: { h: "Group order · Matchaful", rows: [["Jo · 2 × ceremonial", "$96", ""], ["Mei · 3 × ceremonial, 1 whisk", "$168", ""], ["Total", "$864", "$336 to go"]], f: "Shared page updated →" } },
+      { who: "Tom", text: "Put me down for 4 ceremonial" },
+      { who: "Pip", text: "$1,056 in. $144 to go, then Jo places it and I'll record what each of you owes." },
+    ] },
+    family: { name: "Family 🏡", people: ["M", "D", "J"], me: "Mum", lines: [
+      { who: "Mum", text: "Pip, move Dad's physio from Tuesday to Thursday afternoon." },
+      { who: "Pip", typing: true },
+      { who: "Pip", text: "Calling Riverside Physio now, for the family, Thursday after 2." },
+      { who: "Pip", card: { h: "Call · Riverside Physio · 1m 40s", rows: [["Moved to Thu 3:15pm with Sarah", "done", ""]], f: "On the family calendar · Dad reminded Wed night" } },
+      { who: "Jo", text: "Can I get a ride with him?" },
+      { who: "Pip", text: "Noted for Dad. I'll remind you both." },
+    ] },
+    couple: { name: "Alex 💛", people: ["E"], me: "Ellie", lines: [
+      { who: "Ellie", text: "Pip, dinner for two Friday near Union Station, around 8." },
+      { who: "Pip", typing: true },
+      { who: "Pip", card: { h: "Friday · 2 people · near Union Station", rows: [["Cosme · 8:15", "free", ""], ["Via Carota · 8:30", "free", ""], ["Le Coucou · 7:45", "free", ""]], f: "Say which and I'll book it" } },
+      { who: "Alex", text: "Via Carota" },
+      { who: "Pip", text: "Booked, 8:30 under Alex. Confirmation's in both your chats." },
+    ] },
+  };
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const thread = document.getElementById("thread");
+  const render = (key) => {
+    const s = S[key];
+    document.getElementById("chatName").innerHTML = `${esc(s.name)} <span>›</span>`;
+    document.getElementById("avatars").innerHTML = s.people.map((p) => `<i>${esc(p)}</i>`).join("") + `<i class="pip">✦</i>`;
+    let i = 0;
+    thread.innerHTML = `<div class="stamp"><b>iMessage</b><br>Today 7:41 PM</div>` + s.lines.map((l) => {
+      const side = l.who === s.me ? "me" : "them";
+      const who = side === "them" ? `<span class="who">${esc(l.who)}</span>` : "";
+      const body = l.typing ? `<div class="bub dots"><i></i><i></i><i></i></div>`
+        : l.card ? `<div class="card"><div class="card-h">${esc(l.card.h)}</div>${l.card.rows.map((r) => `<div class="line"><span>${esc(r[0])}</span><b>${esc(r[1])}</b>${r[2] ? `<s>${esc(r[2])}</s>` : ""}</div>`).join("")}<div class="card-f">${esc(l.card.f)}</div></div>`
+        : `<div class="bub">${esc(l.text)}</div>`;
+      return `<div class="row ${side}${l.typing ? " typing" : ""}" style="--i:${i++}">${who}${body}</div>`;
+    }).join("");
+  };
+  const play = () => { thread.classList.remove("go"); void thread.offsetWidth; thread.classList.add("go"); };
+  let loop = null;
+  const start = () => { clearInterval(loop); if (reduce) { thread.classList.add("go", "still"); return; } play(); loop = setInterval(play, Number(thread.dataset.loop) || 16000); };
+  render("ski");
+  document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach((x) => { x.classList.toggle("on", x === t); x.setAttribute("aria-selected", x === t ? "true" : "false"); });
+    render(t.dataset.s); start();
+  }));
+  if ("IntersectionObserver" in window && !reduce) {
+    new IntersectionObserver((es) => { for (const e of es) { if (e.isIntersecting) { if (!loop) start(); } else { clearInterval(loop); loop = null; } } }, { threshold: 0.15 }).observe(thread);
+  } else start();
+
+  // ---- sections rise in once; readable without this
   if (!reduce && "IntersectionObserver" in window) {
     const io = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }, { rootMargin: "0px 0px -10% 0px" });
     document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
   } else document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
-  // Chat screens play their conversation when they come into view, then loop.
-  const loops = new Map();
-  const play = (t) => { t.classList.remove("go"); void t.offsetWidth; t.classList.add("go"); };
-  const threads = document.querySelectorAll(".thread.play");
-  if (reduce) { threads.forEach((t) => t.classList.add("go", "still")); return; }
-  const tio = new IntersectionObserver((es) => {
-    for (const e of es) {
-      const t = e.target;
-      if (e.isIntersecting && !loops.has(t)) { play(t); loops.set(t, setInterval(() => play(t), Number(t.dataset.loop) || 15000)); }
-      else if (!e.isIntersecting && loops.has(t)) { clearInterval(loops.get(t)); loops.delete(t); }
-    }
-  }, { threshold: 0.15 });
-  threads.forEach((t) => tio.observe(t));
 
-  // The scroll scene: a ball rolls down through the headline and pushes letters out of its way; the index lights up by stage.
+  // ---- scroll scenes share one smooth loop: each scene eases toward its scroll position every frame, so a jumpy
+  //      wheel never shows as a jump on screen. The loop runs only while a scene is on screen.
+  const scenes = [];
+  let running = false, last = 0;
+  const tick = (now) => {
+    const dt = Math.min(48, now - last) || 16; last = now;
+    const k = 1 - Math.pow(0.001, dt / 1000); // ~ settle in 1s
+    let active = false;
+    for (const sc of scenes) {
+      const r = sc.el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > innerHeight + 200) continue;
+      active = true;
+      const target = clamp(-r.top / Math.max(1, sc.el.offsetHeight - innerHeight));
+      sc.p += (target - sc.p) * k;
+      if (Math.abs(target - sc.p) < 0.0005) sc.p = target;
+      sc.draw(sc.p);
+    }
+    if (active) requestAnimationFrame(tick); else running = false;
+  };
+  const wake = () => { if (!running) { running = true; last = performance.now(); requestAnimationFrame(tick); } };
+
+  // ---- the flow: five tiles sit inside the sentence, then travel into the dark band as you scroll
+  const flow = document.getElementById("flow");
+  if (flow) {
+    const sticky = flow.querySelector(".flow-sticky"), line = document.getElementById("bigline"), band = document.getElementById("band");
+    const tiles = [...flow.querySelectorAll(".ftile")], phs = [...flow.querySelectorAll(".ph")], slots = [...flow.querySelectorAll(".slot")];
+    let from = [], to = [];
+    const measure = () => {
+      const b = sticky.getBoundingClientRect();
+      const rel = (r) => ({ x: r.left - b.left, y: r.top - b.top, w: r.width, h: r.height });
+      from = phs.map((p) => rel(p.getBoundingClientRect()));
+      to = slots.map((s) => rel(s.getBoundingClientRect()));
+      tiles.forEach((t, i) => { t.style.width = `${to[i].w}px`; t.style.height = `${to[i].h}px`; });
+    };
+    const draw = (p) => {
+      const fade = 1 - clamp((p - 0.12) / 0.3);
+      line.style.opacity = fade; line.style.transform = `translateY(${-40 * (1 - fade)}px)`;
+      const bandIn = ease(clamp((p - 0.3) / 0.45));
+      band.style.opacity = bandIn; band.style.transform = `translateY(${(1 - bandIn) * 60}px)`;
+      tiles.forEach((t, i) => {
+        const a = from[i], z = to[i]; if (!a || !z) return;
+        const q = ease(clamp((p - 0.08 - i * 0.05) / 0.62));
+        const s0 = a.w / z.w;
+        const x = a.x + (z.x - a.x) * q, y = a.y + (z.y - a.y) * q, s = s0 + (1 - s0) * q;
+        t.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
+        t.style.setProperty("--q", q);
+      });
+    };
+    if (reduce) { flow.classList.add("still"); }
+    else {
+      measure(); draw(0);
+      scenes.push({ el: flow, p: 0, draw });
+      addEventListener("resize", () => { measure(); });
+      if (document.fonts?.ready) document.fonts.ready.then(measure);
+    }
+  }
+
+  // ---- the ball scene: it rolls down through the headline and pushes letters aside; the index lights up by stage
   const scene = document.querySelector(".format");
   const h = scene?.querySelector(".format-h");
   if (scene && h) {
     const lines = (h.dataset.text || h.textContent).split("|");
     h.textContent = "";
-    for (const line of lines) {
+    for (const ln of lines) {
       const row = document.createElement("span"); row.className = "fl";
-      for (const ch of line) { const l = document.createElement("span"); l.className = "ch"; l.textContent = ch === " " ? "\u00a0" : ch; row.appendChild(l); }
+      for (const ch of ln) { const l = document.createElement("span"); l.className = "ch"; l.textContent = ch === " " ? " " : ch; row.appendChild(l); }
       h.appendChild(row);
     }
     const letters = [...h.querySelectorAll(".ch")];
@@ -265,42 +343,37 @@
     const index = [...scene.querySelectorAll(".format-index li")];
     const sticky = scene.querySelector(".format-sticky");
     const colors = ["#c6f432", "#ffe14d", "#ff7a45", "#7fb5ff"];
-    let rects = [], W = 0, H = 0, ticking = false;
+    let rects = [], W = 0, H = 0;
     const measure = () => {
       const base = sticky.getBoundingClientRect(); W = base.width; H = base.height;
       rects = letters.map((l) => { l.style.transform = ""; const r = l.getBoundingClientRect(); return { x: r.left - base.left + r.width / 2, y: r.top - base.top + r.height / 2 }; });
     };
-    const frame = () => {
-      ticking = false;
-      const top = scene.getBoundingClientRect().top;
-      const span = scene.offsetHeight - innerHeight;
-      const p = Math.min(1, Math.max(0, -top / Math.max(1, span)));
+    const draw = (p) => {
       const R = Math.min(W, H) * 0.14;
       const bx = W * (0.5 + 0.32 * Math.sin(p * Math.PI * 2.2)), by = H * (0.08 + 0.84 * p);
       ball.style.transform = `translate(${bx - R}px, ${by - R}px)`;
       ball.style.width = ball.style.height = `${R * 2}px`;
       const stage = Math.min(3, Math.floor(p * 4));
-      ball.style.background = colors[stage];
+      ball.style.setProperty("--ballc", colors[stage]);
       index.forEach((li, i) => li.classList.toggle("on", i <= stage));
       const reach = R + Math.min(W, H) * 0.12;
-      letters.forEach((l, i) => {
-        const r = rects[i]; if (!r) return;
+      for (let i = 0; i < letters.length; i++) {
+        const r = rects[i], l = letters[i]; if (!r) continue;
         const dx = r.x - bx, dy = r.y - by, d = Math.hypot(dx, dy);
-        if (d > reach || d === 0) { if (l.style.transform) l.style.transform = ""; return; }
-        const push = (1 - d / reach) * R * 0.9;
-        const ux = dx / d, uy = dy / d;
-        l.style.transform = `translate(${ux * push}px, ${uy * push}px) rotate(${(ux * 28 * (1 - d / reach)).toFixed(1)}deg)`;
-      });
+        if (d > reach || d === 0) { if (l.style.transform) l.style.transform = ""; continue; }
+        const push = (1 - d / reach) * R * 0.9, ux = dx / d, uy = dy / d;
+        l.style.transform = `translate(${ux * push}px, ${uy * push}px) rotate(${ux * 28 * (1 - d / reach)}deg)`;
+      }
     };
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
-    if (reduce) { measure(); index.forEach((li) => li.classList.add("on")); }
+    if (reduce) { index.forEach((li) => li.classList.add("on")); }
     else {
-      measure(); frame();
-      addEventListener("scroll", onScroll, { passive: true });
-      addEventListener("resize", () => { measure(); frame(); });
-      if (document.fonts?.ready) document.fonts.ready.then(() => { measure(); frame(); });
+      measure(); draw(0);
+      scenes.push({ el: scene, p: 0, draw });
+      addEventListener("resize", measure);
+      if (document.fonts?.ready) document.fonts.ready.then(measure);
     }
   }
+  if (scenes.length) { addEventListener("scroll", wake, { passive: true }); wake(); }
 })();
 </script>
 </body>
